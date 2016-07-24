@@ -1,0 +1,33 @@
+<md-sidenav-layout fullscreen>
+
+	<md-sidenav #sidenav>
+		<md-nav-list>
+			<a md-list-item *ngFor="let view of views" [routerLink]="[view.link]" (click)="sidenav.close()">
+				<md-icon md-list-icon>{{view.icon}}</md-icon>
+				<span md-line>{{view.name}}</span>
+			</a>
+		</md-nav-list>
+	</md-sidenav>
+
+	<md-toolbar color="primary">
+		<button md-icon-button (click)="sidenav.open()">
+			<md-icon>menu</md-icon>
+		</button>
+		<span class="logo">
+			Graphs and Tracks
+			<small>BETA</small>
+		</span>
+
+		<span class="filler"></span>
+
+		<small class="right-menu">
+			<button md-icon-button disabled>
+				<md-icon light inactive>help_outline</md-icon>
+			</button>
+		</small>
+	</md-toolbar>
+
+	<div id="main-container">
+		<router-outlet></router-outlet>
+	</div>
+</md-sidenav-layout>

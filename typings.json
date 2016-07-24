@@ -1,0 +1,11 @@
+{
+  "name": "welldone",
+  "dependencies": {
+    "webpack": "registry:npm/webpack#1.12.9+20160418172948"
+  },
+  "globalDependencies": {
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
+    "hammerjs": "registry:dt/hammerjs#2.0.4+20160622233604",
+    "node": "registry:dt/node#6.0.0+20160709114037"
+  }
+}
