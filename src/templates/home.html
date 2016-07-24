@@ -1,14 +1,41 @@
 <md-grid-list cols="4" gutterSize="8px" rowHeight="fit">
 	<md-grid-tile>
 		<md-card>
+			<md-card-title>
+				Challenge Selection
+			</md-card-title>
 			<md-card-content>
-				challenge selection
+				<md-list id="challenge-list" dense>
+
+					<h3 md-subheader>Custom Challenges</h3>
+					<md-list-item>
+						<md-icon md-list-avatar>create</md-icon>
+						<h4 md-line>Create Challenge</h4>
+						<p md-line>Design your own track to challenge others</p>
+					</md-list-item>
+					<md-list-item>
+						<md-icon md-list-avatar>file_upload</md-icon>
+						<h4 md-line>Import Challenge</h4>
+						<p md-line>Load a challenge from a file</p>
+					</md-list-item>
+
+
+					<h3 md-subheader>Available Challenges</h3>
+					<md-list-item *ngFor="let example of examples; let i = index" (click)="selectExample(example)">
+						<md-icon md-list-avatar>show_chart</md-icon>
+						<h4 md-line>Example Challenge #{{i+1}}</h4>
+						<p md-line class="incomplete">Incomplete, 0 attempts made</p>
+					</md-list-item>
+				</md-list>
 			</md-card-content>
 		</md-card>
 	</md-grid-tile>
 
 	<md-grid-tile colspan="3">
 		<md-card>
+			<md-card-title>
+				Challenge Graphs
+			</md-card-title>
 			<md-card-content>
 				graphs
 			</md-card-content>
@@ -17,13 +44,20 @@
 
 	<md-grid-tile colspan="3">
 		<md-card>
+			<md-card-title>
+				Challenge Track
+			</md-card-title>
 			<md-card-content>
-				tracks
+				track
 			</md-card-content>
 		</md-card>
 	</md-grid-tile>
+
 	<md-grid-tile colspan="1">
 		<md-card>
+			<md-card-title>
+				Info Panel
+			</md-card-title>
 			<md-card-content>
 				results
 			</md-card-content>

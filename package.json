@@ -14,6 +14,7 @@
     "lint": "tslint --force \"src/**/*.ts\"",
     "test": "npm run lint",
     "start": "npm run server",
+    "preinstall": "npm i -g typescript@next typings webpack webpack-dev-server",
     "postinstall": "typings install"
   },
   "dependencies": {

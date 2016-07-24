@@ -7,3 +7,21 @@ md-grid-list md-card {
   width: 100%;
   box-sizing: border-box;
 }
+
+#challenge-list md-icon[md-list-avatar] {
+  background: #F0F0F0;
+  text-align: center;
+  line-height: 1.65em;
+}
+
+#challenge-list p[md-line] {
+  color: #999;
+
+  &.incomplete {
+    color:lightcoral;
+  }
+
+  &.complete {
+    color:lightgreen;
+  }
+}

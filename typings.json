@@ -1,6 +1,7 @@
 {
   "name": "welldone",
   "dependencies": {
+    "lodash": "registry:npm/lodash#4.0.0+20160723033700",
     "webpack": "registry:npm/webpack#1.12.9+20160418172948"
   },
   "globalDependencies": {
