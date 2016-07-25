@@ -19,6 +19,12 @@ import { MotionData }  from '../models'
 export class HomeComponent implements OnInit {
 	examples: MotionData[] = [
 		{ position: 50, velocity: -30, heights: [6, 5, 4, 3, 2, 1] },
+		{ position: 400, velocity: 30, heights: [0, 0, 0, 2, 4, 6] },
+		{ position: 50, velocity: -30, heights: [6, 5, 4, 3, 2, 1] },
+		{ position: 400, velocity: 30, heights: [0, 0, 0, 2, 4, 6] },
+		{ position: 50, velocity: -30, heights: [6, 5, 4, 3, 2, 1] },
+		{ position: 400, velocity: 30, heights: [0, 0, 0, 2, 4, 6] },
+		{ position: 50, velocity: -30, heights: [6, 5, 4, 3, 2, 1] },
 		{ position: 400, velocity: 30, heights: [0, 0, 0, 2, 4, 6] }
 	]
 
