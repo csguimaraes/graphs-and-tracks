@@ -7,7 +7,6 @@ import { MdIconRegistry, MdIcon } from '@angular2-material/icon'
 import * as Components from './components'
 import { ApiService } from './services'
 
-import './public/fonts.scss'
 import './public/icons.scss'
 import './public/utils.scss'
 import './public/main.scss'

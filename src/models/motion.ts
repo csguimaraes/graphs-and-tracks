@@ -34,7 +34,7 @@ export class Motion {
 		let step = DATA_DOMAINS[type].step
 
 		// Check if value isn't off limits
-		if(_.inRange(value, limits[0], limits[1])) {
+		if (_.inRange(value, limits[0], limits[1])) {
 			// Round value to nearest valid step
 			return Math.round(value / step) * step
 		} else {

@@ -115,6 +115,7 @@ module.exports = function makeWebpackConfig() {
 		new HtmlWebpackPlugin({
 			template: root('/src/public/main.html'),
 			chunksSortMode: 'dependency',
+			minify: false,
 			favicon: root('/src/public/img/favicon.png')
 		}),
 
