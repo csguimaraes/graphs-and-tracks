@@ -1,0 +1,38 @@
+$list-highlight: #F0F0F0;
+
+md-grid-list {
+  height: 100%;
+
+  md-card {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+#challenge-list {
+  md-list-item > div:hover {
+    background: $list-highlight;
+    cursor: pointer;
+  }
+
+  md-icon[md-list-avatar] {
+    background: $list-highlight;
+    text-align: center;
+    line-height: 1.65em;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  p[md-line] {
+    color: #999;
+
+    &.incomplete {
+      color:lightcoral;
+    }
+
+    &.complete {
+      color:lightgreen;
+    }
+  }
+}

@@ -27,4 +27,12 @@
   /* Rules for using icons as white on a dark background. */
   &[light] { color: rgba(255, 255, 255, 1); }
   &[light][inactive] { color: rgba(255, 255, 255, 0.3); }
+
+  &[md-list-avatar] {
+    background: #EAEAEA;
+    text-align: center;
+    line-height: 1.65em;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
 }

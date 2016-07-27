@@ -1,0 +1,27 @@
+$list-highlight: #F0F0F0;
+
+md-grid-list {
+  height: 100%;
+
+  md-card {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+
+#challenge-list-grid {
+  p[md-line] {
+    color: #999;
+
+    &.incomplete {
+      color:lightcoral;
+    }
+
+    &.complete {
+      color:lightgreen;
+    }
+  }
+}

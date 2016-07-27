@@ -1,0 +1,48 @@
+/*
+Component styles added at global level due to this issue
+https://github.com/angular/material2/issues/922
+*/
+$gray: #EAEAEA;
+$gray-text: #999;
+
+#challenge-list-grid {
+  md-list-item:hover > div {
+    background: $gray;
+    cursor: pointer;
+  }
+}
+
+md-card-title small {
+  color:#666;
+  font-size: 50%;
+}
+
+md-card-actions {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  display: flex !important;
+
+  [md-button] {
+    padding: 0 16px 0 8px;
+    min-width: unset;
+
+    &[gray] {
+      color: $gray-text !important;
+    }
+
+    md-icon {
+      vertical-align: middle;
+      line-height: 1.3em;
+    }
+  }
+}
+
+
+md-grid-list[card-fill] {
+  height: 100%;
+  md-card {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

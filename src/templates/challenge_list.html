@@ -1,0 +1,38 @@
+<md-grid-list card-fill id="challenge-list-grid" cols="1" gutterSize="8px" rowHeight="fit">
+	<md-grid-tile>
+		<md-card scroll-y>
+			<md-card-title>
+				Challenge List
+			</md-card-title>
+			<!--
+			<md-card-subtitle>
+				Each challenge has
+			</md-card-subtitle>
+			-->
+			<md-card-content>
+				<md-list>
+					<h3 md-subheader>Basic Challenges</h3>
+					<md-list-item *ngFor="let challenge of challenges; let i = index" [routerLink]="['/challenges', challenge.id]">
+						<md-icon md-list-avatar>star_border</md-icon>
+						<h4 md-line>{{challenge.name}}</h4>
+						<p md-line class="incomplete">Incomplete (0 attempts)</p>
+					</md-list-item>
+
+					<h3 md-subheader>Custom Challenges</h3>
+					<md-list-item>
+						<md-icon md-list-avatar>create</md-icon>
+						<h4 md-line>Create Challenge</h4>
+						<p md-line>Design your own challenge</p>
+					</md-list-item>
+					<md-list-item>
+						<md-icon md-list-avatar>file_upload</md-icon>
+						<h4 md-line>Import Challenge</h4>
+						<p md-line>Load a challenge from file</p>
+					</md-list-item>
+				</md-list>
+			</md-card-content>
+		</md-card>
+	</md-grid-tile>
+</md-grid-list>
+
+

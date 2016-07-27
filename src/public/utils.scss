@@ -1,4 +1,8 @@
-.filler {
+[flex] {
+  display: flex !important;
+}
+
+filler {
   flex: 1 1 auto;
 }
 
@@ -6,4 +10,8 @@
   position: relative;
   top: 50%;
   transform: perspective(1px) translateY(-50%);
+}
+
+[scroll-y] {
+  overflow-y: auto !important;
 }
