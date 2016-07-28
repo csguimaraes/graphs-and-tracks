@@ -12,4 +12,4 @@ Rewrite of the original [Graphs and Tracks](https://github.com/davidtro/gt) educ
 - In your browser navigate to http://localhost:8080 and the current WIP of the app should appear
 
 ## Motion Calculations
-All files related to motion trials and its calculations can be found at [src/models](src/models) folder.
+Mostly of the motion calculations are implemented in the [Motion Class](src/models/motion.ts). Some other parameters used in calculations can also be found under the [app settings](src/settings.ts).
