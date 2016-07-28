@@ -1,12 +1,16 @@
-<md-grid-list card-fill fill-y rowHeight="fit" cols="5" gutterSize="8px">
-	<md-grid-tile colspan="3" rowspan="1">
-		<md-card class="info-card">
+<md-grid-list fill rowHeight="fit" cols="5" gutterSize="8px">
+	<md-grid-tile colspan="2" rowspan="2">
+		<md-card fill class="info-card">
 			<md-card-title>
 				{{ challenge.name }}
 				<small>
 					by <b>snolflake</b>
 				</small>
 			</md-card-title>
+
+			<md-card-content>
+				lalalal
+			</md-card-content>
 
 			<md-card-actions>
 				<button md-button>
@@ -28,14 +32,13 @@
 			</md-card-actions>
 		</md-card>
 	</md-grid-tile>
-	<md-grid-tile colspan="2" rowspan="4">
-		<md-card>
-			<md-card-title>Graphs</md-card-title>
-		</md-card>
+
+	<md-grid-tile colspan="3" rowspan="5">
+		<track-editor fill #editor></track-editor>
 	</md-grid-tile>
-	<md-grid-tile colspan="3" rowspan="3">
-		<md-card>
-			<md-card-title>Track</md-card-title>
-		</md-card>
+
+	<md-grid-tile colspan="2" rowspan="3">
+		<graphs fill [goal]="challenge.goal" [trial]="editor.trackSetup"></graphs>
 	</md-grid-tile>
+
 </md-grid-list>

@@ -2,9 +2,9 @@ import * as Settings from '../settings'
 import * as Types from '../types'
 
 /**
- * Class used to represent and manipulate track setups
+ * Class used to represent and manipulate motion setups
  */
-export class TrackSetup {
+export class MotionSetup {
 	private _velocity: number
 	private _position: number
 	private _posts: number[]
@@ -24,13 +24,21 @@ export class TrackSetup {
 		this._posts[postPosition] = this.clamp(postHeight, Settings.POSITION_DOMAIN)
 	}
 
-	constructor(inputData: Types.TrackSetupData) {
-		if (inputData.posts.length !== Settings.POSTS_DOMAIN.count) {
+	constructor(inputData?: Types.MotionSetupData) {
+		if (inputData) {
+			// TODO validations
+			if (inputData.posts.length !== Settings.POSTS_DOMAIN.count) {
 
+			}
+		} else {
+			this._position = 0
+			this._velocity = 0
+			this._posts = [0, 0, 0, 0, 0, 0]
 		}
 	}
 
 	clamp(value: number, domain: Types.DataDomain): number {
+		console.log('received value', value)
 		// Ensure value is on a valid range
 		value = Math.max(domain.min, value)
 		value = Math.min(domain.max, value)

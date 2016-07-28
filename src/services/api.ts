@@ -31,7 +31,7 @@ export class ApiService {
 				id: id,
 				name: `Challenge #${id}`,
 				custom: false,
-				track: trackSetup
+				goal: trackSetup
 			})
 		}
 

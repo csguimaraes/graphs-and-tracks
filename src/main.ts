@@ -5,7 +5,7 @@ import { bootstrap } from '@angular/platform-browser-dynamic'
 import { MdIconRegistry, MdIcon } from '@angular2-material/icon'
 
 import * as Components from './components'
-import { ApiService } from './services'
+import { ApiService, EngineService } from './services'
 
 import './public/icons.scss'
 import './public/utils.scss'
@@ -37,6 +37,7 @@ bootstrap(Components.AppComponent, [
 	APP_ROUTER_PROVIDERS,
 	GLOBAL_DIRECTIVES,
 	ApiService,
+	EngineService,
 	MdIconRegistry
 ])
 	.catch(err => console.error(err))

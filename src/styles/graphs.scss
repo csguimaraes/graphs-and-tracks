@@ -1,0 +1,33 @@
+.graph-selector {
+  display: inline-block;
+  font-size: 14px;
+  margin-left: 10px;
+  margin-top: -4px;
+  font-weight: 600;
+  vertical-align: middle;
+
+  span {
+    display: inline-block;
+    border: 1px solid black;
+    padding: 2px 8px;
+    cursor: pointer;
+    margin-right: -1px;
+
+    &.active {
+      color: white;
+      background: #333;
+    }
+
+    &:hover:not(.active) {
+      background: #EAEAEA;
+    }
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+}

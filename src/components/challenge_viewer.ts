@@ -6,6 +6,8 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card/card'
 
 import { ApiService } from '../services'
 import { Challenge } from '../types'
+import { GraphsComponent } from './graphs'
+import { TrackEditorComponent } from './track_editor'
 
 @Component({
 	moduleId: module.id,
@@ -13,7 +15,9 @@ import { Challenge } from '../types'
 	templateUrl: '../templates/challenge_viewer.html',
 	directives: [
 		MD_GRID_LIST_DIRECTIVES,
-		MD_CARD_DIRECTIVES
+		MD_CARD_DIRECTIVES,
+		TrackEditorComponent,
+		GraphsComponent
 	]
 })
 export class ChallengeViewerComponent implements OnInit {
@@ -24,6 +28,5 @@ export class ChallengeViewerComponent implements OnInit {
 		this.challenge = this.api.getChallenge(id)
 	}
 
-	ngOnInit() {
-	}
+	ngOnInit() {}
 }

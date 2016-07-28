@@ -1,4 +1,4 @@
-export interface TrackSetupData {
+export interface MotionSetupData {
 	velocity: number
 	position: number
 	posts: number[]
@@ -8,7 +8,7 @@ export interface Challenge {
 	id: string
 	name: string
 	custom: boolean
-	track: TrackSetupData
+	goal: MotionSetupData
 }
 
 export interface ChallengeStats {
@@ -20,7 +20,7 @@ export interface ChallengeStats {
 export interface Attempt {
 	time: string
 	accuracy: number
-	track: TrackSetupData
+	motion: MotionSetupData
 }
 
 export interface DataDomain {
