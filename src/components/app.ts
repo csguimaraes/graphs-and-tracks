@@ -6,8 +6,6 @@ import { MD_SIDENAV_DIRECTIVES } from '@angular2-material/sidenav'
 import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button'
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list'
 
-import { ApiService } from '../services'
-
 @Component({
 	selector: 'app',
 	templateUrl: '../templates/app.html',
@@ -25,7 +23,5 @@ export class AppComponent {
 		{ name: 'Challenges', link: 'challenges', icon: 'stars' }
 	]
 
-	constructor(private api: ApiService) {
-		console.info(api.key)
-	}
+	constructor() {}
 }

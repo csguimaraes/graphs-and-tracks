@@ -4,7 +4,7 @@ import { MD_CARD_DIRECTIVES } from '@angular2-material/card'
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list/list'
 import { MD_GRID_LIST_DIRECTIVES } from '@angular2-material/grid-list/grid-list'
 
-import { ApiService } from '../services'
+import { StorageService } from '../services'
 import { Challenge } from '../types'
 
 @Component({
@@ -21,9 +21,10 @@ import { Challenge } from '../types'
 export class ChallengeListComponent implements OnInit {
 	challenges: Challenge[]
 
-	constructor(private api: ApiService) {
-		this.challenges = api.challenges
-	}
+	constructor(private storage: StorageService) {}
 
-	ngOnInit() {}
+
+	ngOnInit() {
+		this.challenges = this.storage.challenges
+	}
 }

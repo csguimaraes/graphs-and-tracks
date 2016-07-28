@@ -1,6 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core'
-import { MotionSetup } from '../models/motion_setup'
-
+import { MotionSetup } from '../types'
 
 @Component({
 	selector: 'track-editor',
@@ -29,7 +28,7 @@ export class TrackEditorComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit() {
-		this.trackSetup = new MotionSetup()
+		// this.trackSetup = new MotionSetup()
 	}
 
 	show() {

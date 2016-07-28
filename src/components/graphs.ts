@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core'
 
-import { MotionSetup } from '../models/motion_setup'
-import { EngineService } from '../services/engine'
-
+import { Motion } from '../models/motion'
+import { MotionSetup } from '../types'
 
 @Component({
 	selector: 'graphs',
@@ -31,15 +30,16 @@ export class GraphsComponent implements OnInit {
 
 	activeGraph: string
 
-	constructor(public engine: EngineService) {
+	constructor() {
 		this.selectGraph(this.graphTypes[0])
 	}
 
 	ngOnInit() {
-		let data = this.engine.calculateMotion(this.goal)
-		this.x = JSON.stringify(data.x)
-		this.v = JSON.stringify(data.v)
-		this.a = JSON.stringify(data.a)
+		let motion = new Motion(this.goal.position, this.goal.velocity, this.goal.posts)
+		motion.execute()
+		this.x = JSON.stringify(motion.getData('x'))
+		this.v = JSON.stringify(motion.getData('v'))
+		this.a = JSON.stringify(motion.getData('a'))
 	}
 
 	selectGraph(graphType: string) {

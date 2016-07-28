@@ -5,9 +5,7 @@ import { Challenge } from '../types'
 import * as Settings from '../settings'
 
 @Injectable()
-export class ApiService {
-	key = 'such secret'
-
+export class StorageService {
 	private _challenges: Challenge[]
 	private id: number = 0
 
@@ -39,6 +37,7 @@ export class ApiService {
 	}
 
 	private generateId(): string {
+		// TODO: use UID generator
 		this.id++
 		return this.id.toString()
 	}
