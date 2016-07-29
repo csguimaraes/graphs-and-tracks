@@ -3,9 +3,11 @@
 Rewrite of the original [Graphs and Tracks](https://github.com/davidtro/gt) educational app, using [Angular 2](https://angular.io/) and [Material Design](https://material.angular.io/).
 
 ## Demo
-The current state of the app can be visualized at https://snolflake.github.io/gt/challenges
+The current state of the app can be visualized at [snolflake.github.io/gt](https://snolflake.github.io/gt/challenges).
+
 The demo will be updated to the latest version every few days.
-To know when the demo was last updated see the latest commit at the [gh-pages branch](https://github.com/snolflake/gt/commits/gh-pages).
+
+To know when the demo was last updated see the latest commit at the [gh-pages](https://github.com/snolflake/gt/commits/gh-pages) branch.
 
 ## Motion Calculation
 Most of the motion calculations take place in the [Motion Class](src/models/motion.ts).
