@@ -13,7 +13,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
  */
 var ENV = process.env.npm_lifecycle_event
 var isProd = ENV === 'build'
-
+var baseUrl = isProd ? '/gt/' : '/'
 module.exports = function makeWebpackConfig() {
 	/**
 	 * Config
@@ -35,7 +35,7 @@ module.exports = function makeWebpackConfig() {
 
 	config.output = {
 		path: root('dist'),
-		publicPath: isProd ? '/' : 'http://localhost:8080/',
+		publicPath: baseUrl,
 		filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
 		chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
 	}
@@ -113,10 +113,12 @@ module.exports = function makeWebpackConfig() {
 		// Inject script and link tags into html files
 		// Reference: https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
-			template: root('/src/public/main.html'),
+			template: root('/src/public/main.ejs'),
+			favicon: root('/src/public/img/favicon.png'),
 			chunksSortMode: 'dependency',
 			minify: false,
-			favicon: root('/src/public/img/favicon.png')
+			// inject: 'head',
+			baseUrl: baseUrl
 		}),
 
 		// Extract css files
@@ -149,7 +151,8 @@ module.exports = function makeWebpackConfig() {
 			new CopyWebpackPlugin([{
 				from: root('src/public'),
 				ignore: [
-					'*.scss'
+					'*.scss',
+					'main.ejs'
 				]
 			}])
 		)
