@@ -2,25 +2,23 @@
 	<md-card-title>
 		Graphs
 		<div class="graph-selector">
-			<span
-					*ngFor="let graphType of graphTypes"
-					[class.active]="activeGraph == graphType"
-					(click)="selectGraph(graphType)"
-			>
-				{{graphType}}
+			<span [class.active]="activeGraph == 'x'" (click)="selectGraph('x')">
+				Position
+			</span>
+			<span [class.active]="activeGraph == 'v'" (click)="selectGraph('v')">
+				Velocity
+			</span>
+			<span [class.active]="activeGraph == 'a'" (click)="selectGraph('a')">
+				Acceleration
 			</span>
 		</div>
 	</md-card-title>
 	<md-card-content>
-		<div
-				*ngFor="let graphType of graphTypes"
-				id="{{graphType | lowercase}}-graph"
-				[class.hidden]="activeGraph != graphType"
-		>
-			{{graphType}}
-		</div>
-		<h3>x</h3>{{x}}<br><br>
-		<h3>v</h3>{{v}}<br><br>
-		<h3>a</h3>{{a}}<br><br>
+		<chart></chart>
+		<b>DEBUG INFO</b> <br>
+		T {{timeDebug}}<br>
+		X {{positionDebug}}<br>
+		V {{velocityDebug}}<br>
+		A {{accelerationDebug}}<br>
 	</md-card-content>
 </md-card>

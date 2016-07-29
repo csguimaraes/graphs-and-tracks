@@ -13,17 +13,11 @@ export interface ChallengeMode {
 	postsCount: number
 }
 
-export interface MotionSetupData {
-	velocity: number
-	position: number
-	posts: number[]
-}
-
 export interface Challenge {
 	id: string
 	name: string
 	custom: boolean
-	goal: MotionSetupData
+	goal: MotionSetup
 }
 
 export interface ChallengeStats {
@@ -35,19 +29,7 @@ export interface ChallengeStats {
 export interface Attempt {
 	time: string
 	accuracy: number
-	motion: MotionSetupData
-}
-
-export interface DataDomain {
-	min: number
-	max: number
-	step: number
-}
-
-export interface Ramp {
-	start?: number
-	end: number
-	acceleration: number
+	motion: MotionSetup
 }
 
 export interface MotionData {
@@ -61,4 +43,16 @@ export interface MotionSetup {
 	velocity: number
 	position: number
 	posts: number[]
+}
+
+export interface DataDomain {
+	min: number
+	max: number
+	step: number
+}
+
+export interface Ramp {
+	start?: number
+	end: number
+	acceleration: number
 }

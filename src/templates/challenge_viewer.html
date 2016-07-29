@@ -4,12 +4,12 @@
 			<md-card-title>
 				{{ challenge.name }}
 				<small>
-					by <b>snolflake</b>
+					created by <b>snolflake</b>
 				</small>
 			</md-card-title>
 
 			<md-card-content>
-				<b>DEBUG</b> <br>
+				<b>DEBUG INFO</b> <br>
 				Initial Position: {{challenge.goal.position}} <br>
 				Initial Velocity: {{challenge.goal.velocity}} <br>
 				Posts: {{challenge.goal.posts | dump }}
@@ -18,7 +18,7 @@
 			<md-card-actions>
 				<button md-button>
 					<md-icon small>keyboard_backspace</md-icon>
-					Challenge List
+					Go Back
 				</button>
 
 				<filler></filler>
@@ -37,10 +37,10 @@
 	</md-grid-tile>
 
 	<md-grid-tile colspan="3" rowspan="5">
+		<graphs fill [goal]="challenge.goal"></graphs>
 	</md-grid-tile>
 
 	<md-grid-tile colspan="2" rowspan="3">
-		<graphs fill [goal]="challenge.goal"></graphs>
 	</md-grid-tile>
 
 </md-grid-list>

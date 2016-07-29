@@ -1,1 +1,1 @@
-export * from './motion_setup'
+export * from './motion'
