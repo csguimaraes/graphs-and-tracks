@@ -2,7 +2,7 @@ import { MotionData } from '../types'
 
 export function printDataTable(data: MotionData[], type: string) {
 	let w = window.open('', '', 'width=300,height=500,resizeable,scrollbars')
-	w.document.write(`<h3>data generated for ${type} motion</h3>`)
+	w.document.write(`<h3>Motion data generated for challenge ${type}</h3>`)
 	w.document.write(`
 	<table border="1">
 		<thead>

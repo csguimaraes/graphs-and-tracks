@@ -22,6 +22,7 @@ import { TrackEditorComponent } from './track_editor'
 })
 export class ChallengeViewerComponent implements OnInit {
 	challenge: Challenge
+	zoom: boolean = false
 
 	constructor(private route: ActivatedRoute, private storage: StorageService) {
 		let id = this.route.snapshot.params['id']
@@ -29,4 +30,8 @@ export class ChallengeViewerComponent implements OnInit {
 	}
 
 	ngOnInit() {}
+
+	toggleZoom() {
+		this.zoom = !(this.zoom)
+	}
 }

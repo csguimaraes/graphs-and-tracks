@@ -14,7 +14,7 @@ $color-a: forestgreen;
   span {
     display: inline-block;
     border: 1px solid black;
-    padding: 2px 8px;
+    padding: 5px;
     cursor: pointer;
     margin-right: -4px;
 
@@ -37,17 +37,6 @@ $color-a: forestgreen;
     &:last-child {
       border-radius: 0 4px 4px 0;
     }
-  }
-}
-
-#debug {
-  position: absolute;
-  top: 0;
-  right: 0;
-  md-icon {
-    padding: 0;
-    cursor: pointer;
-    color: red;
   }
 }
 
@@ -109,9 +98,8 @@ chart /deep/ .axis {
   shape-rendering: crispEdges;
 }
 
-chart /deep/ .axis-x {
+chart:not(.s) /deep/ .axis-x {
   stroke-dasharray: 10 5;
-  stroke-width: 1px;
 }
 
 @keyframes dashing {

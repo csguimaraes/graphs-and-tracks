@@ -13,11 +13,10 @@
 			</span>
 		</div>
 
-
-		<div id="debug">
-			<md-icon small (click)="debug('goal')" title="DEBUG: data generated for GOAL motion">flip_to_back</md-icon>
-			<md-icon small (click)="debug('trial')" title="DEBUG: data generated for TRIAL motion">flip_to_front</md-icon>
-		</div>
+		<top-actions>
+			<md-icon (click)="debug('goal')" title="(DEBUG) View motion data generated for challenge goal">find_in_page</md-icon>
+			<md-icon (click)="toggleZoom()" title="Toggle zoom graphs panel">{{zoomActive ? 'flip_to_back' : 'flip_to_front'}}</md-icon>
+		</top-actions>
 
 	</md-card-title>
 	<md-card-content>

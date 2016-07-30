@@ -47,3 +47,29 @@ md-grid-list[card-fill] {
     box-sizing: border-box;
   }
 }
+
+md-grid-list.zoom {
+  md-grid-tile:not(.zoom) md-card {
+    display: none !important;
+  }
+
+  md-grid-tile.zoom md-card {
+    position: fixed;
+    z-index: 9999;
+    top: calc(64px + 10px);
+    left: 16px;
+    right: 16px;
+    width: auto;
+    bottom: 10px;
+    height: auto;
+  }
+}
+
+md-card top-actions {
+  float: right;
+  md-icon {
+    padding: 0;
+    cursor: pointer;
+    font-size: 18px !important;
+  }
+}

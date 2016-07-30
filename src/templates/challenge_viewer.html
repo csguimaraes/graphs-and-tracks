@@ -1,4 +1,4 @@
-<md-grid-list card-fill rowHeight="fit" cols="5" gutterSize="8px">
+<md-grid-list card-fill rowHeight="fit" cols="5" gutterSize="8px" [class.zoom]="zoom">
 	<md-grid-tile colspan="2" rowspan="2">
 		<md-card class="info-card">
 			<md-card-title>
@@ -40,7 +40,7 @@
 		<track-editor></track-editor>
 	</md-grid-tile>
 
-	<md-grid-tile colspan="2" rowspan="3">
-		<graphs fill [goal]="challenge.goal"></graphs>
+	<md-grid-tile [class.zoom]="zoom" colspan="2" rowspan="3">
+		<graphs fill [goal]="challenge.goal" (zoom)="toggleZoom()"></graphs>
 	</md-grid-tile>
 </md-grid-list>

@@ -28,7 +28,7 @@ export class Motion {
 		for (let n = 1; n < posts.length; n++) {
 			this.ramps.push({
 				end: rampSize * n,
-				acceleration: posts[n - 1] - posts[n]
+				acceleration: (posts[n - 1] - posts[n]) * 10
 			})
 		}
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, ElementRef, AfterViewInit, Output, EventEmitter, HostListener } from '@angular/core'
 
 import { Motion } from '../models'
 import { MotionSetup, MotionData } from '../types'
@@ -22,8 +22,9 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	goalMotion: Motion
 	goalData: MotionData[]
 
-	@Input()
-	trial: MotionSetup
+	@Output('zoom')
+	zoomEvent = new EventEmitter()
+	zoomActive = false
 
 	activeGraph: GraphType = 's'
 
@@ -98,7 +99,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 		let axisTitle = ''
 
-		// Some specific configurations for each graph type
+		// Specific configurations for each graph type
 		switch (type) {
 			case 's':
 				// Position graph uses the track size as domain
@@ -118,7 +119,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			case 'a':
 				// Here we use the maximum acceleration possible to achieve
 				let postsDomain = this.goalMotion.mode.domain.posts
-				let maxAcceleration = postsDomain.min - postsDomain.max
+				let maxAcceleration = (postsDomain.min - postsDomain.max) * 10
 				scaleY.domain([maxAcceleration * -1, maxAcceleration])
 
 				axisTitle = 'Acceleration (cm/s²)'
@@ -169,5 +170,25 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	debug(type: string) {
 		let data = type === 'goal' ? this.goalMotion.getData() : []
 		printDataTable(data, type)
+	}
+
+	toggleZoom() {
+		this.clear()
+		this.zoomActive = !(this.zoomActive)
+		this.zoomEvent.emit(this.zoomActive)
+
+		// ev.target.innerHTML = this.zoomActive ? 'flip_to_back' : 'flip_to_front'
+		setTimeout(() => {
+			this.refresh()
+		}, 1)
+	}
+
+	@HostListener('document:keyup', ['$event'])
+	cancelZoom(event: KeyboardEvent) {
+		if (event.keyCode === 27 && this.zoomActive) {
+			this.toggleZoom()
+		}
+
+		console.log('jesuis')
 	}
 }
