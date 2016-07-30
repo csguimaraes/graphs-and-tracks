@@ -12,6 +12,10 @@ filler {
   box-sizing: border-box;
 }
 
+[fill-x] {
+  width: 100%;
+}
+
 .vcenter {
   position: relative;
   top: 50%;

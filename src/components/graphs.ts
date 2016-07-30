@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ElementRef, AfterViewInit } from '@angular/core'
 
 import { Motion } from '../models'
-import { MotionSetup } from '../types'
+import { MotionSetup, MotionData } from '../types'
+import { printDataTable } from '../utils/debug'
 
 declare let d3
-type GraphType = 'x' | 'v' | 'a'
+type GraphType = 's' | 'v' | 'a'
 
 @Component({
 	selector: 'graphs',
@@ -19,60 +20,64 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	@Input()
 	goal: MotionSetup
 	goalMotion: Motion
+	goalData: MotionData[]
 
 	@Input()
 	trial: MotionSetup
 
-	timeDebug: string
-	positionDebug: string
-	velocityDebug: string
-	accelerationDebug: string
-
-	activeGraph: GraphType = 'x'
+	activeGraph: GraphType = 's'
 
 	element: any
 	host: any
+
+	private resizeDelay
 
 	constructor(private elementRef: ElementRef) {
 	}
 
 	ngOnInit() {
+		this.goalMotion = new Motion(this.goal.position, this.goal.velocity, this.goal.posts)
+		this.goalMotion.execute()
+		this.goalData = this.goalMotion.getData()
+
 		this.element = this.elementRef.nativeElement.querySelector('chart')
 		this.host = d3.select(this.element)
-		this.goalMotion = new Motion(this.goal.position, this.goal.velocity, this.goal.posts)
-
-		this.goalMotion.execute()
-
-		this.timeDebug = JSON.stringify(this.goalMotion.getData('t'))
-		this.positionDebug = JSON.stringify(this.goalMotion.getData('x'))
-		this.velocityDebug = JSON.stringify(this.goalMotion.getData('v'))
-		this.accelerationDebug = JSON.stringify(this.goalMotion.getData('a'))
 	}
 
 	ngAfterViewInit() {
-		this.buildSVG()
+		this.refresh()
 	}
 
 	selectGraph(type: GraphType) {
-		this.activeGraph = type
-		this.buildSVG()
+		if (type !== this.activeGraph) {
+			this.activeGraph = type
+			this.refresh()
+		}
 	}
 
 	onResize(ev: any) {
-		// TODO: redraw only after a short delay
-		this.buildSVG()
+		if (this.resizeDelay) {
+			clearInterval(this.resizeDelay)
+		}
+
+		this.clear()
+		this.resizeDelay = setTimeout(() => {
+			this.refresh()
+		}, 200)
 	}
 
-	buildSVG(): void {
-		// set the dimensions and margins of the graph
-		let margin = {top: 20, right: 20, bottom: 30, left: 50},
-			width = this.element.clientWidth - margin.left - margin.right,
-			height = this.element.clientHeight - margin.top - margin.bottom
-
-		// append the svg obgect to the body of the page
-		// appends a 'group' element to 'svg'
-		// moves the 'group' element to the top left margin
+	clear() {
 		this.host.html('')
+	}
+
+	refresh(): void {
+		console.log('refreshing chart')
+		this.clear()
+
+		let margin = { top: 20, right: 20, bottom: 30, left: 50 }
+		let width = this.element.clientWidth - margin.left - margin.right
+		let height = this.element.clientHeight - margin.top - margin.bottom
+
 		let svg = this.host.append('svg')
 			.attr('width', width + margin.left + margin.right)
 			.attr('height', height + margin.top + margin.bottom)
@@ -80,45 +85,89 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			.attr('transform',
 				'translate(' + margin.left + ',' + margin.top + ')')
 
-		// set the ranges
-		let x = d3.scaleLinear().range([0, width])
-		let y = d3.scaleLinear().range([height, 0])
+		let isGoal = true
+		let data = this.goalMotion.getData()
+		let type = this.activeGraph
 
-		// define the line
-		let valueline = d3.line()
-			.x(function(d) { return x(d.time) })
-			.y(function(d) { return y(d.pos) })
+		let scaleX = d3.scaleLinear()
+			.range([0, width])
+			.domain([0, this.goalMotion.mode.simulation.duration])
 
-		// format the data
-		let time = this.goalMotion.getData('t')
-		let pos = this.goalMotion.getData('x')
+		let scaleY = d3.scaleLinear()
+			.range([height, 0])
 
-		let data = []
-		for (let i = 0; i < time.length; i++) {
-			data.push({
-				time: time[i],
-				pos: pos[i]
-			})
+		let axisTitle = ''
+
+		// Some specific configurations for each graph type
+		switch (type) {
+			case 's':
+				// Position graph uses the track size as domain
+				let pos = this.goalMotion.mode.domain.position
+				scaleY.domain([pos.min, pos.max])
+
+				axisTitle = 'Position (cm)'
+				break
+			case 'v':
+				// Velocity graph use min and max value from the dataset
+				let domainY = d3.extent(data, (d: MotionData) => d[type])
+				domainY = Math.max(Math.abs(domainY[0]), Math.abs(domainY[1]))
+				scaleY.domain([domainY * -1, domainY])
+
+				axisTitle = 'Velocity (cm/s)'
+				break
+			case 'a':
+				// Here we use the maximum acceleration possible to achieve
+				let postsDomain = this.goalMotion.mode.domain.posts
+				let maxAcceleration = postsDomain.min - postsDomain.max
+				scaleY.domain([maxAcceleration * -1, maxAcceleration])
+
+				axisTitle = 'Acceleration (cm/s²)'
+				break
+			default:
+				throw 'Unknown graph type'
 		}
-		console.log(data)
 
-		// Scale the range of the data
-		x.domain(d3.extent(data, function(d) { return d.time }))
-		y.domain([0, d3.max(data, function(d) { return d.pos })])
+		let linePath = d3.line()
+			.x((d: MotionData) => scaleX(d.t))
+			.y((d: MotionData) => scaleY(d[type]))
 
-		// Add the valueline path.
-		svg.append('path')
+		let line = svg.append('path')
 			.data([data])
-			.attr('class', 'line')
-			.attr('d', valueline)
+			.attr('d', linePath)
+
+		// TODO: improve
+		line.classed(type, true)
+		line.classed('line', true)
+		if (isGoal) {
+			line.classed('goal', true)
+		}
 
 		// Add the X Axis
+		let axisX = d3.axisBottom(scaleX)
+		axisX.tickValues([5, 10, 15, 20, 25])
+		axisX.tickFormat(x => x + 's')
 		svg.append('g')
-			.attr('transform', 'translate(0,' + height + ')')
-			.call(d3.axisBottom(x))
+			.attr('class', 'axis axis-x')
+			.attr('transform', 'translate(0,' + scaleY(0) + ')')
+			.call(axisX)
 
 		// Add the Y Axis
 		svg.append('g')
-			.call(d3.axisLeft(y))
+			.attr('class', 'axis')
+			.call(d3.axisLeft(scaleY))
+
+		svg.append('text')
+			.attr('class', 'axis-title')
+			.attr('transform', 'rotate(-90)')
+			.attr('y', (margin.left * -1) + 5)
+			.attr('x', (height / -2))
+			.attr('dy', '.71em')
+			.style('text-anchor', 'middle')
+			.text(axisTitle)
+	}
+
+	debug(type: string) {
+		let data = type === 'goal' ? this.goalMotion.getData() : []
+		printDataTable(data, type)
 	}
 }

@@ -9,7 +9,7 @@ export class Motion {
 	posts: number[]
 
 	private ramps: Types.Ramp[]
-	private data: Types.MotionData
+	private data: Types.MotionData[]
 
 	// TODO: Round value to nearest valid step
 	// value = Math.round(value / domain.step) * domain.step
@@ -21,7 +21,7 @@ export class Motion {
 		// Calculate individual ramp size in the given mode
 		let trackSize = this.mode.domain.position.max
 		let postCount = this.mode.postsCount
-		let rampSize =  trackSize / (postCount - 1)
+		let rampSize = trackSize / (postCount - 1)
 
 		// Calculate ramp acceleration values
 		this.ramps = []
@@ -40,30 +40,37 @@ export class Motion {
 
 	execute() {
 		// Initialize data series with values for T=0
-		let x = this.initialPosition
+		let s = this.initialPosition
 		let v = this.initialVelocity
-		let a = this.getAccelerationAt(x)
-		this.commitData(0, x, v, a)
+		let a = this.getAccelerationAt(s)
+		this.commitData(0, s, v, a)
 
 
 		let dt = 1 / this.mode.simulation.precision
 		let tMax = this.mode.simulation.duration
+		let sDomain = this.mode.domain.position
+
 		for (let t = dt; t <= tMax; t += dt) {
-			// TODO: what happens when the ball go outside the track?
-			x = x + (v * dt) + ((Math.pow(dt, 2) * a) / 2)
+			s = s + (v * dt) + ((Math.pow(dt, 2) * a) / 2)
 
 			v = v + (a * dt)
 
 			// When the ball move to another ramp we plot the new acceleration value
 			// however we'll only use the new value in the next iteration
-			a = this.getAccelerationAt(x)
+			a = this.getAccelerationAt(s)
 
-			this.commitData(t, x, v, a)
+			this.commitData(t, s, v, a)
+
+			// Check if ball fell off the track
+			if (s > sDomain.max || s < sDomain.min) {
+				// TODO: normalize position
+				break
+			}
 		}
 	}
 
-	getData(type: 't' | 'x' | 'v' | 'a') {
-		return this.data[type].slice()
+	getData() {
+		return this.data.slice()
 	}
 
 	private getAccelerationAt(position: number): number {
@@ -79,14 +86,11 @@ export class Motion {
 		return acceleration
 	}
 
-	private commitData(t: number, x: number, v: number, a: number) {
+	private commitData(t: number, s: number, v: number, a: number) {
 		if (t === 0 || this.data === undefined) {
-			this.data = { t: [], x: [], v: [], a: [] }
+			this.data = []
 		}
 
-		this.data.t.push(t)
-		this.data.x.push(x)
-		this.data.v.push(v)
-		this.data.a.push(a)
+		this.data.push({ t: t, s: s, v: v, a: a })
 	}
 }

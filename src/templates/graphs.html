@@ -2,23 +2,25 @@
 	<md-card-title>
 		Graphs
 		<div class="graph-selector">
-			<span [class.active]="activeGraph == 'x'" (click)="selectGraph('x')">
+			<span [class.active]="activeGraph == 's'" class="s" (click)="selectGraph('s')">
 				Position
 			</span>
-			<span [class.active]="activeGraph == 'v'" (click)="selectGraph('v')">
+			<span [class.active]="activeGraph == 'v'" class="v" (click)="selectGraph('v')">
 				Velocity
 			</span>
-			<span [class.active]="activeGraph == 'a'" (click)="selectGraph('a')">
+			<span [class.active]="activeGraph == 'a'" class="a" (click)="selectGraph('a')">
 				Acceleration
 			</span>
 		</div>
+
+
+		<div id="debug">
+			<md-icon small (click)="debug('goal')" title="DEBUG: data generated for GOAL motion">flip_to_back</md-icon>
+			<md-icon small (click)="debug('trial')" title="DEBUG: data generated for TRIAL motion">flip_to_front</md-icon>
+		</div>
+
 	</md-card-title>
 	<md-card-content>
-		<chart></chart>
-		<b>DEBUG INFO</b> <br>
-		T {{timeDebug}}<br>
-		X {{positionDebug}}<br>
-		V {{velocityDebug}}<br>
-		A {{accelerationDebug}}<br>
+		<chart class="{{activeGraph}}"></chart>
 	</md-card-content>
 </md-card>

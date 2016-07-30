@@ -1,3 +1,7 @@
+$color-s: steelblue;
+$color-v: orangered;
+$color-a: forestgreen;
+
 .graph-selector {
   display: inline-block;
   font-size: 14px;
@@ -5,6 +9,7 @@
   margin-top: -4px;
   font-weight: 600;
   vertical-align: middle;
+  white-space: nowrap;
 
   span {
     display: inline-block;
@@ -12,11 +17,13 @@
     padding: 2px 8px;
     cursor: pointer;
     margin-right: -4px;
-    white-space: nowrap;
 
     &.active {
       color: white;
       background: #333;
+      &.s { background: $color-s; }
+      &.v { background: $color-v; }
+      &.a { background: $color-a; }
     }
 
     &:hover:not(.active) {
@@ -33,19 +40,78 @@
   }
 }
 
+#debug {
+  position: absolute;
+  top: 0;
+  right: 0;
+  md-icon {
+    padding: 0;
+    cursor: pointer;
+    color: red;
+  }
+}
+
+md-card {
+  padding-bottom: 8px !important;
+}
+
+md-card-title {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+md-card-content {
+  // Substract card title
+  height: calc(100% - 28px - 16px);
+
+   // Remove some paddings to increase chart area in the card
+  margin-left: -16px !important;
+  margin-right: -16px !important;
+  margin-bottom: -16px !important;
+}
+
 chart {
   width: 100%;
-  height: 500px;
+  height: 100%;
   display: block;
 }
 
 
 chart /deep/ .line {
   fill: none;
-  stroke: steelblue;
   stroke-width: 2px;
+  stroke: black;
+}
+
+chart /deep/ .line.goal {
   stroke-dasharray: 5 10;
-  animation: dashing 3s linear infinite;
+  animation: dashing 5s linear infinite;
+}
+
+chart /deep/ .line.trial {
+  stroke-dasharray: 3 7;
+  animation: dashing 1s linear infinite;
+}
+
+chart /deep/ .line.s {
+  stroke: $color-s;
+}
+
+chart /deep/ .line.v {
+  stroke: $color-v;
+}
+
+chart /deep/ .line.a {
+  stroke: $color-a;
+}
+
+chart /deep/ .axis {
+  shape-rendering: crispEdges;
+}
+
+chart /deep/ .axis-x {
+  stroke-dasharray: 10 5;
+  stroke-width: 1px;
 }
 
 @keyframes dashing {

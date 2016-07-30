@@ -40,7 +40,8 @@ md-card-actions {
 
 md-grid-list[card-fill] {
   height: 100%;
-  & > * {
+
+  md-grid-tile > * > *, md-grid-tile > * > * md-card {
     height: 100%;
     width: 100%;
     box-sizing: border-box;

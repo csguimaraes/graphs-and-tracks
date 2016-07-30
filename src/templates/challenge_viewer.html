@@ -1,6 +1,6 @@
-<md-grid-list fill rowHeight="fit" cols="5" gutterSize="8px">
+<md-grid-list card-fill rowHeight="fit" cols="5" gutterSize="8px">
 	<md-grid-tile colspan="2" rowspan="2">
-		<md-card fill class="info-card">
+		<md-card class="info-card">
 			<md-card-title>
 				{{ challenge.name }}
 				<small>
@@ -16,7 +16,7 @@
 			</md-card-content>
 
 			<md-card-actions>
-				<button md-button>
+				<button md-button [routerLink]="['/challenges']">
 					<md-icon small>keyboard_backspace</md-icon>
 					Go Back
 				</button>
@@ -37,10 +37,10 @@
 	</md-grid-tile>
 
 	<md-grid-tile colspan="3" rowspan="5">
-		<graphs fill [goal]="challenge.goal"></graphs>
+		<track-editor></track-editor>
 	</md-grid-tile>
 
 	<md-grid-tile colspan="2" rowspan="3">
+		<graphs fill [goal]="challenge.goal"></graphs>
 	</md-grid-tile>
-
 </md-grid-list>

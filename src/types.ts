@@ -32,11 +32,12 @@ export interface Attempt {
 	motion: MotionSetup
 }
 
+
 export interface MotionData {
-	t: number[]
-	x: number[]
-	v: number[]
-	a: number[]
+	t: number
+	s: number
+	v: number
+	a: number
 }
 
 export interface MotionSetup {

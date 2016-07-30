@@ -8,6 +8,10 @@ html, body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+* {
+  cursor: default;
+}
+
 /* TODO: Store global values in variables (separate file?) */
 
 body, md-sidenav-layout {
