@@ -23,4 +23,5 @@ export const DEFAULT_CHALLENGES: Types.MotionSetup[] = [
 	{ position: 450, velocity: 10, posts: [2, 2, 1, 0, 2, 4] },
 	{ position: 450, velocity: -30, posts: [5, 0, 2, 2, 0, 6] },
 	{ position: 50, velocity: 60, posts: [1, 2, 0, 3, 0, 9] },
+	{ position: 200, velocity: 20, posts: [0, 1, 1, 4, 0, 0] }
 ]

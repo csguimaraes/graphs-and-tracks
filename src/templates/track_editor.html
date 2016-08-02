@@ -1,0 +1,35 @@
+<md-card>
+	<md-card-title>Track</md-card-title>
+
+	<md-card-content>
+		<label>
+			position
+			<input type="number" [(ngModel)]="setup.position"
+					min="{{mode.domain.position.min}}"
+					max="{{mode.domain.position.max}}"
+					step="{{mode.domain.position.step}}"
+					(change)="0"
+			>
+		</label>
+		<br>
+		<label>
+			velocity
+			<input type="number" [(ngModel)]="setup.velocity"
+					min="{{mode.domain.velocity.min}}"
+					max="{{mode.domain.velocity.max}}"
+					step="{{mode.domain.velocity.step}}"
+					(change)="0"
+			>
+		</label>
+		<br>
+		<input type="number" [(ngModel)]="setup.posts[0]" min="1" max="10">
+		<input type="number" [(ngModel)]="setup.posts[1]" min="1" max="10">
+		<input type="number" [(ngModel)]="setup.posts[2]" min="1" max="10">
+		<input type="number" [(ngModel)]="setup.posts[3]" min="1" max="10">
+		<input type="number" [(ngModel)]="setup.posts[4]" min="1" max="10">
+		<input type="number" [(ngModel)]="setup.posts[5]" min="1" max="10">
+		<br>
+		<br>
+		<button (click)="rollBall()">ROLL BABY</button>
+	</md-card-content>
+</md-card>

@@ -9,10 +9,23 @@ export class Motion {
 	posts: number[]
 
 	private ramps: Types.Ramp[]
-	private data: Types.MotionData[]
+	private _data: Types.MotionData[]
+
+	get data() {
+		if (this._data === undefined) {
+			this.execute()
+		}
+
+		return this._data.slice()
+	}
 
 	// TODO: Round value to nearest valid step
 	// value = Math.round(value / domain.step) * domain.step
+
+	static fromSetup(setup: Types.MotionSetup, mode?: Types.ChallengeMode) {
+		// TODO: fetch challenge mode
+		return new this(setup.position, setup.velocity, setup.posts, mode)
+	}
 
 	constructor(position: number, velocity: number, posts: number[], mode?: Types.ChallengeMode) {
 		// For now only NORMAL mode is available
@@ -69,9 +82,7 @@ export class Motion {
 		}
 	}
 
-	getData() {
-		return this.data.slice()
-	}
+
 
 	private getAccelerationAt(position: number): number {
 		let acceleration
@@ -87,10 +98,11 @@ export class Motion {
 	}
 
 	private commitData(t: number, s: number, v: number, a: number) {
-		if (t === 0 || this.data === undefined) {
-			this.data = []
+		if (t === 0 || this._data === undefined) {
+			this._data = []
 		}
 
-		this.data.push({ t: t, s: s, v: v, a: a })
+		this._data.push({ t: t, s: s, v: v, a: a })
 	}
 }
+

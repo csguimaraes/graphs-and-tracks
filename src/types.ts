@@ -17,7 +17,9 @@ export interface Challenge {
 	id: string
 	name: string
 	custom: boolean
-	goal: MotionSetup
+	goal: MotionSetup,
+	// TODO mark as required
+	mode?: ChallengeMode
 }
 
 export interface ChallengeStats {
@@ -29,7 +31,7 @@ export interface ChallengeStats {
 export interface Attempt {
 	time: string
 	accuracy: number
-	motion: MotionSetup
+	setup: MotionSetup
 }
 
 

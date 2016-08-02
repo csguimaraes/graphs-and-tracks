@@ -78,9 +78,14 @@ chart /deep/ .line.goal {
 }
 
 chart /deep/ .line.trial {
-  stroke-dasharray: 3 7;
-  animation: dashing 1s linear infinite;
+  stroke-opacity: .1 !important;
 }
+
+chart /deep/ .line.trial.active {
+  stroke-opacity: 1 !important;
+  transition: stroke-dashoffset 2.5s linear;
+}
+
 
 chart /deep/ .line.s {
   stroke: $color-s;

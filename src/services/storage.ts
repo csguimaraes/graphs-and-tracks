@@ -18,7 +18,9 @@ export class StorageService {
 	}
 
 	getChallenge(id: string) {
-		return this.challenges.find((c) => { return c.id === id })
+		let challenge = this.challenges.find((c) => { return c.id === id })
+		challenge.mode = challenge.mode || Settings.MODE_NORMAL
+		return challenge
 	}
 
 	private parseDefaultChallenges(): Challenge[] {
