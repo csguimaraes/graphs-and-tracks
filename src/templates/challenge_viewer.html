@@ -1,5 +1,5 @@
 <md-grid-list card-fill rowHeight="fit" cols="5" gutterSize="8px" [class.zoom]="zoom">
-	<md-grid-tile colspan="2" rowspan="4">
+	<md-grid-tile colspan="1" rowspan="4">
 		<md-card class="info-card">
 			<md-card-title>
 				{{ challenge.name }}
@@ -47,11 +47,11 @@
 		</md-card>
 	</md-grid-tile>
 
-	<md-grid-tile colspan="3" rowspan="2">
+	<md-grid-tile colspan="4" rowspan="2">
 		<track-editor [mode]="goalMotion.mode" (roll)="onRollBall($event)"></track-editor>
 	</md-grid-tile>
 
-	<md-grid-tile [class.zoom]="zoom" colspan="3" rowspan="2">
+	<md-grid-tile [class.zoom]="zoom" colspan="4" rowspan="2">
 		<graphs (zoom)="onGraphZoom()"></graphs>
 	</md-grid-tile>
 </md-grid-list>

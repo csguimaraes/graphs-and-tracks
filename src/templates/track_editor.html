@@ -1,35 +1,39 @@
 <md-card>
-	<md-card-title>Track</md-card-title>
+	<md-card-title>
+		Track
+		<small>
+			<label>
+				position
+				<input type="number" [(ngModel)]="setup.position"
+						min="{{mode.domain.position.min}}"
+						max="{{mode.domain.position.max}}"
+						step="5"
+						(change)="refresh()"
+				>
+				<!--{{mode.domain.position.step}}-->
+			</label>
+			|
+			<label>
+				velocity
+				<input type="number" [(ngModel)]="setup.velocity"
+						min="{{mode.domain.velocity.min}}"
+						max="{{mode.domain.velocity.max}}"
+						step="{{mode.domain.velocity.step}}"
+						(change)="refresh()"
+				>
+			</label>
+			| posts
+			<label *ngFor="let post of setup.posts; let i = index; trackBy:trackByIndex">
+				<input type="number" [(ngModel)]="setup.posts[i]"
+						min="{{mode.domain.posts.min}}"
+						max="{{mode.domain.posts.max}}"
+						step="{{mode.domain.posts.step}}"
+						(change)="refresh()"
+				>
+			</label>
+			<button (click)="rollBall()">ROLL BABY</button>
+		</small>
+	</md-card-title>
 
-	<md-card-content>
-		<label>
-			position
-			<input type="number" [(ngModel)]="setup.position"
-					min="{{mode.domain.position.min}}"
-					max="{{mode.domain.position.max}}"
-					step="{{mode.domain.position.step}}"
-					(change)="0"
-			>
-		</label>
-		|
-		<label>
-			velocity
-			<input type="number" [(ngModel)]="setup.velocity"
-					min="{{mode.domain.velocity.min}}"
-					max="{{mode.domain.velocity.max}}"
-					step="{{mode.domain.velocity.step}}"
-					(change)="0"
-			>
-		</label>
-		| posts
-		<label *ngFor="let post of setup.posts; let i = index; trackBy:trackByIndex">
-			{{i}}
-			<input type="number" [(ngModel)]="setup.posts[i]"
-					min="{{mode.domain.posts.min}}"
-					max="{{mode.domain.posts.max}}"
-					step="{{mode.domain.posts.step}}"
-			>
-		</label>
-		<button (click)="rollBall()">ROLL BABY</button>
-	</md-card-content>
+	<md-card-content id="track"></md-card-content>
 </md-card>

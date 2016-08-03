@@ -1,0 +1,11 @@
+#track {
+  height: calc(100% - 28px - 16px);
+  margin-bottom: -16px !important;
+  background: silver;
+}
+
+#track /deep/ .track-line {
+  stroke: black;
+  stroke-width: 3px;
+  fill: none;
+}
