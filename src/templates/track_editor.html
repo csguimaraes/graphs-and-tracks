@@ -11,7 +11,7 @@
 					(change)="0"
 			>
 		</label>
-		<br>
+		|
 		<label>
 			velocity
 			<input type="number" [(ngModel)]="setup.velocity"
@@ -21,15 +21,15 @@
 					(change)="0"
 			>
 		</label>
-		<br>
-		<input type="number" [(ngModel)]="setup.posts[0]" min="1" max="10">
-		<input type="number" [(ngModel)]="setup.posts[1]" min="1" max="10">
-		<input type="number" [(ngModel)]="setup.posts[2]" min="1" max="10">
-		<input type="number" [(ngModel)]="setup.posts[3]" min="1" max="10">
-		<input type="number" [(ngModel)]="setup.posts[4]" min="1" max="10">
-		<input type="number" [(ngModel)]="setup.posts[5]" min="1" max="10">
-		<br>
-		<br>
+		| posts
+		<label *ngFor="let post of setup.posts; let i = index; trackBy:trackByIndex">
+			{{i}}
+			<input type="number" [(ngModel)]="setup.posts[i]"
+					min="{{mode.domain.posts.min}}"
+					max="{{mode.domain.posts.max}}"
+					step="{{mode.domain.posts.step}}"
+			>
+		</label>
 		<button (click)="rollBall()">ROLL BABY</button>
 	</md-card-content>
 </md-card>

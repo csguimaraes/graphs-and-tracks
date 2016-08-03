@@ -36,4 +36,15 @@ export class TrackEditorComponent implements OnInit {
 	rollBall() {
 		this.rollBallEvent.emit(_.cloneDeep(this.setup))
 	}
+
+	/**
+	 * We need to use the array index as identity for detection change
+	 * @param index
+	 * @param value
+	 * @returns {number}
+	 * @see https://github.com/angular/angular/issues/10423
+	 */
+	trackByIndex(index: number, value: number) {
+		return index
+	}
 }
