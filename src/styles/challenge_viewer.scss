@@ -1,1 +1,48 @@
+#attempt-list {
+  .attempt-list-item {
+    padding: 8px 24px !important;
+    margin: 0 -24px;
+    line-height: 2em;
+
+    &:hover {
+      background: #F0F0F0;
+    }
+
+    .attempt-title {
+      small {
+        color: #AAA;
+        font-weight: 400;
+      }
+    }
+
+    .attempt-accuracy {
+      font-weight: 600;
+      float: right;
+      line-height: 18px;
+      color: orangered;
+      text-shadow: 0 0 .1px darkorange;
+      margin-top: 8px;
+      md-icon {
+        width: auto;
+        height: auto;
+        vertical-align: top;
+      }
+    }
+
+    .attempt-info {
+      font-size: 80%;
+      span {
+        background: #AAA;
+        border-radius: 3px;
+        color: white;
+        padding: 2px 4px;
+        margin-right: 15px;
+      }
+    }
+  }
+
+  /deep/ .attempt-info {
+    color: #AAA;
+  }
+}
 

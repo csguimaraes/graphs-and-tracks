@@ -1,30 +1,12 @@
 <md-grid-list card-fill rowHeight="fit" cols="5" gutterSize="8px" [class.zoom]="zoom">
 	<md-grid-tile colspan="2" rowspan="4">
-		<md-card class="info-card">
+		<md-card class="info-card" scroll-y>
 			<md-card-title>
 				{{ challenge.name }}
 				<small>
 					created by <b>Student 42</b>
 				</small>
 			</md-card-title>
-
-			<md-card-content>
-				<b>DEBUG INFO</b> <br>
-				Initial Position: {{challenge.goal.position}} <br>
-				Initial Velocity: {{challenge.goal.velocity}} <br>
-				Posts: {{challenge.goal.posts | dump }}
-
-				<br><br>
-				<b>TRIALS</b> <br>
-				<div *ngFor="let attempt of attempts; let i = index">
-					<b>Attempt #{{i}}</b> - <small>{{attempt.time}}</small>
-					S: {{attempt.setup.position}}
-					V: {{attempt.setup.velocity}}
-
-					P: {{attempt.setup.posts[0]}}
-				</div>
-			</md-card-content>
-
 			<md-card-actions>
 				<button md-button [routerLink]="['/challenges']">
 					<md-icon small>keyboard_backspace</md-icon>
@@ -44,6 +26,37 @@
 				</button>
 			</md-card-actions>
 
+			<md-card-content>
+				<md-card-subtitle>Challenge Info (DEBUG)</md-card-subtitle>
+				Initial Position: {{challenge.goal.position}} <br>
+				Initial Velocity: {{challenge.goal.velocity}} <br>
+				Posts: {{challenge.goal.posts | dump }}
+
+				<br><br>
+
+				<md-card-subtitle>Challenge Attempts</md-card-subtitle>
+				<div id="attempt-list">
+					<div class="attempt-list-item"
+							*ngFor="let attempt of attempts; let i = index"
+							(mouseenter)="graphsPanel.highlightTrial(i)"
+							(mouseleave)="graphsPanel.highlightTrial()"
+					>
+						<div class="attempt-title">
+							Attempt #{{i+1}}
+							<small>{{attempt.time | ago}}</small>
+							<span class="attempt-accuracy" align-right>
+								<md-icon small>filter_tilt_shift</md-icon>
+								30%
+							</span>
+						</div>
+						<div class="attempt-info">
+							<span>Position {{attempt.setup.position}} </span>
+							<span>Velocity {{attempt.setup.velocity}} </span>
+							<span>Posts {{attempt.setup.posts | dump}} </span>
+						</div>
+					</div>
+				</div>
+			</md-card-content>
 		</md-card>
 	</md-grid-tile>
 

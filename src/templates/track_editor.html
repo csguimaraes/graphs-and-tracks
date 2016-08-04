@@ -1,7 +1,7 @@
 <md-card>
 	<md-card-title>
 		Track
-		<small >
+		<small (keyup.enter)="rollBall()">
 			<label>
 				position
 				<input type="number" [(ngModel)]="setup.position"

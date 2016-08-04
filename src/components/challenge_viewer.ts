@@ -13,11 +13,11 @@ import { TrackEditorComponent } from './track_editor'
 
 import * as moment from 'moment'
 
-
 @Component({
 	moduleId: module.id,
 	selector: 'challenge',
 	templateUrl: '../templates/challenge_viewer.html',
+	styleUrls: ['../styles/challenge_viewer.scss'],
 	directives: [
 		MD_GRID_LIST_DIRECTIVES,
 		MD_CARD_DIRECTIVES,

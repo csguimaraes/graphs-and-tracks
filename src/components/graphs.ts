@@ -57,6 +57,13 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	}
 
 	highlightTrial(trialIndex?: number) {
+		this.element.querySelector('.trial.line.active').classList.remove('active')
+		if (trialIndex === undefined) {
+			// Highlight the last trial
+			trialIndex = this.trialsData.length - 1
+		}
+
+		this.element.querySelector(`.trial.line.trial-${trialIndex}`).classList.add('active')
 
 	}
 
@@ -81,11 +88,11 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		let data = this.goalData
 		let type = this.activeGraph
 
-		this.scaleX = d3.scaleLinear()
+		let scaleX = this.scaleX = d3.scaleLinear()
 			.range([0, width])
 			.domain([0, this.mode.simulation.duration])
 
-		this.scaleY = d3.scaleLinear()
+		let scaleY = this.scaleY = d3.scaleLinear()
 			.range([height, 0])
 
 		let axisTitle = ''
@@ -95,7 +102,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			case 's':
 				// Position graph uses the track size as domain
 				let pos = this.mode.domain.position
-				this.scaleY.domain([pos.min, pos.max])
+				scaleY.domain([pos.min, pos.max])
 
 				axisTitle = 'Position (cm)'
 				break
@@ -104,7 +111,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 				// Velocity graph use min and max value from the dataset
 				let domainY = d3.extent(data, (d: MotionData) => d[type])
 				domainY = Math.max(Math.abs(domainY[0]), Math.abs(domainY[1]))
-				this.scaleY.domain([domainY * -1, domainY])
+				scaleY.domain([domainY * -1, domainY])
 
 				axisTitle = 'Velocity (cm/s)'
 				break
@@ -113,7 +120,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 				// Here we use the maximum acceleration possible to achieve
 				let postsDomain = this.mode.domain.posts
 				let maxAcceleration = (postsDomain.max - postsDomain.min) * 10
-				this.scaleY.domain([maxAcceleration * -1, maxAcceleration])
+				scaleY.domain([maxAcceleration * -1, maxAcceleration])
 
 				axisTitle = 'Acceleration (cm/s²)'
 				break
@@ -123,18 +130,18 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}
 
 		// Add the X Axis
-		let axisX = d3.axisBottom(this.scaleX)
+		let axisX = d3.axisBottom(scaleX)
 		axisX.tickValues([5, 10, 15, 20, 25])
 		axisX.tickFormat(x => x + 's')
 		svg.append('g')
 			.attr('class', 'axis axis-x')
-			.attr('transform', 'translate(0,' + this.scaleY(0) + ')')
+			.attr('transform', 'translate(0,' + scaleY(0) + ')')
 			.call(axisX)
 
 		// Add the Y Axis
 		svg.append('g')
 			.attr('class', 'axis')
-			.call(d3.axisLeft(this.scaleY))
+			.call(d3.axisLeft(scaleY))
 
 		svg.append('text')
 			.attr('class', 'axis-title')
@@ -146,12 +153,13 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			.text(axisTitle)
 
 		// Plot goal line
-		this.plotLine(svg, data, type, true)
+		this.plotLine(svg, data, type, ['goal'])
 
 		// Plot trial lines
 		let lastPlotLine: any = null
+		let trialIndex = 0
 		for (let trial of this.trialsData) {
-			lastPlotLine = this.plotLine(svg, trial, type, false)
+			lastPlotLine = this.plotLine(svg, trial, type, ['trial', `trial-${trialIndex++}`])
 		}
 
 		if (lastPlotLine) {
@@ -167,8 +175,9 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	private plotLine(svg: any, data: MotionData[], type: GraphType, isGoal: boolean) {
-		let classList = ['line', type, isGoal ? 'goal' : 'trial']
+	private plotLine(svg: any, data: MotionData[], type: GraphType, classList: string[]) {
+		classList.push('line')
+		classList.push(type)
 
 		let line = d3.line()
 			.x((d: MotionData) => this.scaleX(d.t))
@@ -191,8 +200,19 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	}
 
 	debug(type: string) {
-		let data = type === 'goal' ? this.goalData : []
-		printDataTable(data, type)
+		let trialIndex = ''
+		if (this.trialsData.length) {
+			let promptText = `Enter trial index (from 1 to ${this.trialsData.length}) or leave empty for goal:`
+			trialIndex = prompt('Which trial motion you want to debug?\n\n' + promptText)
+		}
+
+		if (trialIndex !== undefined) {
+			if (trialIndex === '') {
+				printDataTable(this.goalData, 'goal')
+			} else {
+				printDataTable(this.trialsData[+trialIndex - 1], `attempt #${trialIndex}`)
+			}
+		}
 	}
 
 	toggleZoom() {

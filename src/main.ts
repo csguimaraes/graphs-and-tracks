@@ -6,7 +6,7 @@ import { MdIconRegistry, MdIcon } from '@angular2-material/icon'
 
 import * as Components from './components'
 import { StorageService } from './services'
-import { DumpPipe } from './utils/dump.pipe'
+import { DumpPipe, TimeAgoPipe } from './utils'
 import './public/icons.scss'
 import './public/utils.scss'
 import './public/main.scss'
@@ -27,7 +27,8 @@ const GLOBAL_DIRECTIVES = provide(PLATFORM_DIRECTIVES, {
 
 const GLOBAL_PIPES = provide(PLATFORM_PIPES, {
 	useValue: [
-		DumpPipe
+		DumpPipe,
+		TimeAgoPipe
 	],
 	multi: true
 })
