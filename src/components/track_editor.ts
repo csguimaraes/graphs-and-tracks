@@ -6,6 +6,7 @@ declare let d3
 
 @Component({
 	selector: 'track-editor',
+	host: { '(window:resize)': 'onResize($event)' },
 	templateUrl: '../templates/track_editor.html',
 	styleUrls: ['../styles/track_editor.scss']
 })
@@ -35,9 +36,9 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 		}
 
 		this.setup = {
-			position: 350,
-			velocity: 40,
-			posts: [4, 2, 0, 0, 2, 4]
+			position: 250,
+			velocity: 0,
+			posts: [2, 4, 4, 4, 4, 2]
 		}
 	}
 
@@ -45,7 +46,9 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 		this.element = this.elementRef.nativeElement.querySelector('#track')
 		this.host = d3.select(this.element)
 
-		this.refresh()
+		setTimeout(() => {
+			this.refresh()
+		}, 50)
 
 	}
 
@@ -56,115 +59,122 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 	refresh() {
 		this.host.html('')
 
+		let ballRealRadius = 10
+		let ballTrackDistance = 1
+		let ballMargin = ballRealRadius * 2
+
 		let domain = this.mode.domain
 		let trackSize = domain.position.max - domain.position.min
 		let rampSize = trackSize / (this.mode.postsCount - 1)
 		let posts = this.setup.posts.slice()
 
-		let width = this.element.clientWidth
-		let height = this.element.clientHeight
-
+		let margin = { top: ballMargin, right: ballMargin, bottom: 0, left: ballMargin }
+		let width = this.element.clientWidth - margin.left - margin.right
+		let height = this.element.clientHeight - margin.top - margin.bottom
 
 		let svg = this.host.append('svg')
-			.attr('width', width)
-			.attr('height', height)
+			.attr('width', width + margin.left + margin.right)
+			.attr('height', height + margin.top + margin.bottom)
 			.append('g')
+			.attr('transform', `translate(${margin.left}, ${margin.top})`)
 
 		let scaleX = d3.scaleLinear()
 			.range([0, width])
 			.domain([domain.position.min, domain.position.max])
 
+
 		let scaleY = d3.scaleLinear()
 			.range([height, 0])
-			.domain([domain.posts.min - 1, domain.posts.max + 1])
+			.domain([domain.posts.min - 1, domain.posts.max])
 
-		let data = this.setup.posts
-		let line = d3.line()
-			.x((val, idx) => { return scaleX(idx * rampSize) })
-			.y((val, idx) => { return scaleY(val) })
+		let trackArea = d3.area()
+			.y0(height)
+			.y1(val => scaleY(val))
+			.x((val, idx) => scaleX(idx * rampSize))
 
 		svg.append('path')
-			.data([data])
+			.data([posts])
 			.attr('class', 'track-line')
-			.attr('d', line)
+			.attr('d', trackArea)
 
-		this.ballPosition = (position: number, radiusX: number, radiusY: number) => {
+		// We define this function here because we can capture all the calculation contexts
+		// This function will be used afterwards for animating the ball using the latest track setup
+		this.ballPosition = (position: number, ballRadiusX: number, ballRadiusY: number) => {
 			// Find the index of the left hand post
 			let positionRatio = position / rampSize
 			let postIndex = Math.floor(positionRatio)
 
-			if (position % rampSize) {
-				// Ball is between two posts
-				positionRatio = positionRatio - postIndex
-				let slope = posts[postIndex + 1] - posts[postIndex]
-				// This is the exact height of the track at the ball position
-				let initialHeight = posts[postIndex] + (slope * positionRatio)
-
-				// Get ramp angle and its normal
-				let rampDX = scaleX(rampSize * -1)
-				let rampDY = scaleY(posts[postIndex]) - scaleY(posts[postIndex + 1])
-				let rampAngle = Math.atan2(rampDX, rampDY)
-				let normalAngle = 180 * (Math.PI / 180)
-				if (rampAngle >= 0) {
-					normalAngle = rampAngle + normalAngle
-				} else {
-					normalAngle = rampAngle - normalAngle
-				}
-
-				// Translate the ball postion against ramp's normal
-				let finalPosition = {
-					x: position + (radiusX * Math.cos(normalAngle)),
-					y: initialHeight + (radiusY * Math.sin(normalAngle)),
-					initial: {
-						x: position,
-						y: initialHeight
-					}
-				}
-
-				return finalPosition
-			} else {
-				// Ball is exactly above one post
+			// Check if ball is exactly above one post
+			if (position % rampSize === 0) {
 				return {
 					x: position,
-					y: posts[postIndex] + radiusY
+					y: posts[postIndex] + ballRadiusY
 				}
+			}
+
+			// Below we calculate the ball center when it is between two posts
+			// It takes in consideration the angle of the current ramp
+
+			positionRatio = positionRatio - postIndex
+			let rampSlope = posts[postIndex + 1] - posts[postIndex]
+
+			// This is the exact Y value where the ball touches the track
+			let initialHeight = posts[postIndex] + (rampSlope * positionRatio)
+
+			// Get ramp angle and its normal
+			let rightAngle = 90 * (Math.PI / 180) * (rampSlope >= 0 ? 1 : -1)
+			let rampDX = scaleX(rampSize * -1)
+			let rampDY = scaleY(posts[postIndex]) - scaleY(posts[postIndex + 1])
+			let rampAngle = Math.atan2(rampDX, rampDY) + rightAngle
+			let normalAngle = rampAngle +  rightAngle
+
+			// Translate the ball initial postion towards ramp's normal
+			let finalX = position + (ballRadiusX * Math.cos(normalAngle))
+			let finalY = initialHeight + (ballRadiusY * Math.sin(normalAngle))
+
+			return {
+				x: finalX,
+				y: finalY
 			}
 		}
 
-		// This is the 'real' radius of the ball
-		let trackStrokeWidth = 3
-		let ballRealRadius = 10 + (trackStrokeWidth / 2)
+		let scaleYEnd = scaleY(Math.min(...scaleY.domain()))
+		let scaleXEnd = scaleX(Math.max(...scaleX.domain()))
 
-		// To make the calculation with the radius in the abstract portion of dimensions
-		// We need to use an abstract radius for each dimension
-		let ballRealRadiusX = scaleX.invert(ballRealRadius)
-		let ballRealRadiusY = scaleY.invert(ballRealRadius)
-		// Y scale is upside down
-		ballRealRadiusY = Math.max(...scaleY.domain()) - ballRealRadiusY
+		// The ball radius is defined whithout scaling into the data dimensions
+		// We invert the scale to know the proportional radius value in X and Y data domains
+		let ballRadiusX = scaleX.invert(ballRealRadius + ballTrackDistance)
+		let ballRadiusY = scaleY.invert(ballRealRadius + ballTrackDistance)
 
-		let ballPosition = this.ballPosition(this.setup.position, ballRealRadiusX, ballRealRadiusY)
+		// Y scale is upside down, so the actual radius is the returned offset
+		ballRadiusY = Math.max(...scaleY.domain()) - ballRadiusY
+
+		let ballPosition = this.ballPosition(this.setup.position, ballRadiusX, ballRadiusY)
 
 		svg.append('circle')
 			.attr('cx', scaleX(ballPosition.x))
 			.attr('cy', scaleY(ballPosition.y))
-			.attr('r', ballRealRadius - (trackStrokeWidth / 2))
+			.attr('r', ballRealRadius)
+			.attr('class', 'track-ball')
 
-		/*if (ballPosition.initial) {
-			svg.append('circle')
-				.attr('cx', scaleX(ballPosition.initial.x))
-				.attr('cy', scaleY(ballPosition.initial.y))
-				.attr('r', ballRealRadius / 4)
-				.attr('fill', 'red')
+		let leftTrackSideY = scaleY(posts[0])
+		let leftTrackSideHeigth = scaleYEnd - leftTrackSideY
+		svg.append('rect')
+			.attr('x', scaleX(0) - ballMargin)
+			.attr('y', leftTrackSideY)
+			.attr('width', ballMargin)
+			.attr('height', leftTrackSideHeigth)
+			.attr('class', 'track-side')
 
-			svg.append('circle')
-				.attr('cx', scaleX(ballPosition.x))
-				.attr('cy', scaleY(ballPosition.y))
-				.attr('r', ballRealRadius / 4)
-				.attr('fill', 'green')
-		}*/
+		let rightTrackSideY = scaleY(posts[posts.length - 1])
+		let rightTrackSideHeigth = scaleYEnd - rightTrackSideY
+		svg.append('rect')
+			.attr('x', scaleXEnd)
+			.attr('y', rightTrackSideY)
+			.attr('width', ballMargin)
+			.attr('height', rightTrackSideHeigth)
+			.attr('class', 'track-side')
 	}
-
-
 
 	/**
 	 * We need to use the array index as identity for detection change
@@ -175,5 +185,9 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 	 */
 	trackByIndex(index: number, value: number) {
 		return index
+	}
+
+	onResize(ev) {
+		this.refresh()
 	}
 }

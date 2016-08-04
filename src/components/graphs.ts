@@ -26,7 +26,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	@Output('zoom')
 	zoomEvent = new EventEmitter()
 	zoomActive = false
-	resizeTimeout: any
 
 	constructor(private elementRef: ElementRef) {
 		this.activeGraph = 's'
@@ -77,8 +76,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			.attr('width', width + margin.left + margin.right)
 			.attr('height', height + margin.top + margin.bottom)
 			.append('g')
-			.attr('transform',
-				'translate(' + margin.left + ',' + margin.top + ')')
+			.attr('transform', `translate(${margin.left}, ${margin.top})`)
 
 		let data = this.goalData
 		let type = this.activeGraph
@@ -217,13 +215,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	}
 
 	onResize(ev: any) {
-		if (this.resizeTimeout) {
-			clearInterval(this.resizeTimeout)
-		}
-
 		this.clear()
-		this.resizeTimeout = setTimeout(() => {
-			this.refresh()
-		}, 200)
+		this.refresh()
 	}
 }

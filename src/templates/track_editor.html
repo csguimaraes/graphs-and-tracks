@@ -1,13 +1,13 @@
 <md-card>
 	<md-card-title>
 		Track
-		<small>
+		<small >
 			<label>
 				position
 				<input type="number" [(ngModel)]="setup.position"
 						min="{{mode.domain.position.min}}"
 						max="{{mode.domain.position.max}}"
-						step="5"
+						step="{{mode.domain.position.step}}"
 						(change)="refresh()"
 				>
 				<!--{{mode.domain.position.step}}-->
@@ -31,9 +31,13 @@
 						(change)="refresh()"
 				>
 			</label>
-			<button (click)="rollBall()">ROLL BABY</button>
+			<button (click)="rollBall()">ROLL</button>
 		</small>
 	</md-card-title>
 
 	<md-card-content id="track"></md-card-content>
+	<!--
+	<div id="track-controls-shade"></div>
+	<md-card-content id="track-controls"></md-card-content>
+	-->
 </md-card>

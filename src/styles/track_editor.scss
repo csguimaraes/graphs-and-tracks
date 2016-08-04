@@ -1,11 +1,38 @@
+$card-header-size: 28px - 16px;
+$track-height: calc(100% - #{$card-header-size});
+$track-controls-height: calc(30% - #{$card-header-size});
+$track-color: silver;
+
 #track {
-  height: calc(100% - 28px - 16px);
-  margin-bottom: -16px !important;
-  background: silver;
+  height: $track-height;
+  margin-left: -24px !important;
+  margin-right: -24px !important;
+  margin-bottom: 0 !important;
+  border-top: 1px dashed red;
+}
+
+#track-controls-shade {
+  margin: -5px -20px 10px;
+  height: 5px;
+  box-shadow: 0 0 1em $track-color, 0 0 .6em $track-color, 0 0 .3em $track-color;
+}
+
+#track-controls {
+  height: $track-controls-height;
+  overflow: hidden;
+  position: relative;
 }
 
 #track /deep/ .track-line {
-  stroke: black;
-  stroke-width: 3px;
-  fill: none;
+  stroke-width: 0;
+  fill: $track-color;
+}
+
+#track /deep/ .track-ball {
+  fill:red;
+  stroke:1px black;
+}
+
+#track /deep/ .track-side {
+  fill: darken($track-color, 20);
 }
