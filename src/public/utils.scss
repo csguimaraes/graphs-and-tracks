@@ -29,3 +29,16 @@ filler {
 [scroll-y] {
   overflow-y: auto !important;
 }
+
+
+.back-button {
+  opacity: .9;
+  cursor: pointer !important;
+
+  md-icon {
+    vertical-align: text-bottom;
+    padding: 0;
+    width: 18px;
+    line-height: .9em;
+  }
+}

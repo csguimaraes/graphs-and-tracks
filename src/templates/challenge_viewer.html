@@ -1,40 +1,25 @@
 <md-grid-list card-fill rowHeight="fit" cols="6" gutterSize="8px" [class.zoom]="zoom">
 	<md-grid-tile colspan="2" rowspan="4">
 		<md-card class="info-card" scroll-y>
-			<md-card-title>
+			<md-card-title [routerLink]="['/challenges']" class="back-button" alt="Return to Challenge List">
+				<md-icon>keyboard_arrow_left</md-icon>
 				{{ challenge.name }}
-				<small>
-					created by <b>Student 42</b>
-				</small>
 			</md-card-title>
-			<md-card-actions>
-				<button md-button [routerLink]="['/challenges']">
-					<md-icon small>keyboard_backspace</md-icon>
-					Go Back
-				</button>
-
-				<filler></filler>
-
-				<button md-button>
-					<md-icon small>edit</md-icon>
-					Edit
-				</button>
-
-				<button md-button>
-					<md-icon small>share</md-icon>
-					Share
-				</button>
-			</md-card-actions>
 
 			<md-card-content>
-				<md-card-subtitle>Challenge Info (DEBUG)</md-card-subtitle>
-				Initial Position: {{challenge.goal.position}} <br>
-				Initial Velocity: {{challenge.goal.velocity}} <br>
-				Posts: {{challenge.goal.posts | dump }}
+				<md-card-subtitle>
+					Challenge Info (DEBUG)
+					<br><br>
+					<div class="setup-info">
+						<span>Position {{challenge.goal.position}} </span>
+						<span>Velocity {{challenge.goal.velocity}} </span>
+						<span>Posts {{challenge.goal.posts | dump}} </span>
+					</div>
+				</md-card-subtitle>
 
 				<br><br>
 
-				<md-card-subtitle>Challenge Attempts</md-card-subtitle>
+				<md-card-subtitle *ngIf="attempts.length">Challenge Attempts</md-card-subtitle>
 				<div id="attempt-list">
 					<div class="attempt-list-item"
 							*ngFor="let attempt of attempts; let i = index"
@@ -44,12 +29,8 @@
 						<div class="attempt-title">
 							Attempt #{{i+1}}
 							<small>{{attempt.time | ago}}</small>
-							<span class="attempt-accuracy" align-right>
-								<md-icon small>filter_tilt_shift</md-icon>
-								30%
-							</span>
 						</div>
-						<div class="attempt-info">
+						<div class="setup-info">
 							<span>Position {{attempt.setup.position}} </span>
 							<span>Velocity {{attempt.setup.velocity}} </span>
 							<span>Posts {{attempt.setup.posts | dump}} </span>

@@ -134,8 +134,8 @@ export class Motion {
 				let leftToRight = v > 0
 				let junctionIndex = Math.min(r.number, nextRamp.number)
 
-				if (fellOff) {
-					junctionIndex += leftToRight ? 1 : -1
+				if (fellOff && !leftToRight) {
+					junctionIndex--
 				}
 
 				let junction = this.junctions[junctionIndex]

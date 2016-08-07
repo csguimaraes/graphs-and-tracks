@@ -25,7 +25,11 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 	@Output('zoom')
 	zoomEvent = new EventEmitter()
+
 	zoomActive = false
+	rolling = false
+
+	velocityDomain: number[]
 
 	constructor(private elementRef: ElementRef) {
 		this.activeGraph = 's'
@@ -69,6 +73,11 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 	addTrialData(data: MotionData[]) {
 		this.trialsData.push(data)
+
+		// Clear cached data domain for velocity
+		this.velocityDomain = undefined
+
+		this.rolling = true
 		this.refresh()
 	}
 
@@ -96,23 +105,26 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			.range([height, 0])
 
 		let axisTitle = ''
+		let ticks: any
 
 		// Specific configurations for each graph type
 		switch (type) {
 			case 's':
-				// Position graph uses the track size as domain
+				// Position graph uses the track size as data domain
 				let pos = this.mode.domain.position
 				scaleY.domain([pos.min, pos.max])
 
+				ticks = 6
 				axisTitle = 'Position (cm)'
 				break
 
 			case 'v':
-				// Velocity graph use min and max value from the dataset
-				let domainY = d3.extent(data, (d: MotionData) => d[type])
-				domainY = Math.max(Math.abs(domainY[0]), Math.abs(domainY[1]))
-				scaleY.domain([domainY * -1, domainY])
+				// Velocity graph domain is min and max values from all datasets (challenge and trials)
+				let domainY = this.getVelocityDomain()
+				let domainYMax = Math.max(Math.abs(domainY[0]), Math.abs(domainY[1]))
+				scaleY.domain([domainYMax * -1, domainYMax])
 
+				ticks = height > 200 ? 10 : 5
 				axisTitle = 'Velocity (cm/s)'
 				break
 
@@ -122,6 +134,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 				let maxAcceleration = (postsDomain.max - postsDomain.min) * 10
 				scaleY.domain([maxAcceleration * -1, maxAcceleration])
 
+				ticks = 5
 				axisTitle = 'Acceleration (cm/s²)'
 				break
 
@@ -130,18 +143,22 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}
 
 		// Add the X Axis
-		let axisX = d3.axisBottom(scaleX)
-		axisX.tickValues([5, 10, 15, 20, 25])
-		axisX.tickFormat(x => x + 's')
+		let axisX = d3
+			.axisBottom(scaleX)
+			.tickValues([5, 10, 15, 20, 25])
+			.tickFormat(x => x + 's')
 		svg.append('g')
 			.attr('class', 'axis axis-x')
 			.attr('transform', 'translate(0,' + scaleY(0) + ')')
 			.call(axisX)
 
 		// Add the Y Axis
+		let axisY = d3
+			.axisLeft(scaleY)
+			.tickArguments([ticks])
 		svg.append('g')
 			.attr('class', 'axis')
-			.call(d3.axisLeft(scaleY))
+			.call(axisY)
 
 		svg.append('text')
 			.attr('class', 'axis-title')
@@ -156,7 +173,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		this.plotLine(svg, data, type, ['goal'])
 
 		// Plot trial lines
-		let lastPlotLine: any = null
+		let lastPlotLine: any
 		let trialIndex = 0
 		for (let trial of this.trialsData) {
 			lastPlotLine = this.plotLine(svg, trial, type, ['trial', `trial-${trialIndex++}`])
@@ -164,14 +181,20 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 		if (lastPlotLine) {
 			let lineEl = lastPlotLine.node()
-			let pathLength = Math.round(lineEl.getTotalLength())
-			lineEl.style.strokeDasharray = `${pathLength} ${pathLength}`
-			lineEl.style.strokeDashoffset = `${pathLength}`
-			setTimeout(() => {
+			if (this.rolling) {
+				let pathLength = Math.round(lineEl.getTotalLength())
+				lineEl.style.strokeDasharray = `${pathLength} ${pathLength}`
+				lineEl.style.strokeDashoffset = `${pathLength}`
+				setTimeout(() => {
+					lineEl.classList.add('active')
+					lineEl.style.strokeDashoffset = 0
+					// TODO: transition duration VS simulation duration
+				}, 10)
+
+				this.rolling = false
+			} else {
 				lineEl.classList.add('active')
-				lineEl.style.strokeDashoffset = 0
-				// TODO transition duration VS simulation duration
-			}, 10)
+			}
 		}
 	}
 
@@ -194,6 +217,18 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			.attr('class', classList.join(' '))
 			.attr('d', line)
 	}
+
+	getVelocityDomain() {
+		if (this.velocityDomain === undefined) {
+			let dataSets = [this.goalData, ...this.trialsData]
+			let min = d3.min(dataSets, (dataSet: MotionData[]) =>  d3.min(dataSet, (d: MotionData) => d.v))
+			let max = d3.max(dataSets, (dataSet: MotionData[]) =>  d3.max(dataSet, (d: MotionData) => d.v))
+			this.velocityDomain = [min, max]
+		}
+
+		return this.velocityDomain
+	}
+
 
 	clear() {
 		this.host.html('')
