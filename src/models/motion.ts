@@ -119,7 +119,10 @@ export class Motion {
 			let nextPosition = s + (v * dt) + (((dt ** 2) * a) / 2)
 			let nextRamp = this.getRampAt(nextPosition)
 
-			if (r === nextRamp) {
+			// Check if the ball still inside the track
+			let fellOff = nextPosition < sDomain.min || sDomain.max < nextPosition
+
+			if (r === nextRamp && !fellOff) {
 				// No crossing occurred, ramp and acceleration still the same
 				s = nextPosition
 				v = v + (a * dt)
@@ -128,8 +131,14 @@ export class Motion {
 				// A ramp crossing occurred, here we go
 
 				// Determine crossing junction and direction
-				let leftToRight = nextRamp.number > r.number
-				let junction = this.junctions[Math.min(r.number, nextRamp.number)]
+				let leftToRight = v > 0
+				let junctionIndex = Math.min(r.number, nextRamp.number)
+
+				if (fellOff) {
+					junctionIndex += leftToRight ? 1 : -1
+				}
+
+				let junction = this.junctions[junctionIndex]
 
 				if (junction.speed === null) {
 					console.warn(`The ball reached a junction that is too high for the amount of energy in the system. Something is wrong!`)
@@ -167,6 +176,11 @@ export class Motion {
 					// --------
 					// Now calculate the values after crossing the ramp junction
 
+					if (fellOff) {
+						// If the ball fell off, it crossed the junction on the edge
+						break
+					}
+
 					// Update the ramp and acceleration
 					r = nextRamp
 					a = r.acceleration
@@ -183,15 +197,7 @@ export class Motion {
 				}
 			}
 
-			// Check if the ball still inside the track
-			if (sDomain.min < s && s < sDomain.max) {
-				this.commitData(t, s, v, a)
-			} else {
-				// The ball fell off the track
-				// TODO: "rewind" the values to the latest valid position before
-				this.commitData(t, s, v, a)
-				break
-			}
+			this.commitData(t, s, v, a)
 		}
 	}
 
