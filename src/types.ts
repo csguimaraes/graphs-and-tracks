@@ -55,7 +55,16 @@ export interface DataDomain {
 }
 
 export interface Ramp {
-	start?: number
-	end: number
+	number: number
+	left: number
+	right: number
+	slope: number
 	acceleration: number
+	speed?: number
+}
+
+export interface Junction {
+	speed: number
+	height: number
+	position: number
 }
