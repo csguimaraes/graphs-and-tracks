@@ -65,7 +65,8 @@ export class Motion {
 		// --------
 		// Determine the initial height of the ball to find out its potential energy
 
-		let initialRamp = this.getRampAt(position)
+		let leftToRight = velocity > 0
+		let initialRamp = this.getRampAt(position, leftToRight)
 		// Relative position of the ball in the initial ramp, ranging from 0 to 1
 		let relativePosition = (position - initialRamp.left) / rampSize
 		// Height of the ramp at the initial ball position
@@ -105,7 +106,7 @@ export class Motion {
 		// Initialize data series with values for T=0
 		let s = this.initialPosition
 		let v = this.initialVelocity
-		let r = this.getRampAt(s)
+		let r = this.getRampAt(s, v > 0)
 		let a = r.acceleration
 		this.commitData(0, s, v, a)
 
@@ -131,8 +132,7 @@ export class Motion {
 				let junction = this.junctions[Math.min(r.number, nextRamp.number)]
 
 				if (junction.speed === null) {
-					console.warn(`The ball reached a junction at ${junction.height} meters,
-					however the amount of energy in the system isn't enough to reach this altitude. Something is wrong!`)
+					console.warn(`The ball reached a junction that is too high for the amount of energy in the system. Something is wrong!`)
 				}
 
 				// Distance between the previous position and the junction
@@ -156,7 +156,7 @@ export class Motion {
 					// Amount of time elapsed before the crossing
 					let dtA = dsA / speedA
 					if (dtA >= dt) {
-						throw 'Junction crossing has partial time bigger than full time. This should\'nt happen!'
+						console.warn('Junction crossing has partial time bigger than full time. Something is wrong!')
 					}
 
 					// Commit a data point at the exact moment of the crossing
@@ -195,10 +195,15 @@ export class Motion {
 		}
 	}
 
-	private getRampAt(position: number, velocity?: number) {
-		// TODO: if ball is exactly over a junction, pick the ramp based on the ball direction to avoid a falsy ramp change
+	private getRampAt(position: number, leftToRight = true) {
 		for (let idx = 0; idx < this.ramps.length; idx++) {
 			if (this.ramps[idx].right > position) {
+				let overJunction = this.ramps[idx].left === position
+				if (overJunction && !leftToRight && idx > 0) {
+					// Ball is exactly over a junction and is going to the right
+					return this.ramps[idx - 1]
+				}
+
 				return this.ramps[idx]
 			}
 		}
