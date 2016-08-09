@@ -27,7 +27,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	zoomEvent = new EventEmitter()
 
 	zoomActive = false
-	rolling = false
 
 	velocityDomain: number[]
 
@@ -56,7 +55,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	selectGraph(type: GraphType) {
 		if (type !== this.activeGraph) {
 			this.activeGraph = type
-			this.refresh()
+			this.refresh(true)
 		}
 	}
 
@@ -77,11 +76,10 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		// Clear cached data domain for velocity
 		this.velocityDomain = undefined
 
-		this.rolling = true
-		this.refresh()
+		this.refresh(true)
 	}
 
-	private refresh() {
+	private refresh(animated = false) {
 		this.clear()
 
 		let margin = { top: 20, right: 20, bottom: 30, left: 50 }
@@ -172,16 +170,13 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		// Plot goal line
 		this.plotLine(svg, data, type, ['goal'])
 
-		// Plot trial lines
-		let lastPlotLine: any
-		let trialIndex = 0
-		for (let trial of this.trialsData) {
-			lastPlotLine = this.plotLine(svg, trial, type, ['trial', `trial-${trialIndex++}`])
-		}
+		// Plot last trial line
+		if (this.trialsData.length ) {
+			let lastTrial = this.trialsData[this.trialsData.length - 1]
+			let lastTrialLine = this.plotLine(svg, lastTrial, type, ['trial'])
 
-		if (lastPlotLine) {
-			let lineEl = lastPlotLine.node()
-			if (this.rolling) {
+			let lineEl = lastTrialLine.node()
+			if (animated) {
 				let pathLength = Math.round(lineEl.getTotalLength())
 				lineEl.style.strokeDasharray = `${pathLength} ${pathLength}`
 				lineEl.style.strokeDashoffset = `${pathLength}`
@@ -190,8 +185,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 					lineEl.style.strokeDashoffset = 0
 					// TODO: transition duration VS simulation duration
 				}, 10)
-
-				this.rolling = false
 			} else {
 				lineEl.classList.add('active')
 			}
