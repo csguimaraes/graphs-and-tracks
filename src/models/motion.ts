@@ -65,8 +65,7 @@ export class Motion {
 		// --------
 		// Determine the initial height of the ball to find out its potential energy
 
-		let leftToRight = velocity > 0
-		let initialRamp = this.getRampAt(position, leftToRight)
+		let initialRamp = this.getRampAt(position, velocity)
 		// Relative position of the ball in the initial ramp, ranging from 0 to 1
 		let relativePosition = (position - initialRamp.left) / rampSize
 		// Height of the ramp at the initial ball position
@@ -106,7 +105,7 @@ export class Motion {
 		// Initialize data series with values for T=0
 		let s = this.initialPosition
 		let v = this.initialVelocity
-		let r = this.getRampAt(s, v > 0)
+		let r = this.getRampAt(s, v)
 		let a = r.acceleration
 		this.commitData(0, s, v, a)
 
@@ -116,11 +115,17 @@ export class Motion {
 		let sDomain = this.mode.domain.position
 
 		for (let t = dt; t <= tMax; t += dt) {
+			// Calculate the next values and store them separately, so we can make some checkings first
 			let nextPosition = s + (v * dt) + (((dt ** 2) * a) / 2)
-			let nextRamp = this.getRampAt(nextPosition)
+			let nextVelocity = v + (a * dt)
+			let nextRamp = this.getRampAt(nextPosition, nextVelocity)
 
 			// Check if the ball still inside the track
 			let fellOff = nextPosition < sDomain.min || sDomain.max < nextPosition
+			if (fellOff && t === dt) {
+				// We end it here if the ball fell of the track right after T=0
+				break
+			}
 
 			if (r === nextRamp && !fellOff) {
 				// No crossing occurred, ramp and acceleration still the same
@@ -177,7 +182,8 @@ export class Motion {
 					// Now calculate the values after crossing the ramp junction
 
 					if (fellOff) {
-						// If the ball fell off, it crossed the junction on the edge
+						// End the simulation here if the ball fell off the track
+						// it has just crossed the junction on the track edge
 						break
 					}
 
@@ -201,21 +207,42 @@ export class Motion {
 		}
 	}
 
-	private getRampAt(position: number, leftToRight = true) {
-		for (let idx = 0; idx < this.ramps.length; idx++) {
-			if (this.ramps[idx].right > position) {
-				let overJunction = this.ramps[idx].left === position
-				if (overJunction && !leftToRight && idx > 0) {
-					// Ball is exactly over a junction and is going to the right
-					return this.ramps[idx - 1]
+	private getRampAt(position: number, velocity: number) {
+		let r = this.ramps
+		let idx: number
+		for (idx = 0; idx < r.length; idx++) {
+			if (r[idx].right > position) {
+				// The ball is contained in this ramp
+
+				let overLeftJunction = r[idx].left === position
+				if (overLeftJunction && idx > 0) {
+					// Ball is exactly at the start of the ramp
+					// test some edge cases that selects the previous ramp
+
+					if (velocity === 0) {
+						// Ball has zero velocity, so we make it fall towards
+						// the right ramp if it has a bigger slope
+						if (Math.abs(r[idx - 1].slope) > Math.abs(r[idx].slope)) {
+							idx--
+						}
+					} else if (velocity < 0) {
+						// Ball is heading to the right
+						// so we select the previous ramp
+						idx--
+					}
 				}
 
-				return this.ramps[idx]
+				break
 			}
 		}
 
-		// This probably means that the ball fell of the track
-		return this.ramps[this.ramps.length - 1]
+		if (idx === r.length) {
+			// This happens when no ramp was found
+			// the ball fell out on the right edge, just select the last ramp
+			idx--
+		}
+
+		return r[idx]
 	}
 
 	private commitData(t: number, s: number, v: number, a: number) {

@@ -59,17 +59,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	highlightTrial(trialIndex?: number) {
-		this.element.querySelector('.trial.line.active').classList.remove('active')
-		if (trialIndex === undefined) {
-			// Highlight the last trial
-			trialIndex = this.trialsData.length - 1
-		}
-
-		this.element.querySelector(`.trial.line.trial-${trialIndex}`).classList.add('active')
-
-	}
-
 	addTrialData(data: MotionData[]) {
 		this.trialsData.push(data)
 

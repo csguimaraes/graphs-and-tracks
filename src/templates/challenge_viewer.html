@@ -23,12 +23,9 @@
 				<div id="attempt-list">
 					<div class="attempt-list-item"
 							*ngFor="let attempt of attempts; let i = index"
-							(mouseenter)="graphsPanel.highlightTrial(i)"
-							(mouseleave)="graphsPanel.highlightTrial()"
 					>
 						<div class="attempt-title">
-							Attempt #{{i+1}}
-							<small>{{attempt.time | ago}}</small>
+							Trial #{{i+1}}
 						</div>
 						<div class="setup-info">
 							<span>Position {{attempt.setup.position}} </span>
