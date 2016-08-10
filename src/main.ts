@@ -7,6 +7,7 @@ import { MdIconRegistry, MdIcon } from '@angular2-material/icon'
 import * as Components from './components'
 import { StorageService } from './services'
 import { DumpPipe, TimeAgoPipe } from './utils'
+
 import './public/icons.scss'
 import './public/utils.scss'
 import './public/main.scss'

@@ -4,6 +4,7 @@ import { MotionData, ChallengeMode } from '../types'
 import { printDataTable } from '../utils/debug'
 
 declare let d3
+
 type GraphType = 's' | 'v' | 'a'
 
 @Component({

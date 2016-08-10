@@ -2,27 +2,7 @@
 	<md-card-title>
 		Track
 		<small (keyup.enter)="rollBall()">
-			<label>
-				position
-				<input type="number" [(ngModel)]="setup.position"
-						min="{{mode.domain.position.min}}"
-						max="{{mode.domain.position.max}}"
-						step="{{mode.domain.position.step}}"
-						(change)="refresh()"
-				>
-				<!--{{mode.domain.position.step}}-->
-			</label>
-			|
-			<label>
-				velocity
-				<input type="number" [(ngModel)]="setup.velocity"
-						min="{{mode.domain.velocity.min}}"
-						max="{{mode.domain.velocity.max}}"
-						step="{{mode.domain.velocity.step}}"
-						(change)="refresh()"
-				>
-			</label>
-			| posts
+			posts:
 			<label *ngFor="let post of setup.posts; let i = index; trackBy:trackByIndex">
 				<input type="number" [(ngModel)]="setup.posts[i]"
 						min="{{mode.domain.posts.min}}"
@@ -36,8 +16,42 @@
 	</md-card-title>
 
 	<md-card-content id="track"></md-card-content>
-	<!--
-	<div id="track-controls-shade"></div>
-	<md-card-content id="track-controls"></md-card-content>
-	-->
+	<md-card-content id="track-controls">
+		<div id="position-controls">
+			<div class="slider-container">
+				<div class="slider">
+					<span
+							*ngFor="let val of positionScale"
+							[class.selected]="setup.position === val"
+					>
+						{{val}}
+					</span>
+				</div>
+			</div>
+
+			<span class="slider-info">
+				<span class="slider-info-label">Position</span>
+				<span class="slider-info-value">{{setup.position}} <small>cm</small></span>
+			</span>
+
+		</div>
+
+		<!--
+		<div >
+
+			<span id="velocity-slider-info">
+				Initial Velocity: <b>{{setup.velocity}} <small>cm/s</small></b>
+			</span>
+		</div>
+		<div id="velocity-slider" class="slider">
+			<span
+					*ngFor="let val of velocityScale"
+					[class.selected]="setup.velocity === val"
+					(mousedown)="setVelocity(val)"
+			>
+				{{val + (val < 0 ? '&nbsp;' : '')}}
+			</span>
+		</div>
+		-->
+	</md-card-content>
 </md-card>

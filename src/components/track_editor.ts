@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output, ElementRef, AfterViewInit} from '@angular/core'
 import { MotionSetup, ChallengeMode } from '../types'
 import * as _ from 'lodash'
+import * as Hammer from 'hammerjs'
 
 declare let d3
+declare let document
 
 @Component({
 	selector: 'track-editor',
@@ -18,27 +20,39 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 	rollBallEvent: EventEmitter<MotionSetup>
 
 	setup: MotionSetup
-
-	ballPosition: (position: number, radiusX: number, radiusY: number) => any // { x: number, y: number }
+	ballPosition: (position: number, radiusX: number, radiusY: number) => { x: number, y: number }
 
 	element: any
 	host: any
+
+	positionScale: number[]
+	velocityScale: number[]
 
 	constructor(private elementRef: ElementRef) {
 		this.rollBallEvent = new EventEmitter<MotionSetup>()
 	}
 
 	ngOnInit() {
-		this.setup = {
-			position: this.mode.domain.position.min,
-			velocity: this.mode.domain.velocity.min,
-			posts: new Array(this.mode.postsCount).fill(0)
+		let p = this.mode.domain.position
+		let v = this.mode.domain.velocity
+
+		this.velocityScale = []
+		this.positionScale = []
+
+		for (let value = p.min; value <= p.max; value += p.step) {
+			this.positionScale.push(value)
 		}
 
+		for (let value = v.min; value <= v.max; value += v.step) {
+			this.velocityScale.push(value)
+		}
+
+		let midPos = Math.ceil(this.positionScale.length / 2) - 1
+		let midVel = Math.ceil(this.velocityScale.length / 2) - 1
 		this.setup = {
-			position: 250,
-			velocity: 0,
-			posts: [2, 4, 4, 4, 4, 2]
+			position: this.positionScale[midPos],
+			velocity: this.velocityScale[midVel],
+			posts: new Array(this.mode.postsCount).fill(0)
 		}
 	}
 
@@ -50,6 +64,17 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 			this.refresh()
 		}, 50)
 
+		let positionSlider = this.elementRef.nativeElement.querySelector('#position-controls .slider')
+		let mc = new Hammer(positionSlider)
+		mc.on('panleft panright tap', ev => {
+			let sliderBoundry = positionSlider.getBoundingClientRect()
+			let currentX = ev.center.x - sliderBoundry.left
+			let sizePerTick = sliderBoundry.width / this.positionScale.length
+
+			let scaleIndex = Math.floor(currentX / sizePerTick)
+			scaleIndex = Math.max(0, Math.min(scaleIndex, this.positionScale.length - 1))
+			this.setPosition(this.positionScale[scaleIndex])
+		})
 	}
 
 	rollBall() {
@@ -59,9 +84,10 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 	refresh() {
 		this.host.html('')
 
+		let trackLineWidth  = 10
 		let ballRealRadius = 10
-		let ballTrackDistance = 1
-		let ballMargin = ballRealRadius * 2
+		let ballTrackDistance = trackLineWidth / 2
+		let ballMargin = (ballRealRadius * 2) + ballTrackDistance
 
 		let domain = this.mode.domain
 		let trackSize = domain.position.max - domain.position.min
@@ -87,15 +113,14 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 			.range([height, 0])
 			.domain([domain.posts.min - 1, domain.posts.max])
 
-		let trackArea = d3.area()
-			.y0(height)
-			.y1(val => scaleY(val))
+		let trackLine = d3.line()
+			.y(val => scaleY(val))
 			.x((val, idx) => scaleX(idx * rampSize))
 
 		svg.append('path')
 			.data([posts])
 			.attr('class', 'track-line')
-			.attr('d', trackArea)
+			.attr('d', trackLine)
 
 		// We define this function here because we can capture all the calculation contexts
 		// This function will be used afterwards for animating the ball using the latest track setup
@@ -138,9 +163,6 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 			}
 		}
 
-		let scaleYEnd = scaleY(Math.min(...scaleY.domain()))
-		let scaleXEnd = scaleX(Math.max(...scaleX.domain()))
-
 		// The ball radius is defined whithout scaling into the data dimensions
 		// We invert the scale to know the proportional radius value in X and Y data domains
 		let ballRadiusX = scaleX.invert(ballRealRadius + ballTrackDistance)
@@ -156,24 +178,6 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 			.attr('cy', scaleY(ballPosition.y))
 			.attr('r', ballRealRadius)
 			.attr('class', 'track-ball')
-
-		let leftTrackSideY = scaleY(posts[0])
-		let leftTrackSideHeigth = scaleYEnd - leftTrackSideY
-		svg.append('rect')
-			.attr('x', scaleX(0) - ballMargin)
-			.attr('y', leftTrackSideY)
-			.attr('width', ballMargin)
-			.attr('height', leftTrackSideHeigth)
-			.attr('class', 'track-side')
-
-		let rightTrackSideY = scaleY(posts[posts.length - 1])
-		let rightTrackSideHeigth = scaleYEnd - rightTrackSideY
-		svg.append('rect')
-			.attr('x', scaleXEnd)
-			.attr('y', rightTrackSideY)
-			.attr('width', ballMargin)
-			.attr('height', rightTrackSideHeigth)
-			.attr('class', 'track-side')
 	}
 
 	/**
@@ -188,6 +192,15 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 	}
 
 	onResize(ev) {
+		this.refresh()
+	}
+
+	setVelocity(val: number) {
+		this.setup.velocity = val
+	}
+
+	setPosition(val: number) {
+		this.setup.position = val
 		this.refresh()
 	}
 }

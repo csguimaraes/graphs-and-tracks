@@ -42,7 +42,6 @@
     "@angular2-material/slide-toggle": "*",
     "@angular2-material/tabs": "*",
     "@angular2-material/toolbar": "*",
-    "d3": "^4.1.1",
     "es6-shim": "*",
     "hammerjs": "^2.0.8",
     "moment": "^2.14.1",

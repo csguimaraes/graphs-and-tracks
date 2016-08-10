@@ -122,7 +122,7 @@ export class Motion {
 
 			// Check if the ball still inside the track
 			let fellOff = nextPosition < sDomain.min || sDomain.max < nextPosition
-			if (fellOff && t === dt) {
+			if (t === dt && fellOff) {
 				// We end it here if the ball fell of the track right after T=0
 				break
 			}
@@ -237,6 +237,7 @@ export class Motion {
 		}
 
 		if (idx === r.length) {
+
 			// This happens when no ramp was found
 			// the ball fell out on the right edge, just select the last ramp
 			idx--
