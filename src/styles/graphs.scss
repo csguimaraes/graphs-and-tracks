@@ -2,67 +2,107 @@ $color-s: orangered;
 $color-v: forestgreen;
 $color-a: steelblue;
 
-.graph-selector {
-  display: inline-block;
-  font-size: 14px;
-  margin-left: 10px;
-  margin-top: -4px;
-  font-weight: 600;
-  vertical-align: middle;
+
+$color-s-light: lighten($color-s, 40);
+$color-v-light: lighten($color-v, 40);
+$color-a-light: lighten($color-a, 40);
+
+$ball-margin: 20px;
+$header-height: 32px;
+
+md-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+#graph-header {
+  background: silver;
+  height: $header-height;
+  display: flex;
   white-space: nowrap;
+  padding: 0 $ball-margin;
 
   span {
+    line-height: $header-height;
+  }
+
+  .graph-header-title {
+    padding-right: $header-height;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .graph-selector:before, .graph-actions:before {
+    content: ' ';
     display: inline-block;
-    border: 1px solid black;
-    padding: 5px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-bottom: $header-height solid #999;
+    border-left: $header-height solid transparent;
+    left: $header-height * -1;
+  }
+
+  .graph-selector {
+    flex: 1 0 0;
     cursor: pointer;
-    margin-right: -4px;
+    position: relative;
+    padding: 0 $header-height 0 0;
+    color: #CCC;
+    background: #999;
+    text-align: center;
 
     &.active {
       color: white;
-      background: #333;
-      &.s { background: $color-s; }
-      &.v { background: $color-v; }
-      &.a { background: $color-a; }
+      font-weight: bold;
+      text-shadow: 0 0 .3em black;
+      padding: 0 #{$header-height * 2} 0 $header-height;
     }
 
-    &:hover:not(.active) {
-      background: #EAEAEA;
+    &.s.active {
+      background: $color-s;
+      &:before {
+        border-bottom-color: $color-s;
+      }
     }
 
-    &:first-child {
-      border-radius: 4px 0 0 4px;
+    &.v.active {
+      background: $color-v;
+      &:before {
+        border-bottom-color: $color-v;
+      }
     }
 
-    &:last-child {
-      border-radius: 0 4px 4px 0;
+    &.a.active {
+      background: $color-a;
+      &:before {
+        border-bottom-color: $color-a;
+      }
+    }
+
+  }
+
+  .graph-actions {
+    position: relative;
+    &:before {
+      border-bottom-color: silver;
+    }
+
+    md-icon {
+      font-size: 18px;
+      vertical-align: sub;
+      padding: 0 5px;
+      cursor: pointer;
     }
   }
 }
 
-md-card {
-  padding-bottom: 8px !important;
-}
-
-md-card-title {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-md-card-content {
-  // Substract card title
-  height: calc(100% - 28px - 16px);
-
-   // Remove some paddings to increase chart area in the card
-  margin-left: -16px !important;
-  margin-right: -16px !important;
-  margin-bottom: -16px !important;
-}
-
 chart {
-  width: 100%;
-  height: 100%;
+  width: calc(100% - #{$ball-margin * 2});
+  height: calc(100% - #{$header-height});
   display: block;
+  box-sizing: border-box;
+  margin: 0 $ball-margin;
 }
 
 

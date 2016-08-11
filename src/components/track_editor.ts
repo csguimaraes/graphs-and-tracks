@@ -4,7 +4,6 @@ import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
 
 declare let d3
-declare let document
 
 @Component({
 	selector: 'track-editor',
@@ -64,16 +63,28 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 			this.refresh()
 		}, 50)
 
-		let positionSlider = this.elementRef.nativeElement.querySelector('#position-controls .slider')
-		let mc = new Hammer(positionSlider)
-		mc.on('panleft panright tap', ev => {
-			let sliderBoundry = positionSlider.getBoundingClientRect()
-			let currentX = ev.center.x - sliderBoundry.left
-			let sizePerTick = sliderBoundry.width / this.positionScale.length
+
+		this.buildSlider('#position-controls .slider', this.positionScale, this.positionSetter)
+		this.buildSlider('#velocity-controls .slider', this.velocityScale, this.velocitySetter)
+	}
+
+	buildSlider(sliderSelector: string, scale: number[], callback: (number) => void) {
+		let slider = this.elementRef.nativeElement.querySelector(sliderSelector)
+		let gestureHandler = new Hammer.Manager(slider, {
+			recognizers: [
+				[Hammer.Tap],
+				[Hammer.Pan, { direction: Hammer.DIRECTION_HORIZONTAL }],
+			]
+		})
+
+		gestureHandler.on('panleft panright tap', event => {
+			let sliderBoundry = slider.getBoundingClientRect()
+			let currentX = event.center.x - sliderBoundry.left
+			let sizePerTick = sliderBoundry.width / scale.length
 
 			let scaleIndex = Math.floor(currentX / sizePerTick)
-			scaleIndex = Math.max(0, Math.min(scaleIndex, this.positionScale.length - 1))
-			this.setPosition(this.positionScale[scaleIndex])
+			scaleIndex = Math.max(0, Math.min(scaleIndex, scale.length - 1))
+			callback(scale[scaleIndex])
 		})
 	}
 
@@ -84,7 +95,7 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 	refresh() {
 		this.host.html('')
 
-		let trackLineWidth  = 10
+		let trackLineWidth = 10 + 5
 		let ballRealRadius = 10
 		let ballTrackDistance = trackLineWidth / 2
 		let ballMargin = (ballRealRadius * 2) + ballTrackDistance
@@ -195,11 +206,11 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 		this.refresh()
 	}
 
-	setVelocity(val: number) {
+	velocitySetter = (val: number) => {
 		this.setup.velocity = val
 	}
 
-	setPosition(val: number) {
+	positionSetter = (val: number) => {
 		this.setup.position = val
 		this.refresh()
 	}

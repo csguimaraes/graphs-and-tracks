@@ -1,26 +1,24 @@
 <md-card>
-	<md-card-title>
-		Graphs
-		<div class="graph-selector">
-			<span [class.active]="activeGraph == 's'" class="s" (click)="selectGraph('s')">
-				Position
-			</span>
-			<span [class.active]="activeGraph == 'v'" class="v" (click)="selectGraph('v')">
-				Velocity
-			</span>
-			<span [class.active]="activeGraph == 'a'" class="a" (click)="selectGraph('a')">
-				Acceleration
-			</span>
-		</div>
+	<div id="graph-header">
+		<span class="graph-header-title">
+			MOTION GRAPHS
+		</span>
+		<span class="graph-selector s" [class.active]="activeGraph === 's'" (click)="selectGraph('s')">
+			POSITION
+		</span>
+		<span class="graph-selector v" [class.active]="activeGraph === 'v'" (click)="selectGraph('v')">
+			VELOCITY
+		</span>
+		<span class="graph-selector a" [class.active]="activeGraph === 'a'" (click)="selectGraph('a')">
+			ACCELERATION
+		</span>
 
-		<top-actions>
+		<span class="graph-actions">
 			<md-icon (click)="debug()" title="(DEBUG) View generated motion data">find_in_page</md-icon>
 			<md-icon (click)="toggleZoom()" title="Toggle zoom graphs panel">{{zoomActive ? 'flip_to_back' : 'flip_to_front'}}</md-icon>
+		</span>
 
-		</top-actions>
+	</div>
 
-	</md-card-title>
-	<md-card-content>
-		<chart class="{{activeGraph}}"></chart>
-	</md-card-content>
+	<chart class="{{activeGraph}}"></chart>
 </md-card>
