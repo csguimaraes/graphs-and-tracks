@@ -1,9 +1,9 @@
-$color-s: orangered;
-$color-v: forestgreen;
-$color-a: steelblue;
+$color-s: lighten(orangered, 10);
+$color-v: lighten(forestgreen, 10);
+$color-a: lighten(steelblue, 10);
 
-$color-s-light: lighten($color-s, 40);
-$color-v-light: lighten($color-v, 40);
+$color-s-light: lighten(orangered, 25);
+$color-v-light: lighten(forestgreen, 25);
 
 $ball-margin:20px;
 $radius: 6px;
@@ -19,7 +19,6 @@ $slider-line-height: $track-controls-height / 3;
 md-card {
   padding: 0 !important;
   overflow: hidden;
-  background: lightyellow;
 }
 
 #track {
@@ -155,6 +154,7 @@ md-card {
         box-sizing: border-box;
         position: relative;
         text-align: center;
+        color: #333;
 
         &:before, &:after {
           content: ' ';
@@ -166,8 +166,8 @@ md-card {
       }
 
       .slider-info-label {
-        color: white;
-        text-shadow: 0 0 .1em black;
+        color: #333;
+        // text-shadow: 0 0 .3em black;
       }
     }
 
@@ -177,7 +177,7 @@ md-card {
       padding: 0 $h;
       text-align: center;
       color: white;
-      text-shadow: 0 0 .1em black;
+      // text-shadow: 0 0 .1em black;
       cursor: pointer;
       &:hover {
         background: red;
@@ -188,7 +188,6 @@ md-card {
       text-align: right;
       .slider-info-value {
         background: $color-s-light;
-        color: $color-s;
         padding: 0 $mpad 0 $h;
 
         &:after {
@@ -209,7 +208,6 @@ md-card {
     #velocity-slider-info {
       .slider-info-value {
         background: $color-v-light;
-        color: $color-v;
         padding: 0 $h 0 $mpad;
 
         &:before {

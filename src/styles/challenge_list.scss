@@ -10,18 +10,43 @@ md-grid-list {
   }
 }
 
+#challenge-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
 
+  div {
+    min-width: 200px;
+    padding: 15px 5px 0 20px;
+    background: #F0F0F0;
+    cursor: pointer !important;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
 
-#challenge-list-grid {
-  p[md-line] {
-    color: #999;
-
-    &.incomplete {
-      color:lightcoral;
+    &:hover {
+      background: #EAEAEA;
     }
 
-    &.complete {
-      color:lightgreen;
+    b {
+      line-height: 24px;
+      display: inline-block;
+      md-icon {
+        vertical-align: middle;
+        margin-top: -5px;
+      }
+    }
+
+    p[md-line] {
+      color: #999;
+
+      &.incomplete {
+        color:lightcoral;
+      }
+
+      &.complete {
+        color:lightgreen;
+      }
     }
   }
 }

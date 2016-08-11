@@ -1,11 +1,6 @@
-$color-s: orangered;
-$color-v: forestgreen;
-$color-a: steelblue;
-
-
-$color-s-light: lighten($color-s, 40);
-$color-v-light: lighten($color-v, 40);
-$color-a-light: lighten($color-a, 40);
+$color-s: lighten(orangered, 10);
+$color-v: lighten(forestgreen, 10);
+$color-a: lighten(steelblue, 10);
 
 $ball-margin: 20px;
 $header-height: 32px;
@@ -53,10 +48,10 @@ md-card {
     text-align: center;
 
     &.active {
-      color: white;
+      color: #333;
       font-weight: bold;
-      text-shadow: 0 0 .3em black;
-      padding: 0 #{$header-height * 2} 0 $header-height;
+      // text-shadow: 0 0 .3em black;
+      // padding: 0 #{$header-height * 2} 0 $header-height;
     }
 
     &.s.active {
