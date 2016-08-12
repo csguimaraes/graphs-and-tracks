@@ -50,8 +50,6 @@ md-card {
     &.active {
       color: #333;
       font-weight: bold;
-      // text-shadow: 0 0 .3em black;
-      // padding: 0 #{$header-height * 2} 0 $header-height;
     }
 
     &.s.active {
@@ -100,6 +98,10 @@ chart {
   margin: 0 $ball-margin;
 }
 
+chart /deep/ svg {
+  pointer-events: bounding-box;
+}
+
 
 chart /deep/ .line {
   fill: none;
@@ -118,7 +120,7 @@ chart /deep/ .line.trial {
 
 chart /deep/ .line.trial.active {
   stroke-opacity: 1 !important;
-  transition: stroke-dashoffset 600ms ease-out;
+  transition: stroke-dashoffset 9.5s linear;
 }
 
 chart /deep/ .line.s {

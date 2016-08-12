@@ -28,17 +28,37 @@ md-card {
 
 #track /deep/ .track-line {
   stroke-width: 10px;
-  stroke-linecap: round;
+  stroke-linecap: square;
   stroke-linejoin: round;
   stroke: #333;
   fill: none;
 }
 
+#track /deep/ .track-outline {
+  stroke-width: 5px;
+  stroke-linecap: square;
+  stroke-linejoin: round;
+  stroke: rgba(51, 51, 51, .5);
+  fill: none;
+}
+
+#track /deep/ .post-base {
+  fill: #333;
+}
+
+#track /deep/ .post-dragger {
+  fill: #333;
+  cursor: ns-resize !important;
+}
+
 #track /deep/ .track-ball {
   fill: crimson;
   stroke-width: 4px;
-  stroke-dasharray: 4.28px 2px;
+  // ((Math.PI * 2 * R) / 5) - 2px
+  stroke-dasharray: 15.59291886010284px 2px;
+  stroke-dashoffset: 0;
   stroke: red;
+  cursor: move !important;
 }
 
 #track-controls {
@@ -167,7 +187,6 @@ md-card {
 
       .slider-info-label {
         color: #333;
-        // text-shadow: 0 0 .3em black;
       }
     }
 
@@ -177,7 +196,6 @@ md-card {
       padding: 0 $h;
       text-align: center;
       color: white;
-      // text-shadow: 0 0 .1em black;
       cursor: pointer;
       &:hover {
         background: red;

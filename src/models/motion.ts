@@ -216,8 +216,8 @@ export class Motion {
 
 				let overLeftJunction = r[idx].left === position
 				if (overLeftJunction && idx > 0) {
-					// Ball is exactly at the start of the ramp
-					// test some edge cases that selects the previous ramp
+					// Ball is exactly at the start of the ramp so we
+					// test some edge cases when the previous ramp must be selected
 
 					if (velocity === 0) {
 						// Ball has zero velocity, so we make it fall towards
@@ -237,7 +237,6 @@ export class Motion {
 		}
 
 		if (idx === r.length) {
-
 			// This happens when no ramp was found
 			// the ball fell out on the right edge, just select the last ramp
 			idx--

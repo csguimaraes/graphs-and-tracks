@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, AfterViewInit, Output, EventEmitter, HostListener } from '@angular/core'
+import * as Hammer from 'hammerjs'
 
 import { MotionData, ChallengeMode } from '../types'
 import { printDataTable } from '../utils/debug'
@@ -28,8 +29,9 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	zoomEvent = new EventEmitter()
 
 	zoomActive = false
-
 	velocityDomain: number[]
+
+	doubleTapRecognizer: HammerManager
 
 	constructor(private elementRef: ElementRef) {
 		this.activeGraph = 's'
@@ -179,6 +181,10 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 				lineEl.classList.add('active')
 			}
 		}
+
+		let recognizer = this.doubleTapRecognizer = new Hammer.Manager(svg.node())
+		recognizer.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }))
+		recognizer.on('doubletap', ev => { this.toggleZoom() })
 	}
 
 	private plotLine(svg: any, data: MotionData[], type: GraphType, classList: string[]) {
@@ -214,6 +220,11 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 
 	clear() {
+		if (this.doubleTapRecognizer) {
+			this.doubleTapRecognizer.destroy()
+			this.doubleTapRecognizer = null
+		}
+
 		this.host.html('')
 	}
 

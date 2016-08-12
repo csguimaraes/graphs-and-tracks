@@ -8,22 +8,22 @@
 
 		<filler id="app-menu">
 			<a [routerLink]="['challenges']">
-				<md-icon>stars</md-icon>
+				<md-icon>star</md-icon>
 				Challenges
 			</a>
 
-			<a [routerLink]="['statistics']">
-				<md-icon>insert_chart</md-icon>
-				Statistics
+			<a [routerLink]="['playground']" class="todo">
+				<md-icon>broken_image</md-icon>
+				Playground
 			</a>
 
-			<a [routerLink]="['settings']">
-				<md-icon>settings_applications</md-icon>
+			<a [routerLink]="['settings']" class="todo">
+				<md-icon>settings</md-icon>
 				Settings
 			</a>
 		</filler>
 
-		<md-icon>help</md-icon>
+		<md-icon class="todo">help</md-icon>
 	</md-toolbar>
 
 	<div id="main-container">

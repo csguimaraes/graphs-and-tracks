@@ -36,13 +36,16 @@ export class ChallengeViewerComponent implements OnInit {
 	goalMotion: Motion
 
 	attempts: Attempt[] = []
-
+	animationDuration: number
 	zoom: boolean = false
 
 	constructor(private route: ActivatedRoute, private storage: StorageService) {
 		let id = this.route.snapshot.params['id']
 		this.challenge = this.storage.getChallenge(id)
 		this.goalMotion = Motion.fromSetup(this.challenge.goal, this.challenge.mode)
+
+		// TODO get from settings
+		this.animationDuration = 10
 	}
 
 	ngOnInit() {
@@ -62,5 +65,6 @@ export class ChallengeViewerComponent implements OnInit {
 
 		let motion = Motion.fromSetup(setup)
 		this.graphsPanel.addTrialData(motion.data)
+		this.trackEditor.animate(motion.data, this.animationDuration)
 	}
 }

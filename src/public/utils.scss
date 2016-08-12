@@ -42,3 +42,14 @@ filler {
     line-height: .9em;
   }
 }
+
+.no-interaction {
+  pointer-events: none !important;
+}
+
+.todo {
+  opacity: .5;
+  &, & * {
+    cursor: not-allowed !important;
+  }
+}
