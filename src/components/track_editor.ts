@@ -242,6 +242,55 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 			}
 		}
 
+		// The ball radius is defined whithout scaling into the data dimensions
+		// We invert the scale to know the proportional radius value in X and Y data domains
+		let ballRadiusX = scaleX.invert(ballRealRadius + ballTrackDistance)
+		let ballRadiusY = scaleY.invert(ballRealRadius + ballTrackDistance)
+
+		// Y scale is upside down, so the actual radius is the returned offset
+		ballRadiusY = Math.max(...scaleY.domain()) - ballRadiusY
+
+		// We define this function here because we can capture all the calculation contexts
+		// This function will be used afterwards for animating the ball using the latest track setup
+		this.getBallPosition = (position: number, radiusX: number, radiusY: number) => {
+			// Find the index of the left hand post
+			let positionRatio = position / rampSize
+			let postIndex = Math.floor(positionRatio)
+
+			// Check if ball is exactly above one post
+			if (position % rampSize === 0) {
+				return {
+					x: position,
+					y: posts[postIndex] + radiusY
+				}
+			}
+
+			// Below we calculate the ball center when it is between two posts
+			// It takes in consideration the angle of the current ramp
+
+			positionRatio = positionRatio - postIndex
+			let rampSlope = posts[postIndex + 1] - posts[postIndex]
+
+			// This is the exact Y value where the ball touches the track
+			let initialHeight = posts[postIndex] + (rampSlope * positionRatio)
+
+			// Get ramp angle and its normal
+			let rightAngle = 90 * (Math.PI / 180) * (rampSlope >= 0 ? 1 : -1)
+			let rampDX = scaleX(rampSize * -1)
+			let rampDY = scaleY(posts[postIndex]) - scaleY(posts[postIndex + 1])
+			let rampAngle = Math.atan2(rampDX, rampDY) + rightAngle
+			let normalAngle = rampAngle +  rightAngle
+
+			// Translate the ball initial postion towards ramp's normal
+			let finalX = position + (radiusX * Math.cos(normalAngle))
+			let finalY = initialHeight + (radiusY * Math.sin(normalAngle))
+
+			return {
+				x: finalX,
+				y: finalY
+			}
+		}
+
 		// We define this function here because we can capture all the calculation contexts
 		// This function will be used afterwards to update the track line and posts
 		this.redrawTrackAndPosts = (postsToDraw: number[]) => {
@@ -300,59 +349,31 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 				this.refresh()
 			}, true)
 
+			// Append ball position placeholders
+			let ballPlaceholders = svg.selectAll('dot')
+				.data(this.positionScale)
+				.enter().append('circle')
+				.attr('data-position', (val) => val.toString())
+				.attr('class', 'track-ball-placeholder')
+				.attr('r', ballRealRadius)
+				.attr('cx', (val) => {
+					let ballPosition = this.getBallPosition(val, ballRadiusX, ballRadiusY)
+					return scaleX(ballPosition.x)
+				})
+				.attr('cy', (val) => {
+					let ballPosition = this.getBallPosition(val, ballRadiusX, ballRadiusY)
+					return scaleY(ballPosition.y)
+				})
+
+			for (let placeholders of ballPlaceholders.nodes()) {
+				placeholders.onclick = (ev) => {
+					let newPosition = parseInt(ev.target.getAttribute('data-position'), 10)
+					this.positionSetter(newPosition)
+				}
+			}
 		}
 
 		this.redrawTrackAndPosts(posts)
-
-
-		// We define this function here because we can capture all the calculation contexts
-		// This function will be used afterwards for animating the ball using the latest track setup
-		this.getBallPosition = (position: number, ballRadiusX: number, ballRadiusY: number) => {
-			// Find the index of the left hand post
-			let positionRatio = position / rampSize
-			let postIndex = Math.floor(positionRatio)
-
-			// Check if ball is exactly above one post
-			if (position % rampSize === 0) {
-				return {
-					x: position,
-					y: posts[postIndex] + ballRadiusY
-				}
-			}
-
-			// Below we calculate the ball center when it is between two posts
-			// It takes in consideration the angle of the current ramp
-
-			positionRatio = positionRatio - postIndex
-			let rampSlope = posts[postIndex + 1] - posts[postIndex]
-
-			// This is the exact Y value where the ball touches the track
-			let initialHeight = posts[postIndex] + (rampSlope * positionRatio)
-
-			// Get ramp angle and its normal
-			let rightAngle = 90 * (Math.PI / 180) * (rampSlope >= 0 ? 1 : -1)
-			let rampDX = scaleX(rampSize * -1)
-			let rampDY = scaleY(posts[postIndex]) - scaleY(posts[postIndex + 1])
-			let rampAngle = Math.atan2(rampDX, rampDY) + rightAngle
-			let normalAngle = rampAngle +  rightAngle
-
-			// Translate the ball initial postion towards ramp's normal
-			let finalX = position + (ballRadiusX * Math.cos(normalAngle))
-			let finalY = initialHeight + (ballRadiusY * Math.sin(normalAngle))
-
-			return {
-				x: finalX,
-				y: finalY
-			}
-		}
-
-		// The ball radius is defined whithout scaling into the data dimensions
-		// We invert the scale to know the proportional radius value in X and Y data domains
-		let ballRadiusX = scaleX.invert(ballRealRadius + ballTrackDistance)
-		let ballRadiusY = scaleY.invert(ballRealRadius + ballTrackDistance)
-
-		// Y scale is upside down, so the actual radius is the returned offset
-		ballRadiusY = Math.max(...scaleY.domain()) - ballRadiusY
 
 		this.ballPosition = this.getBallPosition(this.setup.position, ballRadiusX, ballRadiusY)
 		let ball = svg.append('circle')

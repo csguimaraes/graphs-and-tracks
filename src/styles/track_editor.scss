@@ -51,7 +51,7 @@ md-card {
   cursor: ns-resize !important;
 }
 
-#track /deep/ .track-ball {
+#track /deep/ .track-ball, #track /deep/ .track-ball-placeholder {
   fill: crimson;
   stroke-width: 4px;
   // ((Math.PI * 2 * R) / 5) - 2px
@@ -59,6 +59,15 @@ md-card {
   stroke-dashoffset: 0;
   stroke: red;
   cursor: move !important;
+}
+
+#track /deep/ .track-ball-placeholder {
+  opacity: 0 !important;
+  fill: rgba(255,0,0,.5);
+  cursor: pointer !important;
+  &:hover {
+    opacity: 0.3 !important;
+  }
 }
 
 #track-controls {
