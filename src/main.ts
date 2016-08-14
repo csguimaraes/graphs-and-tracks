@@ -39,7 +39,8 @@ const routes: RouterConfig = [
 	{ path: '', component: Components.HomeComponent },
 	{ path: 'challenges', component: Components.ChallengeListComponent },
 	{ path: 'challenges/:id', component: Components.ChallengeViewerComponent },
-	{ path: 'challenges/:id/edit', component: Components.ChallengeEditorComponent }
+	{ path: 'challenges/:id/edit', component: Components.ChallengeEditorComponent },
+	{ path: 'test', component: Components.TestComponent }
 ]
 const APP_ROUTER_PROVIDERS = provideRouter(routes)
 

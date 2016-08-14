@@ -68,3 +68,17 @@ export interface Junction {
 	height: number
 	position: number
 }
+
+export interface Margin {
+	top: number
+	bottom: number
+	left: number
+	right: number
+}
+
+export interface Dimensions {
+	x: number
+	y: number
+	width: number
+	height: number
+}

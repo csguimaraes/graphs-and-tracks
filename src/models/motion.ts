@@ -123,7 +123,7 @@ export class Motion {
 			// Check if the ball still inside the track
 			let fellOff = nextPosition < sDomain.min || sDomain.max < nextPosition
 			if (t === dt && fellOff) {
-				// We end it here if the ball fell of the track right after T=0
+				// We endOffset it here if the ball fell of the track right after T=0
 				break
 			}
 
@@ -216,7 +216,7 @@ export class Motion {
 
 				let overLeftJunction = r[idx].left === position
 				if (overLeftJunction && idx > 0) {
-					// Ball is exactly at the start of the ramp so we
+					// Ball is exactly at the startOffset of the ramp so we
 					// test some edge cases when the previous ramp must be selected
 
 					if (velocity === 0) {

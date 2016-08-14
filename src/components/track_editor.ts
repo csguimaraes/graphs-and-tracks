@@ -348,29 +348,6 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 				this.setup.posts[postIndex] = value
 				this.refresh()
 			}, true)
-
-			// Append ball position placeholders
-			let ballPlaceholders = svg.selectAll('dot')
-				.data(this.positionScale)
-				.enter().append('circle')
-				.attr('data-position', (val) => val.toString())
-				.attr('class', 'track-ball-placeholder')
-				.attr('r', ballRealRadius)
-				.attr('cx', (val) => {
-					let ballPosition = this.getBallPosition(val, ballRadiusX, ballRadiusY)
-					return scaleX(ballPosition.x)
-				})
-				.attr('cy', (val) => {
-					let ballPosition = this.getBallPosition(val, ballRadiusX, ballRadiusY)
-					return scaleY(ballPosition.y)
-				})
-
-			for (let placeholders of ballPlaceholders.nodes()) {
-				placeholders.onclick = (ev) => {
-					let newPosition = parseInt(ev.target.getAttribute('data-position'), 10)
-					this.positionSetter(newPosition)
-				}
-			}
 		}
 
 		this.redrawTrackAndPosts(posts)
