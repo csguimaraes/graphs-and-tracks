@@ -1,33 +1,27 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 
-import { MD_GRID_LIST_DIRECTIVES } from '@angular2-material/grid-list/grid-list'
-import { MD_CARD_DIRECTIVES } from '@angular2-material/card/card'
+import { StorageService } from '../../shared/storage.service'
+import { Challenge, Attempt, MotionSetup } from '../../shared/types'
+import { Motion } from '../../shared/motion.model'
 
-import { StorageService } from '../services'
-import { Challenge, Attempt, MotionSetup } from '../types'
-import { Motion } from '../models'
-
-import { GraphsComponent } from './graphs'
-import { TrackEditorComponent } from './track_editor'
+import { GraphsComponent } from '../../shared/graphs/graphs.component'
+import { TrackComponent } from '../../shared/track/track.component'
 
 import * as moment from 'moment'
 
 @Component({
-	moduleId: module.id,
-	selector: 'challenge',
-	templateUrl: '../templates/challenge_viewer.html',
-	styleUrls: ['../styles/challenge_viewer.scss'],
+	selector: 'gt-challenge',
+	templateUrl: './challenge.component.html',
+	styleUrls: ['./challenge.component.scss'],
 	directives: [
-		MD_GRID_LIST_DIRECTIVES,
-		MD_CARD_DIRECTIVES,
-		TrackEditorComponent,
+		TrackComponent,
 		GraphsComponent
 	]
 })
-export class ChallengeViewerComponent implements OnInit {
-	@ViewChild(TrackEditorComponent)
-	trackEditor: TrackEditorComponent
+export class ChallengeComponent implements OnInit {
+	@ViewChild(TrackComponent)
+	trackEditor: TrackComponent
 
 	@ViewChild(GraphsComponent)
 	graphsPanel: GraphsComponent

@@ -39,10 +39,10 @@
 	</md-grid-tile>
 
 	<md-grid-tile colspan="3" rowspan="2">
-		<track-editor [mode]="goalMotion.mode" (roll)="onRollBall($event)"></track-editor>
+		<gt-track [mode]="goalMotion.mode" (roll)="onRollBall($event)"></gt-track>
 	</md-grid-tile>
 
 	<md-grid-tile [class.zoom]="zoom" colspan="3" rowspan="2">
-		<graphs (zoom)="onGraphZoom()"></graphs>
+		<gt-graphs (zoom)="onGraphZoom()"></gt-graphs>
 	</md-grid-tile>
 </md-grid-list>

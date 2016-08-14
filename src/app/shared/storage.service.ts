@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core'
 
-import { Challenge } from '../types'
-
-import * as Settings from '../settings'
+import { Challenge } from './types'
+import * as Settings from './settings'
 
 @Injectable()
 export class StorageService {

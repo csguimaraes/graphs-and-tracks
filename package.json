@@ -26,13 +26,11 @@
     "@angular/platform-browser-dynamic": "2.0.0-rc.5",
     "@angular/forms": "0.3.0",
     "@angular/router": "3.0.0-rc.1",
-
     "core-js": "^2.4.0",
     "hammerjs": "^2.0.8",
     "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.31",
     "zone.js": "0.6.12",
-
     "@angular2-material/button": "*",
     "@angular2-material/card": "*",
     "@angular2-material/checkbox": "*",
@@ -48,38 +46,33 @@
     "@angular2-material/slide-toggle": "*",
     "@angular2-material/tabs": "*",
     "@angular2-material/toolbar": "*",
-
     "moment": "^2.14.1"
   },
   "devDependencies": {
-    "tslint": "^3.10.0-dev.2",
-    "typescript": "^1.9.0-dev.20160409",
-    "codelyzer" : "^0.0.28",
-    "ts-helpers": "*",
-
-    "node-sass": "*",
-    "rimraf": "*",
-    "typings": "*",
-
-    "webpack": ">=1.12.13",
-    "webpack-dev-server": ">=1.14.1",
-
-    "extract-text-webpack-plugin": "*",
-    "copy-webpack-plugin": "*",
-    "html-webpack-plugin": "*",
-
     "angular2-template-loader": "*",
+    "codelyzer": "0.0.26",
+    "copy-webpack-plugin": "*",
     "css-loader": "*",
+    "extract-text-webpack-plugin": "*",
     "file-loader": "*",
     "html-loader": "*",
+    "html-webpack-plugin": "*",
     "json-loader": "*",
+    "node-sass": "*",
     "null-loader": "*",
     "postcss-loader": "*",
     "raw-loader": "*",
+    "rimraf": "*",
     "sass-loader": "*",
     "style-loader": "*",
+    "ts-helpers": "*",
     "ts-loader": "*",
+    "tslint": "^3.10.0-dev.2",
     "tslint-loader": "*",
-    "url-loader": "*"
+    "typescript": "^2.0.0",
+    "typings": "*",
+    "url-loader": "*",
+    "webpack": ">=1.12.13",
+    "webpack-dev-server": ">=1.14.1"
   }
 }

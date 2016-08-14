@@ -32,6 +32,7 @@
 		"no-console": [
 			true,
 			"debug",
+			"info",
 			"time",
 			"timeEnd",
 			"trace"
@@ -65,7 +66,10 @@
 			"single"
 		],
 		"radix": true,
-		"semicolon": false,
+		"semicolon": [
+			true,
+			"never"
+		],
 		"triple-equals": [
 			true,
 			"allow-null-check"
@@ -81,25 +85,30 @@
 			}
 		],
 		"variable-name": false,
-		"whitespace": [true, "check-branch", "check-decl", "check-operator", "check-separator", "check-type"],
+		"whitespace": [
+			true,
+			"check-branch",
+			"check-decl",
+			"check-operator",
+			"check-separator",
+			"check-type"
+		],
+
 		"directive-selector-name": [true, "camelCase"],
 		"component-selector-name": [true, "kebab-case"],
 		"directive-selector-type": [true, "attribute"],
 		"component-selector-type": [true, "element"],
-		"directive-selector-prefix": [true, "gt"],
-		"component-selector-prefix": [true, "gt"],
 		"use-input-property-decorator": true,
 		"use-output-property-decorator": true,
 		"use-host-property-decorator": true,
-		"no-attribute-parameter-decorator": true,
-		"no-input-rename": true,
-		"no-output-rename": true,
-		"no-forward-ref" :true,
+		"no-input-rename": false,
+		"no-output-rename": false,
 		"use-life-cycle-interface": true,
 		"use-pipe-transform-interface": true,
-		"pipe-naming": [true, "camelCase", "gt"],
 		"component-class-suffix": true,
 		"directive-class-suffix": true,
-		"import-destructuring-spacing": true
+		"directive-selector-prefix": [true, "gt"],
+		"component-selector-prefix": [true, "gt"],
+		"pipe-naming": [true, "camelCase"]
 	}
 }

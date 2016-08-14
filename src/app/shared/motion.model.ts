@@ -1,5 +1,5 @@
-import * as Settings from '../settings'
-import * as Types from '../types'
+import * as Settings from './settings'
+import * as Types from './types'
 
 export class Motion {
 	mode: Types.ChallengeMode

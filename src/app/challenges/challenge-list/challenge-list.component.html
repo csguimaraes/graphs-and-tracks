@@ -5,7 +5,7 @@
 				Challenge List
 			</md-card-title>
 			<md-card-content id="challenge-list">
-				<div *ngFor="let challenge of challenges; let i = index" [routerLink]="['/challenges', challenge.id]">
+				<div *ngFor="let challenge of challenges" [routerLink]="['/challenges', challenge.id]">
 					<b md-line>
 						<md-icon>star_border</md-icon>
 						{{challenge.name}}
@@ -16,5 +16,3 @@
 		</md-card>
 	</md-grid-tile>
 </md-grid-list>
-
-

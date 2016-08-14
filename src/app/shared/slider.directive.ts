@@ -22,7 +22,7 @@ import * as Hammer from 'hammerjs'
  * (change) Emits the final position when the drag ends
  */
 
-@Directive({selector: '[slider]'})
+@Directive({selector: '[gtSlider]'})
 export class SliderDirective implements OnInit, OnDestroy {
 	@Input('vertical')
 	isVertical: boolean = false

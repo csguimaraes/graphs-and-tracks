@@ -66,13 +66,15 @@ module.exports = function makeWebpackConfig() {
 				exclude: [/node_modules\/(?!(ng2-.+))/]
 			},
 
-			// Style loaders for the app (will generate a standalone css and be added in the index.html head)
-			{ test: /\.css$/, exclude: root('src', 'public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') },
-			{ test: /\.scss$/, include: root('src', 'public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass') },
-
 			// Style loaders for components (will be embedded within the component code)
-			{ test: /\.css$/, include: root('src', 'app'), loader: 'raw!postcss' },
+			// { test: /\.css$/, include: root('src', 'app'), loader: 'raw!postcss' },
 			{ test: /\.scss$/, include: root('src', 'app'), loader: 'raw!postcss!sass' },
+
+			// Style loaders for the app (will generate a standalone css and be added in the index.html head)
+			// { test: /\.css$/, exclude: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') },
+			{ test: /\.scss$/, include: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass') },
+
+
 
 			// Support for *.json files.
 			{ test: /\.json$/, loader: 'json' },
@@ -113,8 +115,8 @@ module.exports = function makeWebpackConfig() {
 		// Inject script and link tags into html files
 		// Reference: https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
-			template: root('/src/public/main.ejs'),
-			favicon: root('/src/public/img/favicon.png'),
+			template: root('/public/main.ejs'),
+			favicon: root('/public/img/favicon.png'),
 			chunksSortMode: 'dependency',
 			minify: false,
 			// inject: 'head',
@@ -149,7 +151,7 @@ module.exports = function makeWebpackConfig() {
 			// Copy assets from the public folder
 			// Reference: https://github.com/kevlened/copy-webpack-plugin
 			new CopyWebpackPlugin([{
-				from: root('src/public'),
+				from: root('public'),
 				ignore: [
 					'*.scss',
 					'main.ejs'
@@ -182,7 +184,7 @@ module.exports = function makeWebpackConfig() {
 	 * Reference: http://webpack.github.io/docs/webpack-dev-server.html
 	 */
 	config.devServer = {
-		contentBase: './src/public',
+		contentBase: './public',
 		historyApiFallback: true,
 		stats: 'minimal'
 	}

@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, EventEmitter, Output, ElementRef, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, EventEmitter, Output, ElementRef, AfterViewInit, HostListener } from '@angular/core'
 import { MotionSetup, ChallengeMode, MotionData } from '../types'
+
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
 
@@ -7,12 +8,11 @@ declare let d3
 type coord = {x: number, y: number}
 
 @Component({
-	selector: 'track-editor',
-	host: { '(window:resize)': 'onResize($event)' },
-	templateUrl: '../templates/track_editor.html',
-	styleUrls: ['../styles/track_editor.scss']
+	selector: 'gt-track',
+	templateUrl: './track.component.html',
+	styleUrls: ['./track.component.scss']
 })
-export class TrackEditorComponent implements OnInit, AfterViewInit {
+export class TrackComponent implements OnInit, AfterViewInit {
 	@Input()
 	mode: ChallengeMode
 
@@ -46,6 +46,11 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 	constructor(private elementRef: ElementRef) {
 		this.gestureHandlers = []
 		this.rollBallEvent = new EventEmitter<MotionSetup>()
+	}
+
+	@HostListener('window:resize')
+	onResize(ev) {
+		this.refresh()
 	}
 
 	ngOnInit() {
@@ -386,10 +391,6 @@ export class TrackEditorComponent implements OnInit, AfterViewInit {
 		}
 
 		this.buildSlider(ball.node(), this.positionScale, this.positionSetter, true, svg.node(), null, true)
-	}
-
-	onResize(ev) {
-		this.refresh()
 	}
 
 	velocitySetter = (val: number) => {

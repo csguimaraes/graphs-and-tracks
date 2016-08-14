@@ -1,4 +1,4 @@
-import { MotionData } from '../types'
+import { MotionData } from './types'
 
 export function printDataTable(data: MotionData[], type: string) {
 	let w = window.open('', '', 'width=300,height=500,resizeable,scrollbars')

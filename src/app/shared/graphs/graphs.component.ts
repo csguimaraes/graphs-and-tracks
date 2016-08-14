@@ -2,17 +2,16 @@ import { Component, OnInit, ElementRef, AfterViewInit, Output, EventEmitter, Hos
 import * as Hammer from 'hammerjs'
 
 import { MotionData, ChallengeMode } from '../types'
-import { printDataTable } from '../utils/debug'
+import { printDataTable } from '../debug'
 
 declare let d3
 
 type GraphType = 's' | 'v' | 'a'
 
 @Component({
-	selector: 'graphs',
-	templateUrl: '../templates/graphs.html',
-	host: { '(window:resize)': 'onResize($event)' },
-	styleUrls: ['../styles/graphs.scss'],
+	selector: 'gt-graphs',
+	templateUrl: './graphs.component.html',
+	styleUrls: ['./graphs.component.scss'],
 })
 export class GraphsComponent implements OnInit, AfterViewInit {
 	mode: ChallengeMode
@@ -263,6 +262,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}
 	}
 
+	@HostListener('window:resize')
 	onResize(ev: any) {
 		this.clear()
 		this.refresh()
