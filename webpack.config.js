@@ -71,8 +71,8 @@ module.exports = function makeWebpackConfig() {
 			{ test: /\.scss$/, include: root('src', 'public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass') },
 
 			// Style loaders for components (will be embedded within the component code)
-			{ test: /\.css$/, include: root('src', 'styles'), loader: 'raw!postcss' },
-			{ test: /\.scss$/, include: root('src', 'styles'), loader: 'raw!postcss!sass' },
+			{ test: /\.css$/, include: root('src', 'app'), loader: 'raw!postcss' },
+			{ test: /\.scss$/, include: root('src', 'app'), loader: 'raw!postcss!sass' },
 
 			// Support for *.json files.
 			{ test: /\.json$/, loader: 'json' },

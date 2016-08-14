@@ -1,0 +1,37 @@
+<md-sidenav-layout fullscreen>
+	<md-toolbar color="primary">
+		<span class="logo">
+			<md-icon>multiline_chart</md-icon>
+			Graphs and Tracks
+			<small>BETA</small>
+		</span>
+
+		<filler id="app-menu">
+			<a [routerLink]="['challenges']">
+				<md-icon>star</md-icon>
+				Challenges
+			</a>
+
+			<a [routerLink]="['playground']" class="todo">
+				<md-icon>broken_image</md-icon>
+				Playground
+			</a>
+
+			<a [routerLink]="['tutorial']" class="todo">
+				<md-icon>school</md-icon>
+				Tutorial
+			</a>
+
+			<a [routerLink]="['settings']" class="todo">
+				<md-icon>settings</md-icon>
+				Settings
+			</a>
+		</filler>
+
+		<md-icon id="menu-about" class="todo" alt="About">info_outline</md-icon>
+	</md-toolbar>
+
+	<div id="main-container">
+		<router-outlet></router-outlet>
+	</div>
+</md-sidenav-layout>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ElementRef, AfterViewInit} from '@angular/core'
+import { Component, OnInit, Input, EventEmitter, Output, ElementRef, AfterViewInit } from '@angular/core'
 import { MotionSetup, ChallengeMode, MotionData } from '../types'
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'

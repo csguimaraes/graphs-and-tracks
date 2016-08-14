@@ -1,5 +1,4 @@
-import 'es6-shim'
-import 'reflect-metadata'
+import 'core-js'
 require('zone.js/dist/zone')
 
 import 'ts-helpers'
