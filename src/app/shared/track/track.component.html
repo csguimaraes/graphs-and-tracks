@@ -1,18 +1,10 @@
 <md-card [class.no-interaction]="rolling">
 	<md-card-content id="track"></md-card-content>
 	<md-card-content id="track-controls">
-		<div id="position-controls">
-			<div class="slider-container">
-				<div class="slider">
-					<span
-							*ngFor="let val of positionScale"
-							[class.selected]="setup.position === val"
-					>
-						{{val}}
-					</span>
-				</div>
-			</div>
-		</div>
+		<gt-scale id="position-scale" [color]="colors.position"
+				[domain]="mode.domain.position" [value]="setup.position"
+				(slide)="positionSetter($event)"
+		></gt-scale>
 
 		<div id="slider-info-container">
 			<span id="position-slider-info" class="slider-info">
@@ -28,18 +20,9 @@
 			</span>
 		</div>
 
-		<div id="velocity-controls">
-			<div class="slider-container">
-				<div class="slider">
-					<span
-							*ngFor="let val of velocityScale"
-							[class.selected]="setup.velocity === val"
-					>
-						{{val + (val < 0 ? '&nbsp;' : '')}}
-					</span>
-				</div>
-			</div>
-		</div>
-
+		<gt-scale id="velocity-scale" [color]="colors.velocity"
+				[domain]="mode.domain.velocity" [value]="setup.velocity"
+				(slide)="velocitySetter($event)"
+		></gt-scale>
 	</md-card-content>
 </md-card>

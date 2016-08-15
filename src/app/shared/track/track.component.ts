@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output, ElementRef, AfterViewInit, HostListener } from '@angular/core'
 import { MotionSetup, ChallengeMode, MotionData } from '../types'
 
+import { ScaleComponent } from '../scale/scale.component'
+import * as Settings from '../settings'
+
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
 
@@ -10,7 +13,10 @@ type coord = {x: number, y: number}
 @Component({
 	selector: 'gt-track',
 	templateUrl: './track.component.html',
-	styleUrls: ['./track.component.scss']
+	styleUrls: ['./track.component.scss'],
+	directives: [
+		ScaleComponent
+	]
 })
 export class TrackComponent implements OnInit, AfterViewInit {
 	@Input()
@@ -42,10 +48,13 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	ballRadius = 10 + 4
 	ballRotation = 0
 	ballPosition: coord
+	colors: any
 
 	constructor(private elementRef: ElementRef) {
 		this.gestureHandlers = []
 		this.rollBallEvent = new EventEmitter<MotionSetup>()
+
+		this.colors = Settings.THEME.colors
 	}
 
 	@HostListener('window:resize')
@@ -90,9 +99,6 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		setTimeout(() => {
 			this.refresh()
 		}, 50)
-
-		this.buildSlider('#position-controls .slider', this.positionScale, this.positionSetter)
-		this.buildSlider('#velocity-controls .slider', this.velocityScale, this.velocitySetter)
 	}
 
 	buildSlider(
@@ -271,7 +277,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 			}
 
 			// Below we calculate the ball center when it is between two posts
-			// It takes in consideration the angle of the current ramp
+			// It takes in consideration the angle of the value ramp
 
 			positionRatio = positionRatio - postIndex
 			let rampSlope = posts[postIndex + 1] - posts[postIndex]
@@ -434,8 +440,8 @@ export class TrackComponent implements OnInit, AfterViewInit {
 				currentTime = motion[idx].t * 1000
 				nextTime = motion[idx + 1].t * 1000
 				if (currentTime <= t && t < nextTime) {
-					// This index is surrounded by two data points that have our current animation time
-					// som we can interpolate the current position value from them
+					// This index is surrounded by two data points that have our value animation time
+					// som we can interpolate the value position value from them
 					found = true
 					break
 				} else {

@@ -67,11 +67,11 @@ module.exports = function makeWebpackConfig() {
 			},
 
 			// Style loaders for components (will be embedded within the component code)
-			// { test: /\.css$/, include: root('src', 'app'), loader: 'raw!postcss' },
+			{ test: /\.css$/, include: root('src', 'app'), loader: 'raw!postcss' },
 			{ test: /\.scss$/, include: root('src', 'app'), loader: 'raw!postcss!sass' },
 
 			// Style loaders for the app (will generate a standalone css and be added in the index.html head)
-			// { test: /\.css$/, exclude: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') },
+			{ test: /\.css$/, exclude: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') },
 			{ test: /\.scss$/, include: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass') },
 
 

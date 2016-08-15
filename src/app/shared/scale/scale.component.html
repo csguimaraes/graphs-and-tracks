@@ -1,0 +1,10 @@
+<div id="slider-container" [ngStyle]="setStyles()">
+	<div id="slider" gtSlider
+			(slide)="onSlide($event)"
+			(change)="onChange($event)"
+	>
+		<span *ngFor="let val of scale" [class.selected]="value === val">
+			{{val + (val < 0 ? '&nbsp;' : '')}}
+		</span>
+	</div>
+</div>

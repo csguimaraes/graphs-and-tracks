@@ -28,3 +28,13 @@ export const DEFAULT_CHALLENGES: Types.MotionSetup[] = [
 	{ position: 250, velocity: -10, posts: [0, 8, 0, 0, 6, 0] },
 	{ position: 100, velocity: -60, posts: [0, 10, 4, 0, 0, 0] }
 ]
+
+
+// TODO: move theme settings to JSON and share it with SASS
+export const THEME = {
+	colors: {
+		position: 'orangered',
+		velocity: 'forestgreen',
+		acceleration: 'steelblue'
+	}
+}

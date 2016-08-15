@@ -48,7 +48,8 @@ md-card {
     text-align: center;
 
     &.active {
-      color: #333;
+      color: white;
+      text-shadow: 0 0 .1em gray;
       font-weight: bold;
     }
 

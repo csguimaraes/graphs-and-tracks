@@ -24,28 +24,20 @@ import * as Hammer from 'hammerjs'
 
 @Directive({selector: '[gtSlider]'})
 export class SliderDirective implements OnInit, OnDestroy {
-	@Input('vertical')
-	isVertical: boolean = false
+	@Input() vertical: boolean = false
+	@Input() reference: HTMLElement = null
+	@Input() start: number = 0
+	@Input() end: number = 0
 
-	@Input('reference')
-	panReference: HTMLElement = null
+	@Output() slide: EventEmitter<number> = new EventEmitter<number>()
+	@Output() change: EventEmitter<number> = new EventEmitter<number>()
 
-	@Input('start')
-	startOffset: number = 0
-
-	@Input('end')
-	endOffset: number = 0
-
-	@Output('slide')
-	slide: EventEmitter<number> = new EventEmitter<number>()
-
-	@Output('change')
-	change: EventEmitter<number> = new EventEmitter<number>()
+	sliderStart: number
+	sliderEnd: number
+	sliderSize: number
 
 	private target: HTMLElement
 	private handler: HammerManager
-	private boundaries: ClientRect
-	private sliderSize: number
 
 	constructor(el: ElementRef) {
 		this.target = el.nativeElement
@@ -53,7 +45,7 @@ export class SliderDirective implements OnInit, OnDestroy {
 
 	ngOnInit(): any {
 		let panDirection, panEvents = ['tap']
-		if (this.isVertical) {
+		if (this.vertical) {
 			panDirection = Hammer.DIRECTION_VERTICAL
 			panEvents.push('panup', 'pandown')
 		} else {
@@ -85,28 +77,32 @@ export class SliderDirective implements OnInit, OnDestroy {
 	}
 
 	onPan = (event: HammerInput) => {
-		// let dragPosition = (horizontal ? event.center.x : event.center.y) - sliderStart
-		// let scaleIndex = Math.floor(dragPosition / sliderTickSize)
-		// scaleIndex = Math.max(0, Math.min(scaleIndex, scale.length - 1))
-		// callback(scale[scaleIndex], target)
-		this.slide.emit(Math.random())
+		let relativePosition = this.getRelativePosition(event)
+		this.slide.emit(relativePosition)
 	}
 
 	onPanEnd = (event: HammerInput) => {
-		this.change.emit(Math.random())
+		let relativePosition = this.getRelativePosition(event)
+		this.change.emit(relativePosition)
+	}
+
+	getRelativePosition(event: HammerInput) {
+		let position = this.vertical ? event.center.y : event.center.x
+		let positionOffset = position - this.sliderStart
+		let relativePosition = positionOffset / this.sliderSize
+		relativePosition = Math.max(0, Math.min(relativePosition, 1))
+		return relativePosition
 	}
 
 	updateBoundaries() {
-		this.boundaries = (this.panReference || this.target).getBoundingClientRect()
+		let boundaries = (this.reference || this.target).getBoundingClientRect()
 
-		if (this.isVertical) {
-			this.boundaries.top -= this.startOffset
-			this.boundaries.bottom -= this.endOffset
-			this.sliderSize = this.boundaries.bottom - this.boundaries.top
-		} else {
-			this.boundaries.left -= this.startOffset
-			this.boundaries.right -= this.endOffset
-			this.sliderSize = this.boundaries.right - this.boundaries.left
-		}
+		this.sliderStart = this.vertical ? boundaries.top : boundaries.left
+		this.sliderEnd = this.vertical ? boundaries.bottom : boundaries.right
+
+		this.sliderStart += this.start
+		this.sliderEnd -= this.end
+
+		this.sliderSize = this.sliderEnd - this.sliderStart
 	}
 }
