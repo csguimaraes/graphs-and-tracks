@@ -1,0 +1,184 @@
+$color-s: orangered;
+$color-v: forestgreen;
+$color-a: steelblue;
+
+$color-s-light: lighten(orangered, 25);
+$color-v-light: lighten(forestgreen, 25);
+
+$ball-margin:20px;
+$radius: 6px;
+$info-radius: 10px;
+$info-value-width: 80px;
+$slider-font-size: 16px;
+
+$track-controls-height: 110px;
+$track-height: calc(100% - #{$track-controls-height});
+$slider-line-height: $track-controls-height / 3;
+
+
+md-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+#track {
+  height: $track-height;
+  margin-bottom: 0 !important;
+}
+
+#track /deep/ .track-line {
+  stroke-width: 10px;
+  stroke-linecap: square;
+  stroke-linejoin: round;
+  stroke: #333;
+  fill: none;
+}
+
+#track /deep/ .track-outline {
+  stroke-width: 5px;
+  stroke-linecap: square;
+  stroke-linejoin: round;
+  stroke: rgba(51, 51, 51, .5);
+  fill: none;
+}
+
+#track /deep/ .post-base {
+  fill: #333;
+}
+
+#track /deep/ .post-dragger {
+  fill: #333;
+  cursor: ns-resize !important;
+}
+
+#track /deep/ .track-ball, #track /deep/ .track-ball-placeholder {
+  fill: crimson;
+  stroke-width: 4px;
+  // ((Math.PI * 2 * R) / 5) - 2px
+  stroke-dasharray: 15.59291886010284px 2px;
+  stroke-dashoffset: 0;
+  stroke: red;
+  cursor: move !important;
+}
+
+#track /deep/ .track-ball-placeholder {
+  opacity: 0 !important;
+  fill: rgba(255,0,0,.5);
+  cursor: pointer !important;
+  &:hover {
+    opacity: 0.3 !important;
+  }
+}
+
+#track-controls {
+  height: $track-controls-height;
+  overflow: hidden;
+  position: relative;
+
+  gt-scale {
+    margin: 0 #{$ball-margin - 5};
+    overflow: hidden;
+
+    &#position-scale {
+      border-radius: $radius $radius 0 0;
+    }
+
+    &#velocity-scale {
+      border-radius: 0 0 $radius $radius;
+    }
+  }
+
+  $h: 20px;
+  $r: $h / 2;
+  $mpad: 2px;
+  $bpad: 15px;
+  #slider-info-container {
+    background: linear-gradient(to right, $color-s, $color-s 49.9%, $color-v 50%, $color-v);
+    margin: 0 #{$ball-margin - 5};
+    height: $h;
+    display: flex;
+    white-space: nowrap;
+
+    .slider-info {
+      flex:2 0 0;
+      height: $h;
+      line-height: $h - 1;
+      font-weight: bold;
+
+      .slider-info-value {
+        display: inline-block;
+        min-width: 80px;
+        box-sizing: border-box;
+        position: relative;
+        text-align: center;
+        color: #333;
+
+        &:before, &:after {
+          content: ' ';
+          display: inline-block;
+          position: absolute;
+          width: 0;
+          height: 0;
+        }
+      }
+
+      .slider-info-label {
+        color: white;
+        text-shadow: 0 0 .1em gray;
+      }
+    }
+
+    #ball-roller {
+      background: crimson;
+      flex:1 0 0;
+      padding: 0 $h;
+      text-align: center;
+      color: white;
+      text-shadow: 0 0 .1em gray;
+      cursor: pointer;
+      &:hover {
+        background: red;
+      }
+    }
+
+    #position-slider-info {
+      text-align: right;
+      .slider-info-value {
+        background: $color-s-light;
+        padding: 0 $mpad 0 $h;
+
+        &:after {
+          border-top: $h solid $color-s-light;
+          border-right: $h solid transparent;
+          margin-left: $mpad;
+          right: $h * -1;
+        }
+
+        &:before {
+          border-top: $h solid $color-s;
+          border-right: $h solid transparent;
+          left: 0;
+        }
+      }
+    }
+
+    #velocity-slider-info {
+      .slider-info-value {
+        background: $color-v-light;
+        padding: 0 $h 0 $mpad;
+
+        &:before {
+          border-bottom: $h solid $color-v-light;
+          border-left: $h solid transparent;
+          left: $h * -1;
+        }
+
+        &:after {
+          border-bottom: $h solid $color-v;
+          border-left: $h solid transparent;
+          right: 0;
+        }
+      }
+    }
+  }
+}

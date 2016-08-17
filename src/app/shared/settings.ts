@@ -8,7 +8,7 @@ export const MODE_NORMAL: Types.ChallengeMode = {
 		precision: 5
 	},
 	domain: {
-		position: { min: 0, max: 500, step: 50 },
+		position: { min: 0, max: 500, step: 20 },
 		velocity: { min: -60, max: 60, step: 10 },
 		posts: { min: 0, max: 10, step: 1 }
 	},

@@ -6,7 +6,7 @@ import { Challenge, Attempt, MotionSetup } from '../../shared/types'
 import { Motion } from '../../shared/motion.model'
 
 import { GraphsComponent } from '../../shared/graphs/graphs.component'
-import { TrackComponent } from '../../shared/track/track.component'
+import { TrackPanelComponent } from '../../shared/track-panel/track-panel.component'
 
 import * as moment from 'moment'
 
@@ -15,13 +15,13 @@ import * as moment from 'moment'
 	templateUrl: './challenge.component.html',
 	styleUrls: ['./challenge.component.scss'],
 	directives: [
-		TrackComponent,
+		TrackPanelComponent,
 		GraphsComponent
 	]
 })
 export class ChallengeComponent implements OnInit {
-	@ViewChild(TrackComponent)
-	trackEditor: TrackComponent
+	@ViewChild(TrackPanelComponent)
+	trackEditor: TrackPanelComponent
 
 	@ViewChild(GraphsComponent)
 	graphsPanel: GraphsComponent

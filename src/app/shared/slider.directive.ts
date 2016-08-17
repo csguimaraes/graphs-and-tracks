@@ -44,13 +44,13 @@ export class SliderDirective implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): any {
-		let panDirection, panEvents = ['tap']
+		let panDirection, panEvents
 		if (this.vertical) {
 			panDirection = Hammer.DIRECTION_VERTICAL
-			panEvents.push('panup', 'pandown')
+			panEvents = 'panup pandown'
 		} else {
 			panDirection = Hammer.DIRECTION_HORIZONTAL
-			panEvents.push('panleft', 'panright')
+			panEvents = 'panleft panright'
 		}
 
 		this.handler = new Hammer.Manager(this.target, {
@@ -61,8 +61,8 @@ export class SliderDirective implements OnInit, OnDestroy {
 		})
 
 		this.handler.on('panstart', this.onPanStart)
-		this.handler.on(panEvents.join(' '), this.onPan)
-		this.handler.on('panend', this.onPanEnd)
+		this.handler.on(panEvents, this.onPan)
+		this.handler.on('tap panend', this.onPanEnd)
 	}
 
 	ngOnDestroy(): any {

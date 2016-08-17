@@ -1,0 +1,28 @@
+<md-card [class.no-interaction]="rolling">
+	<md-card-content id="track"></md-card-content>
+	<md-card-content id="track-controls">
+		<gt-scale id="position-scale" [color]="colors.position"
+				[domain]="mode.domain.position" [value]="setup.position"
+				(slide)="positionSetter($event)"
+		></gt-scale>
+
+		<div id="slider-info-container">
+			<span id="position-slider-info" class="slider-info">
+				<span class="slider-info-label">INITIAL POSITION</span>
+				<span class="slider-info-value">{{setup.position}} <small>cm</small></span>
+			</span>
+			<span id="ball-roller" class="slider-info" (click)="rollBall()">
+				ROLL BALL
+			</span>
+			<span id="velocity-slider-info" class="slider-info">
+				<span class="slider-info-value">{{setup.velocity}} <small>cm/s</small></span>
+				<span class="slider-info-label">INITIAL VELOCITY</span>
+			</span>
+		</div>
+
+		<gt-scale id="velocity-scale" [color]="colors.velocity"
+				[domain]="mode.domain.velocity" [value]="setup.velocity"
+				(slide)="velocitySetter($event)"
+		></gt-scale>
+	</md-card-content>
+</md-card>

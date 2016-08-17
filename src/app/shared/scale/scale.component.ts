@@ -26,9 +26,12 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 	@ViewChild(SliderDirective) slider: SliderDirective
 
 	scale: number[]
+	scaleRange: number
 	interval: number
+	latestValue: number
 
 	ngOnInit(): void {
+		let initialIndex, scaleValue
 		if (this.domain) {
 			this.min = this.domain.min
 			this.max = this.domain.max
@@ -36,16 +39,19 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 		}
 
 		this.scale = []
-		for (let val = this.min; val <= this.max; val += this.step) {
-			this.scale.push(val)
+		for (scaleValue = this.min; scaleValue <= this.max; scaleValue += this.step) {
+			this.scale.push(scaleValue)
 		}
+		let lastValue = scaleValue - this.step
+		this.scaleRange = lastValue - this.min
 
 		if (this.value === undefined) {
 			// Pick one value at the center of the scale
-			let initialIndex = Math.round(this.scale.length / 2) - 1
+			initialIndex = Math.round(this.scale.length / 2) - 1
 			this.value = this.scale[initialIndex]
 		}
 
+		this.latestValue = this.value
 		this.interval = 1 / this.scale.length
 	}
 
@@ -57,18 +63,19 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 
 	onSlide(position: number) {
 		let newValue = this.getValueAtPosition(position)
-
 		if (newValue !== this.value) {
-			this.value = this.getValueAtPosition(position)
-			this.slide.emit(this.value)
+			this.value = newValue
 		}
+
+		this.slide.emit(this.min + (this.scaleRange * position))
 	}
 
 	onChange(position: number) {
 		let newValue = this.getValueAtPosition(position)
 
-		if (newValue !== this.value) {
-			this.value = this.getValueAtPosition(position)
+		if (newValue !== this.latestValue) {
+			this.value = newValue
+			this.latestValue = this.value
 			this.change.emit(this.value)
 		}
 	}
