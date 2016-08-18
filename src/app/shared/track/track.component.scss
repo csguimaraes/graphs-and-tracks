@@ -28,7 +28,13 @@ svg /deep/ {
   }
 
   circle {
-    fill: red;
+    fill: crimson;
+    stroke-width: 4px;
+    stroke-dashoffset: 0;
+    stroke: red;
+
+    // R = 10, N = 5, GAP = 2x
+    // ((Math.PI * 2 * R) / N) - GAP
+    stroke-dasharray: 15.59291886010284px 2px;
   }
 }
-

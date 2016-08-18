@@ -38,32 +38,6 @@ export class Angle {
 	}
 }
 
-export class CircleCongruentTangents {
-	constructor(
-		public circleRadius: number,
-		public vertex: Point,
-		public angle: Angle
-	) {}
-
-	/**
-	 * Distance between the vertex and circle center
-	 * @returns {number}
-	 */
-	get distance(): number {
-		return (this.circleRadius / Math.sin(this.angle.rad / 2)) - this.circleRadius
-	}
-
-	get firstTangentPoint(): Point {
-		// TODO
-		return null
-	}
-
-	get lastTangentPoint(): Point {
-		// TODO
-		return null
-	}
-}
-
 export function interpolate(current, start, end, startValue, endValue) {
 	let offset = current - start
 	let delta = end - start
@@ -88,4 +62,11 @@ export function getDeterminant(vectorA: Point, vectorB: Point) {
 
 export function getVector(a: Point, b: Point): Point {
 	return { x: b.x - a.x, y: b.y - a.y }
+}
+
+export function translate(point: Point, angleRad: number, distance: number): Point {
+	return {
+		x: point.x + (distance * Math.cos(angleRad)),
+		y: point.y + (distance * Math.sin(angleRad))
+	}
 }

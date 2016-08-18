@@ -13,7 +13,7 @@ import { ScaleComponent } from '../shared/scale/scale.component'
 			<gt-track [setup]="setup" [mode]="mode"></gt-track>
 		</div>
 		<br>
-		<gt-scale [domain]="mode.domain.position" (change)="onPositionChange($event)"></gt-scale>
+		<gt-scale [domain]="mode.domain.position" (slide)="onPositionChange($event)"></gt-scale>
 `,
 	styleUrls: ['./home.component.scss'],
 	directives: [
@@ -32,7 +32,7 @@ export class HomeComponent {
 		this.setup = {
 			position: 250,
 			velocity: 0,
-			posts: [10, 0, 10, 4, 10, 5]
+			posts: [0, 1, 10, 4, 6, 10]
 		}
 	}
 

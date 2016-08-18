@@ -1,9 +1,10 @@
 import { Component, OnInit, ElementRef, HostListener, AfterViewInit, Input } from '@angular/core'
 
 import { MotionSetup, ChallengeMode, Ball, Margin, Point } from '../types'
-import { Angle } from '../helpers'
+import { Angle, translate, getDistance } from '../helpers'
 
 declare let d3
+type DeadZone = { position: Point, start: number, end: number }
 
 @Component({
 	selector: 'gt-track',
@@ -14,21 +15,20 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	@Input() setup: MotionSetup
 	@Input() mode: ChallengeMode
 
-
-	aux: any // TODO remove
-
 	// TODO: get from THEME settings
 	trackWidth = 5
 	ball: Ball = {
-		radius: 6 + 4,
+		radius: 19,
+		stroke: 4,
 		rotation: 0,
+		perimeter: Math.PI * 2 * 19,
 		cx: 50,
 		cy: 50
 	}
 
 	margin: Margin = {
 		left: 20,
-		top: 20,
+		top: this.ball.radius,
 		right: 20,
 		bottom: 20
 	}
@@ -40,6 +40,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 
 	scaleX: any
 	scaleY: any
+	deadZones: DeadZone[]
 
 	rampSize: number
 
@@ -53,7 +54,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 
 		this.svg = d3.select(this.host.querySelector('svg'))
 		this.trackGroup = this.svg.select('g')
-		this.ball.element = this.svg.select('circle')
+		this.ball.element = this.svg.select('circle').node()
 	}
 
 	ngAfterViewInit() {
@@ -66,12 +67,12 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	}
 
 	refresh() {
-		this.updateBounds()
+		this.recalculate()
 		this.drawTrackLine(this.setup.posts)
 		this.updateBallPostion(this.setup.position)
 	}
 
-	updateBounds() {
+	recalculate() {
 		let rect = this.host.getBoundingClientRect()
 		this.svg.attr('width', rect.width).attr('height', rect.height)
 		this.trackGroup.attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
@@ -88,6 +89,8 @@ export class TrackComponent implements OnInit, AfterViewInit {
 			.range([domainHeight, 0])
 			// Substract 1 of the min value so we have space to draw the post bases
 			.domain([domain.posts.min - 1, domain.posts.max])
+
+		this.updateDeadZones()
 	}
 
 	drawTrackLine(posts: number[], outline = false) {
@@ -107,7 +110,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	updateBallPostion(position: number) {
 		let x = position, y = 0
 		let posts = this.setup.posts
-		let offset = this.ball.radius + 2.5
+		let offset = this.ball.radius + (this.trackWidth / 2)
 
 		let trackPositionRatio = position / this.rampSize
 		let postIndex = Math.floor(trackPositionRatio)
@@ -123,50 +126,55 @@ export class TrackComponent implements OnInit, AfterViewInit {
 
 		let left = posts[rampIndex], right = posts[rampIndex + 1]
 		let rampSlope = right - left
-		let offsetAngle: Angle
+		let offsetAngle: Angle, center: Point
 
-		let isOverDeadZone = false // TODO
-
-		if (isOverDeadZone) {
-			// TODO
-		} else if (isOverPost) {
-			y = posts[postIndex]
-			if (isOverEdge) {
-				offsetAngle = this.getRampInclination(rampIndex, true)
+		let deadZone = this.getDeadZone(position, rampIndex)
+		if (deadZone) {
+			center = deadZone.position
+		} else {
+			if (isOverPost) {
+				y = posts[postIndex]
+				if (isOverEdge) {
+					offsetAngle = this.getRampInclination(rampIndex, true)
+				}
 			} else {
-			// TODO remove debug
-				let deadZone = this.getDeadZoneOverPost(rampIndex)
-				offsetAngle = deadZone.normal
-				offset += deadZone.offset
+				// The ball is between two posts
+				y = left + (rampSlope * rampPositionRatio)
+				offsetAngle = this.getRampInclination(rampIndex, true)
 			}
-		} else {
-			// The ball is between two posts
-			y = left + (rampSlope * rampPositionRatio)
-			offsetAngle = this.getRampInclination(rampIndex, true)
+
+			center = {
+				x: this.scaleX(x),
+				y: this.scaleY(y)
+			}
+
+			if (offsetAngle) {
+				center = translate(center, offsetAngle.rad, offset)
+			} else {
+				center.y = center.y - offset
+			}
 		}
 
-		let cx = this.scaleX(x)
-		let cy = this.scaleY(y)
-		// TODO remove aux debug
-		if (this.aux) {
-			this.aux.remove()
+		let previousCenter = { x: this.ball.cx, y: this.ball.cy }
+		this.ball.cx = center.x
+		this.ball.cy = center.y
+
+		// --------
+		// Calculate how much ball travelled and change its rotation
+		// to give the impression that it is rolling proportionally to its speed
+		let leftToRight = center.x > previousCenter.x
+
+		let distance = getDistance(previousCenter, center)
+		let rotation = this.ball.rotation + (distance * (leftToRight ? -1 : 1))
+
+		let rotationRatio = rotation / this.ball.perimeter
+		if (rotationRatio > 1) {
+			// Normalize new rotation if more than 360 degres
+			rotation = (rotationRatio - Math.floor(rotationRatio)) * this.ball.perimeter
 		}
 
-		this.aux = this.trackGroup.append('circle')
-			.attr('r', 2)
-			.attr('fill', 'red')
-			.attr('cx', cx)
-			.attr('cy', cy)
-
-		if (offsetAngle) {
-			cx = cx + (offset * Math.cos(offsetAngle.rad))
-			cy = cy + (offset * Math.sin(offsetAngle.rad))
-		} else {
-			cy = cy - offset
-		}
-
-		this.ball.cx = cx
-		this.ball.cy = cy
+		this.ball.element.style.strokeDashoffset = `${rotation}px`
+		this.ball.rotation = rotation
 	}
 
 	getPostHead(postIndex): Point {
@@ -194,35 +202,73 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		return result
 	}
 
-	getDeadZoneOverPost(postIndex: number): {offset: number, normal: Angle} {
+	getDeadZone(position: number, rampIndex: number) {
+		let dzLeft = this.deadZones[rampIndex]
+		let dzRight = this.deadZones[rampIndex + 1]
+
+		if (dzLeft && position <= dzLeft.end) {
+			return dzLeft
+		}
+
+		if (dzRight && position >= dzRight.start) {
+			return dzRight
+		}
+
+		return null
+	}
+
+	updateDeadZones() {
+		let posts = this.setup.posts
+		this.deadZones = []
+
+		// Iterate between posts skiping posts on edges
+		for (let idx = 1; idx < (posts.length - 1); idx++) {
+			let deadZone = this.calculateDeadZone(idx)
+			this.deadZones.push(deadZone)
+		}
+
+		// Set null dead zones for edges
+		this.deadZones.unshift(null)
+		this.deadZones.push(null)
+	}
+
+	calculateDeadZone(postIndex: number): DeadZone {
 		let vertex = this.getPostHead(postIndex)
 		let firstSide = this.getPostHead(postIndex - 1)
 		let lastSide = this.getPostHead(postIndex + 1)
 
 		let innerAngle = Angle.betweenVectors(vertex, firstSide, lastSide)
-		console.log('innerAngle is ', innerAngle.deg)
 
-		let rampInclination = this.getRampInclination(postIndex)
-		let normalAngle = Angle.fromRad(rampInclination.rad - (innerAngle.rad / 2))
-		console.log('normalAngle is ', normalAngle.deg)
+		if (innerAngle.rad <= 0) {
+			return null
+		}
 
+		let rightRampInclination = this.getRampInclination(postIndex)
+		let normalAngle = Angle.fromRad(rightRampInclination.rad - (innerAngle.rad / 2))
+
+		// --------
 		// Distance between ball center and vertex
-		let offset = this.ball.radius + (this.trackWidth / 2)
-		let ballDistance = (offset / Math.sin(innerAngle.rad / 2)) - offset
-		console.log('ballDistance is ', ballDistance)
+		// @see http://math.stackexchange.com/questions/1064410
+		let radius = this.ball.radius + (this.trackWidth / 2)
+		let ballDistance = (radius / Math.sin(innerAngle.rad / 2)) - radius
+		let offset = ballDistance + radius
+
+		let ballPosition = translate(vertex, normalAngle.rad, offset)
+
+		// --------
+		// Get tangent points between ball and ramps
+		// to determine were dead zone starts and ends
+
+		let leftRampNormal = this.getRampInclination(postIndex - 1, true)
+		let tangentPointLeft = translate(ballPosition, leftRampNormal.rad, radius * -1)
+
+		let rightRampNormal = this.getRampInclination(postIndex, true)
+		let tangentPointRight = translate(ballPosition, rightRampNormal.rad, radius * -1)
 
 		return {
-			offset: ballDistance,
-			normal: normalAngle
-		}
-	}
-
-	calculateDeadZones() {
-		let posts = this.setup.posts
-
-		// Iterate between posts skiping posts on edges
-		for (let idx = 1; idx < (posts.length - 1); idx++) {
-
+			position: ballPosition,
+			start: this.scaleX.invert(tangentPointLeft.x),
+			end: this.scaleX.invert(tangentPointRight.x)
 		}
 	}
 }

@@ -91,7 +91,9 @@ export interface Point {
 export interface Ball {
 	element?: SVGCircleElement
 	radius: number
+	stroke: number
 	rotation: number
+	perimeter: number
 	cx: number
 	cy: number
 }
