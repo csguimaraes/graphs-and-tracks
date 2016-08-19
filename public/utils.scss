@@ -39,7 +39,28 @@ filler {
 
 .todo {
   opacity: .5;
-  &, & * {
-    cursor: not-allowed !important;
+  cursor: not-allowed !important;
+  & * {
+    pointer-events: none !important;
+  }
+}
+
+.card-button {
+  font-size: 16px;
+  line-height: 16px;
+  padding: 6px 5px 0 5px;
+  border-radius: 3px;
+  color: #999;
+  cursor: pointer;
+
+  md-icon {
+    cursor: pointer;
+    vertical-align: sub;
+    width: auto;
+  }
+
+  &:hover {
+    color: #333;
+    background: #F0F0F0;
   }
 }

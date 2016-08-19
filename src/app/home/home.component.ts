@@ -8,11 +8,7 @@ import { ScaleComponent } from '../shared/scale/scale.component'
 
 @Component({
 	selector: 'gt-home',
-	template: `
-		<div></div>
-		<br>
-		<gt-scale [domain]="mode.domain.position" (slide)="onPositionChange($event)"></gt-scale>
-	`, // <!--<gt-track [setup]="setup" [mode]="mode"></gt-track>-->
+	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
 	directives: [
 		TrackComponent,

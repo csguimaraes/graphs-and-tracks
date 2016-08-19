@@ -2,10 +2,24 @@ h1 {
   text-decoration: underline;
 }
 
-.logo small {
-  opacity: .8;
-  margin-left: 10px;
-  font-size: 60%;
+.logo {
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+
+  &:visited {
+    color: white;
+  }
+
+  &:hover {
+    opacity: .9;
+  }
+
+  small {
+    opacity: .8;
+    margin-left: 10px;
+    font-size: 60%;
+  }
 }
 
 #app-menu {

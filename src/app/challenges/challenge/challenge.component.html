@@ -1,47 +1,34 @@
 <md-grid-list card-fill rowHeight="fit" cols="4" gutterSize="16px" [class.zoom]="zoom">
-	<md-grid-tile colspan="1" rowspan="4">
+
+	<md-grid-tile colspan="1">
 		<md-card class="info-card" scroll-y>
 			<md-card-title>
 				{{ challenge.name }}
+				<span id="help-button" class="card-button">
+					<md-icon small>help_outline</md-icon>
+					HELP
+				</span>
 			</md-card-title>
 
 			<md-card-content>
-				<md-card-subtitle>
-					Challenge Info (DEBUG)
-					<br><br>
-					<div class="setup-info">
-						<span>Position {{challenge.goal.position}} </span>
-						<span>Velocity {{challenge.goal.velocity}} </span>
-						<span>Posts {{challenge.goal.posts | dump}} </span>
-					</div>
-				</md-card-subtitle>
-
-				<br><br>
-
-				<md-card-subtitle *ngIf="attempts.length">Challenge Attempts</md-card-subtitle>
-				<div id="attempt-list">
-					<div class="attempt-list-item"
-							*ngFor="let attempt of attempts; let i = index"
-					>
-						<div class="attempt-title">
-							Trial #{{i+1}}
-						</div>
-						<div class="setup-info">
-							<span>Position {{attempt.setup.position}} </span>
-							<span>Velocity {{attempt.setup.velocity}} </span>
-							<span>Posts {{attempt.setup.posts | dump}} </span>
-						</div>
-					</div>
-				</div>
+				<p>
+					Imagine that someone has set up an arrangement of tracks on which they have rolled a ball.
+					The position, velocity and accelerations shown here represent the ball’s motion.
+				</p>
+				<p>
+					Try to discover the arrangement by examining the challenge graphs by adjusting the tracks yourself and rolling the ball.
+					Set the initial position and initial velocity of the ball by clicking on the scales. Raise or lower the posts as necessary.
+					Then click Roll Ball to see the resulting graphs for your trial motion.
+				</p>
 			</md-card-content>
 		</md-card>
 	</md-grid-tile>
 
-	<md-grid-tile colspan="3" rowspan="2">
-		<gt-track-panel [mode]="goalMotion.mode" (roll)="onRollBall($event)"></gt-track-panel>
+	<md-grid-tile [class.zoom]="zoom" colspan="3">
+		<gt-graphs (zoom)="onGraphZoom()"></gt-graphs>
 	</md-grid-tile>
 
-	<md-grid-tile [class.zoom]="zoom" colspan="3" rowspan="2">
-		<gt-graphs (zoom)="onGraphZoom()"></gt-graphs>
+	<md-grid-tile colspan="4">
+		<gt-track-panel [mode]="goalMotion.mode" (roll)="onRollBall($event)"></gt-track-panel>
 	</md-grid-tile>
 </md-grid-list>

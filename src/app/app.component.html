@@ -1,10 +1,10 @@
 <md-sidenav-layout fullscreen>
 	<md-toolbar color="primary">
-		<span class="logo">
+		<a [routerLink]="['']" class="logo">
 			<md-icon>multiline_chart</md-icon>
 			Graphs and Tracks
 			<small>BETA</small>
-		</span>
+		</a>
 
 		<filler id="app-menu">
 			<a [routerLink]="['challenges']">
@@ -15,11 +15,6 @@
 			<a [routerLink]="['playground']" class="todo">
 				<md-icon>broken_image</md-icon>
 				Playground
-			</a>
-
-			<a [routerLink]="['tutorial']" class="todo">
-				<md-icon>school</md-icon>
-				Tutorial
 			</a>
 
 			<a [routerLink]="['settings']" class="todo">

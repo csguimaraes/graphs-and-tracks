@@ -71,7 +71,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 		this.setup = {
 			position: this.positionScale[midPos],
 			velocity: this.velocityScale[midVel],
-			posts: [1, 8, 0, 10, 0, 3]
+			posts: [5, 4, 3, 2, 1, 0]
 			// new Array(this.mode.postsCount).fill(0)
 		}
 	}

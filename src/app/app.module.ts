@@ -5,6 +5,7 @@ import { MdIconModule } from '@angular2-material/icon'
 import { MdToolbarModule } from '@angular2-material/toolbar'
 import { MdCardModule } from '@angular2-material/card'
 import { MdGridListModule } from '@angular2-material/grid-list'
+import { MdListModule } from '@angular2-material/list'
 
 import { AppComponent } from './app.component'
 import { APP_ROUTING, APP_ROUTING_PROVIDERS } from './app.routing'
@@ -26,6 +27,7 @@ import { ChallengeListComponent } from './challenges/challenge-list/challenge-li
 		MdToolbarModule,
 		MdCardModule,
 		MdGridListModule,
+		MdListModule,
 
 		APP_ROUTING
 	],

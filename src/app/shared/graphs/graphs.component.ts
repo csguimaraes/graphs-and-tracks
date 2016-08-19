@@ -169,19 +169,13 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}
 
 		if (animated) {
-			console.log('setting animation')
+			this.trialClip.style.transition = ''
 			this.trialClip.style.width = '0px'
 
 			setTimeout(() => {
-				console.log('setting full width')
 				this.trialClip.style.transition = `width ${ANIMATION_DURATION}s linear`
 				this.trialClip.style.width = `${this.width}px`
 			}, 1)
-
-			setTimeout(() => {
-				console.log('clearing transition')
-				this.trialClip.style.transition = ''
-			}, ANIMATION_DURATION * 1000)
 		} else {
 			this.trialClip.style.width = `${this.width}px`
 			this.trialClip.style.transition = ''
