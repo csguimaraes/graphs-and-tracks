@@ -9,12 +9,10 @@ import { ScaleComponent } from '../shared/scale/scale.component'
 @Component({
 	selector: 'gt-home',
 	template: `
-		<div>
-			<gt-track [setup]="setup" [mode]="mode"></gt-track>
-		</div>
+		<div></div>
 		<br>
 		<gt-scale [domain]="mode.domain.position" (slide)="onPositionChange($event)"></gt-scale>
-`,
+	`, // <!--<gt-track [setup]="setup" [mode]="mode"></gt-track>-->
 	styleUrls: ['./home.component.scss'],
 	directives: [
 		TrackComponent,
@@ -22,7 +20,8 @@ import { ScaleComponent } from '../shared/scale/scale.component'
 	]
 })
 export class HomeComponent {
-	@ViewChild(TrackComponent) track: TrackComponent
+	@ViewChild(TrackComponent)
+	track: TrackComponent
 
 	setup: Types.MotionSetup
 	mode: Types.ChallengeMode

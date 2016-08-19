@@ -1,8 +1,9 @@
 $track-color: #333;
+$base-color: #333;
 
 // TODO: these variables should be retrieved from JSON
 // since they affect the track calulations
-$track-width: 5;
+$track-width: 10;
 $ball-radius: 10;
 $ball-stroke: 4;
 
@@ -13,7 +14,7 @@ $ball-stroke: 4;
 }
 
 svg {
-  background: #CCC;
+  // background: lightgoldenrodyellow;
 }
 
 svg /deep/ {
@@ -21,20 +22,48 @@ svg /deep/ {
     fill: none;
     stroke: $track-color;
     stroke-width: $track-width;
+    stroke-linejoin: round;
+  }
+
+  .track-line {
+    // fill: #F0F0F0;
   }
 
   .track-outline {
     opacity: .5;
   }
 
+  .post {
+    fill: $track-color;
+  }
+
+  .post-incrementer {
+    cursor: n-resize;
+    fill: rgba(0, 0, 0, 0);
+  }
+
+  .post-dragger {
+    cursor: ns-resize;
+    fill: rgba(0, 0, 0, 0);
+  }
+
+  .post-base {
+    fill: $base-color;
+    cursor: s-resize;
+    pointer-events: bounding-box;
+    &:hover {
+      fill: lighten($base-color, 20);
+    }
+  }
+
   circle {
     fill: crimson;
-    stroke-width: 4px;
+    stroke-width: 3px;
     stroke-dashoffset: 0;
     stroke: red;
 
     // R = 10, N = 5, GAP = 2x
     // ((Math.PI * 2 * R) / N) - GAP
-    stroke-dasharray: 15.59291886010284px 2px;
+    stroke-dasharray: 13.079644737231007px 2px;
   }
 }

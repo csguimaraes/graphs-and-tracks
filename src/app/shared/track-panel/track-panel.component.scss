@@ -2,11 +2,11 @@ $color-s: orangered;
 $color-v: forestgreen;
 $color-a: steelblue;
 
-$color-s-light: lighten(orangered, 25);
-$color-v-light: lighten(forestgreen, 25);
+$color-s-light: lighten($color-s, 25);
+$color-v-light: lighten($color-v, 25);
 
 $ball-margin:20px;
-$radius: 6px;
+$radius: 4px;
 $info-radius: 10px;
 $info-value-width: 80px;
 $slider-font-size: 16px;
@@ -24,50 +24,6 @@ md-card {
 #track {
   height: $track-height;
   margin-bottom: 0 !important;
-}
-
-#track /deep/ .track-line {
-  stroke-width: 10px;
-  stroke-linecap: square;
-  stroke-linejoin: round;
-  stroke: #333;
-  fill: none;
-}
-
-#track /deep/ .track-outline {
-  stroke-width: 5px;
-  stroke-linecap: square;
-  stroke-linejoin: round;
-  stroke: rgba(51, 51, 51, .5);
-  fill: none;
-}
-
-#track /deep/ .post-base {
-  fill: #333;
-}
-
-#track /deep/ .post-dragger {
-  fill: #333;
-  cursor: ns-resize !important;
-}
-
-#track /deep/ .track-ball, #track /deep/ .track-ball-placeholder {
-  fill: crimson;
-  stroke-width: 4px;
-  // ((Math.PI * 2 * R) / 5) - 2px
-  stroke-dasharray: 15.59291886010284px 2px;
-  stroke-dashoffset: 0;
-  stroke: red;
-  cursor: move !important;
-}
-
-#track /deep/ .track-ball-placeholder {
-  opacity: 0 !important;
-  fill: rgba(255,0,0,.5);
-  cursor: pointer !important;
-  &:hover {
-    opacity: 0.3 !important;
-  }
 }
 
 #track-controls {

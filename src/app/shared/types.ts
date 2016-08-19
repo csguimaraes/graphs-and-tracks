@@ -29,7 +29,6 @@ export interface ChallengeStats {
 }
 
 export interface Attempt {
-	time: string
 	accuracy: number
 	setup: MotionSetup
 }
@@ -94,6 +93,7 @@ export interface Ball {
 	stroke: number
 	rotation: number
 	perimeter: number
-	cx: number
-	cy: number
+	position: Point
 }
+
+export type GraphType = 's' | 'v' | 'a'

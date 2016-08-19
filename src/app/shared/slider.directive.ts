@@ -1,18 +1,18 @@
-import { Directive, ElementRef, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core'
+import { Directive, ElementRef, Input, Output, OnInit, OnDestroy, EventEmitter, HostListener } from '@angular/core'
 
 import * as Hammer from 'hammerjs'
 
 /***
- * Use this directive to watch for pan gestures in a element
+ * Use this directive to watch for pan gestures in a svg
  *
- * The dimensions of the element itself will be used as boundary reference,
- * but you can target another element with the [reference] attribute
+ * The dimensions of the svg itself will be used as boundary reference,
+ * but you can target another svg with the [reference] attribute
  *
  * The slider position between the start and end of the slider
  * is always a represented as a floating point between 0 and 1
  *
  * # Attributes
- * [reference] HTML element to be used as a boundary reference
+ * [reference] HTML svg to be used as a boundary reference
  * [start] Offset in pixels of the start slider area
  * [end] Offset in pixels of the end slider area
  * [vertical] Set to true
@@ -25,12 +25,14 @@ import * as Hammer from 'hammerjs'
 @Directive({selector: '[gtSlider]'})
 export class SliderDirective implements OnInit, OnDestroy {
 	@Input() vertical: boolean = false
+	@Input() emitTap: boolean = false
 	@Input() reference: HTMLElement = null
 	@Input() start: number = 0
 	@Input() end: number = 0
 
 	@Output() slide: EventEmitter<number> = new EventEmitter<number>()
 	@Output() change: EventEmitter<number> = new EventEmitter<number>()
+	@Output() tap: EventEmitter<number> = new EventEmitter<number>()
 
 	sliderStart: number
 	sliderEnd: number
@@ -62,7 +64,17 @@ export class SliderDirective implements OnInit, OnDestroy {
 
 		this.handler.on('panstart', this.onPanStart)
 		this.handler.on(panEvents, this.onPan)
-		this.handler.on('tap panend', this.onPanEnd)
+
+		if (this.emitTap) {
+			this.handler.on('tap', this.onTap)
+			this.handler.on('panend', this.onPanEnd)
+		} else {
+			this.handler.on('tap panend', this.onPanEnd)
+		}
+
+		setTimeout(() => {
+			this.updateBoundaries()
+		}, 10)
 	}
 
 	ngOnDestroy(): any {
@@ -86,6 +98,11 @@ export class SliderDirective implements OnInit, OnDestroy {
 		this.change.emit(relativePosition)
 	}
 
+	onTap = (event: HammerInput) => {
+		let relativePosition = this.getRelativePosition(event)
+		this.tap.emit(relativePosition)
+	}
+
 	getRelativePosition(event: HammerInput) {
 		let position = this.vertical ? event.center.y : event.center.x
 		let positionOffset = position - this.sliderStart
@@ -104,5 +121,10 @@ export class SliderDirective implements OnInit, OnDestroy {
 		this.sliderEnd -= this.end
 
 		this.sliderSize = this.sliderEnd - this.sliderStart
+	}
+
+	@HostListener('window:resize')
+	onResize() {
+		this.updateBoundaries()
 	}
 }

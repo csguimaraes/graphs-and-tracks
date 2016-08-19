@@ -2,8 +2,46 @@
 	<g id="track-group">
 		<circle
 				[attr.r]="ball.radius - ball.stroke"
-				[attr.cx]="ball.cx"
-				[attr.cy]="ball.cy"
+				[attr.cx]="ball.position.x"
+				[attr.cy]="ball.position.y"
 		></circle>
+
+		<path class="track-line"></path>
+		<path class="track-outline"></path>
+
+		<template ngFor let-post [ngForOf]="posts" let-idx="index">
+			<!-- inner post -->
+
+			<rect *ngIf="idx > 0 && idx < (posts.length - 1)" class="post"
+					[attr.x]="post.x" [attr.y]="post.y"
+					[attr.width]="post.width" [attr.height]="post.height"
+					[attr.lol]="idx"
+			></rect>
+
+			<!-- post incrementer -->
+			<rect
+					(click)="incrementPost(idx)"
+					[attr.x]="post.x - post.width" [attr.y]="scaleY(mode.domain.posts.max)"
+					[attr.width]="post.width * 3" [attr.height]="post.y - scaleY(mode.domain.posts.max)"
+					class="post-incrementer"
+				></rect>
+
+			<!-- post dragger -->
+			<rect
+					gtSlider [vertical]="true" [reference]="svg.node()"
+					[start]="margin.top" [end]="margin.bottom"
+					[emitTap]="true" (tap)="decrementPost(idx)"
+					(slide)="onPostDrag($event, idx)" (change)="onPostDrag($event, idx, true)"
+					[attr.x]="post.x - post.width" [attr.y]="post.y"
+					[attr.width]="post.width * 3" [attr.height]="post.height"
+					class="post-dragger"
+			></rect>
+
+			<!-- post base -->
+			<path
+					(click)="setPostToZero(idx)"
+					[attr.transform]="'translate('+ (post.x - post.width) +', '+ (scaleY(-1)) +') scale('+ trackWidth +')'"
+					d="M1,.5 V0 H2 V.5 L3,2 H2 L1.5,1.5 L1,2 H0 Z" class="post-base"></path>
+		</template>
 	</g>
 </svg>

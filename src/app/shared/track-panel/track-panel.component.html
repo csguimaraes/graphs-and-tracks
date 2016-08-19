@@ -1,9 +1,13 @@
 <md-card [class.no-interaction]="rolling">
-	<md-card-content id="track"></md-card-content>
+	<md-card-content id="track">
+		<gt-track
+				[mode]="mode" [postsSetup]="setup.posts" [position]="setup.position"
+		></gt-track>
+	</md-card-content>
 	<md-card-content id="track-controls">
 		<gt-scale id="position-scale" [color]="colors.position"
 				[domain]="mode.domain.position" [value]="setup.position"
-				(slide)="positionSetter($event)"
+				(slide)="track.updateBallPostion($event)" (change)="positionSetter($event)"
 		></gt-scale>
 
 		<div id="slider-info-container">
@@ -22,7 +26,7 @@
 
 		<gt-scale id="velocity-scale" [color]="colors.velocity"
 				[domain]="mode.domain.velocity" [value]="setup.velocity"
-				(slide)="velocitySetter($event)"
+				(change)="velocitySetter($event)"
 		></gt-scale>
 	</md-card-content>
 </md-card>

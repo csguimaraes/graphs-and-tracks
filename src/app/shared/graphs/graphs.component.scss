@@ -91,57 +91,46 @@ md-card {
   }
 }
 
-chart {
+#chart {
   width: calc(100% - #{$ball-margin * 2});
   height: calc(100% - #{$header-height});
   display: block;
   box-sizing: border-box;
   margin: 0 $ball-margin;
-}
-
-chart /deep/ svg {
   pointer-events: bounding-box;
-}
 
+  &:not(.s) /deep/ .axis-x {
+    stroke-dasharray: 10 5;
+  }
 
-chart /deep/ .line {
-  fill: none;
-  stroke-width: 2px;
-  stroke: black;
-}
+  &.s /deep/ .line { stroke: $color-s; }
+  &.v /deep/ .line { stroke: $color-v; }
+  &.a /deep/ .line { stroke: $color-a; }
 
-chart /deep/ .line.goal {
-  stroke-dasharray: 5 10;
-  animation: dashing 5s linear infinite;
-}
+  & /deep/ {
+    .line {
+      fill: none;
+      stroke-width: 2px;
+      stroke: black;
+    }
 
-chart /deep/ .line.trial {
-  stroke-opacity: .1 !important;
-}
+    .line.goal {
+      stroke-dasharray: 5 10;
+      animation: dashing 5s linear infinite;
+    }
 
-chart /deep/ .line.trial.active {
-  stroke-opacity: 1 !important;
-  transition: stroke-dashoffset 10s linear;
-}
+    .line.trial {
+      stroke-opacity: .3 !important;
+    }
 
-chart /deep/ .line.s {
-  stroke: $color-s;
-}
+    .line.trial:last-of-type {
+      stroke-opacity: 1 !important;
+    }
 
-chart /deep/ .line.v {
-  stroke: $color-v;
-}
-
-chart /deep/ .line.a {
-  stroke: $color-a;
-}
-
-chart /deep/ .axis {
-  shape-rendering: crispEdges;
-}
-
-chart:not(.s) /deep/ .axis-x {
-  stroke-dasharray: 10 5;
+    .axis {
+      shape-rendering: crispEdges;
+    }
+  }
 }
 
 @keyframes dashing {

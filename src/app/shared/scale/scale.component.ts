@@ -28,7 +28,6 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 	scale: number[]
 	scaleRange: number
 	interval: number
-	latestValue: number
 
 	ngOnInit(): void {
 		let initialIndex, scaleValue
@@ -51,7 +50,6 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 			this.value = this.scale[initialIndex]
 		}
 
-		this.latestValue = this.value
 		this.interval = 1 / this.scale.length
 	}
 
@@ -71,13 +69,8 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 	}
 
 	onChange(position: number) {
-		let newValue = this.getValueAtPosition(position)
-
-		if (newValue !== this.latestValue) {
-			this.value = newValue
-			this.latestValue = this.value
-			this.change.emit(this.value)
-		}
+		this.value = this.getValueAtPosition(position)
+		this.change.emit(this.value)
 	}
 
 	getValueAtPosition(position: number) {

@@ -1,6 +1,7 @@
 import * as Types from './types'
 
 export const GRAVITY_ACCELERATION = 980.665 // cm/s²
+export const ANIMATION_DURATION = 10
 
 export const MODE_NORMAL: Types.ChallengeMode = {
 	simulation: {
@@ -8,7 +9,7 @@ export const MODE_NORMAL: Types.ChallengeMode = {
 		precision: 5
 	},
 	domain: {
-		position: { min: 0, max: 500, step: 20 },
+		position: { min: 0, max: 500, step: 50 },
 		velocity: { min: -60, max: 60, step: 10 },
 		posts: { min: 0, max: 10, step: 1 }
 	},

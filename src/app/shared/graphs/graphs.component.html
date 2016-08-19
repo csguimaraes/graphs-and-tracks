@@ -19,6 +19,31 @@
 		</span>
 
 	</div>
+	<svg id="chart" [attr.class]="activeGraph">
+		<defs>
+			<clipPath id="trial-line-clip">
+				<rect x="0"
+						[attr.y]="margin.top * -1" [attr.height]="height + margin.top + margin.bottom"
+				></rect>
+			</clipPath>
+		</defs>
+		<g id="main-group" [attr.transform]="'translate(' + margin.left +','+ margin.top +')'">
+			<g id="axis-group">
 
-	<chart class="{{activeGraph}}"></chart>
+			</g>
+			<path class="line goal" [attr.d]="goalLinePath"></path>
+			<template ngFor let-trial [ngForOf]="trialLinePaths" let-idx="index">
+				<path class="line trial" [attr.d]="trial"
+						[attr.clip-path]="(idx === trialLinePaths.length - 1) ? 'url(' + router.url + '#trial-line-clip)' : ''"
+				></path>
+			</template>
+
+			<text class="axis-title" transform="rotate(-90)" dy=".71em" style="text-anchor: middle;"
+					[attr.y]="(margin.left * -1) + 5"
+					[attr.x]="height / -2"
+				>
+				{{axisTitle}}
+			</text>
+		</g>
+	</svg>
 </md-card>
