@@ -44,7 +44,11 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 	doubleTapRecognizer: HammerManager
 
+	activeUrl
+
 	constructor(private elementRef: ElementRef, public router: Router) {
+		this.activeUrl = router.url.split('#')[0]
+
 		this.trialsData = []
 	}
 
@@ -178,7 +182,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			setTimeout(() => {
 				this.trialClip.style.transition = `width ${ANIMATION_DURATION}s linear`
 				this.trialClip.style.width = `${this.width}px`
-			}, 1)
+			}, 50)
 		} else {
 			this.trialClip.style.width = `${this.width}px`
 			this.trialClip.style.transition = ''

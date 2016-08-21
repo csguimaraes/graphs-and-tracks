@@ -17,6 +17,8 @@ import { DumpPipe } from './shared/dump.pipe'
 import { HomeComponent } from './home/home.component'
 import { ChallengeComponent } from './challenges/challenge/challenge.component'
 import { ChallengeListComponent } from './challenges/challenge-list/challenge-list.component'
+import { TrackPanelComponent } from './shared/track-panel/track-panel.component'
+import { GraphsComponent } from './shared/graphs/graphs.component'
 
 @NgModule({
 	imports: [
@@ -37,6 +39,8 @@ import { ChallengeListComponent } from './challenges/challenge-list/challenge-li
 
 		ChallengeListComponent,
 		ChallengeComponent,
+		TrackPanelComponent,
+		GraphsComponent,
 
 		DumpPipe
 		// HighlightDirective

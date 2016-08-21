@@ -29,7 +29,7 @@
 			<path class="line goal" [attr.d]="goalLinePath"></path>
 			<template ngFor let-trial [ngForOf]="trialLinePaths" let-idx="index">
 				<path class="line trial" [attr.d]="trial"
-						[attr.clip-path]="(idx === trialLinePaths.length - 1) ? 'url(' + router.url + '#trial-line-clip)' : ''"
+						[attr.clip-path]="(idx === trialLinePaths.length - 1) ? 'url(' + activeUrl + '#trial-line-clip)' : ''"
 				></path>
 			</template>
 

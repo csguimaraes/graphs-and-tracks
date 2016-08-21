@@ -34,7 +34,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		stroke: 3,
 		rotation: 0,
 		perimeter: Math.PI * 2 * 19,
-		position: {x: 0, y: 0}
+		position: { x: 0, y: 0 }
 	}
 
 	margin: Margin = {
