@@ -9,7 +9,6 @@ import { Challenge } from '../../shared/types'
 })
 export class ChallengeListComponent implements OnInit {
 	challenges: Challenge[]
-	eita = [1, 3, 2]
 
 	constructor(private storage: StorageService) {}
 

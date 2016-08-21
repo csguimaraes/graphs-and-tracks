@@ -41,7 +41,11 @@
 			<path
 					(click)="setPostToZero(idx)"
 					[attr.transform]="'translate('+ (post.x - post.width) +', '+ (scaleY(-1)) +') scale('+ trackWidth +')'"
-					d="M1,.5 V0 H2 V.5 L3,2 H2 L1.5,1.5 L1,2 H0 Z" class="post-base"></path>
+					d="M0,0.5 L.5,0 H2.5 L3,0.5 V2 H0 Z" class="post-base"></path>
+			<text *ngIf="showHeights" class="post-height-label" text-anchor="middle"
+					[attr.x]="post.x + (post.width / 2)" [attr.y]="scaleY(-1) + trackWidth" dy=".4em">
+				{{ postsSetup[idx] }}
+			</text>
 		</template>
 	</g>
 </svg>

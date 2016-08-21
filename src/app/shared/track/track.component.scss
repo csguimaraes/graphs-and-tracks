@@ -56,6 +56,11 @@ svg /deep/ {
     }
   }
 
+  .post-height-label {
+    pointer-events: none !important;
+    fill: white;
+  }
+
   circle {
     fill: crimson;
     stroke-width: 3px;

@@ -1,13 +1,12 @@
 import { Component, OnInit, ElementRef, HostListener, AfterViewInit, Input } from '@angular/core'
 import { Router } from '@angular/router'
 
-import { ChallengeMode, Ball, Margin, Point, Dimensions } from '../types'
+import { ChallengeMode, Ball, Margin, Point, Dimensions, DeadZone } from '../types'
 import { Angle, translate, getDistance } from '../helpers'
 
 import { SliderDirective } from '../slider.directive'
 
 declare let d3
-type DeadZone = { position: Point, start: number, end: number }
 
 @Component({
 	selector: 'gt-track',
@@ -54,6 +53,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	deadZones: DeadZone[]
 
 	rampSize: number
+	showHeights = true
 
 	constructor(elementRef: ElementRef, public router: Router) {
 		this.host = elementRef.nativeElement

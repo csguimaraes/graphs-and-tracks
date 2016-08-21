@@ -1,8 +1,5 @@
 <md-card>
 	<div id="graph-header">
-		<span class="graph-header-title">
-			MOTION GRAPHS
-		</span>
 		<span class="graph-selector s" [class.active]="activeGraph === 's'" (click)="selectGraph('s')">
 			POSITION
 		</span>
@@ -12,12 +9,10 @@
 		<span class="graph-selector a" [class.active]="activeGraph === 'a'" (click)="selectGraph('a')">
 			ACCELERATION
 		</span>
-
-		<span class="graph-actions">
-			<md-icon (click)="debug()" title="(DEBUG) View generated motion data">find_in_page</md-icon>
-			<md-icon (click)="toggleZoom()" title="Toggle zoom graphs panel">{{zoomActive ? 'flip_to_back' : 'flip_to_front'}}</md-icon>
+		<span class="legend">
+			<b class="goal {{activeGraph}}">Challenge</b>
+			<b class="trial {{activeGraph}}">My Motion</b>
 		</span>
-
 	</div>
 	<svg id="chart" [attr.class]="activeGraph">
 		<defs>
@@ -42,7 +37,7 @@
 					[attr.y]="(margin.left * -1) + 5"
 					[attr.x]="height / -2"
 				>
-				{{axisTitle}}
+				{{ axisTitle }}
 			</text>
 		</g>
 	</svg>

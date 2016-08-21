@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core'
+import { Component, ViewChild, HostListener } from '@angular/core'
+import { Router } from '@angular/router'
 
 import * as Types from '../shared/types'
 import * as Settings from '../shared/settings'
@@ -22,7 +23,10 @@ export class HomeComponent {
 	setup: Types.MotionSetup
 	mode: Types.ChallengeMode
 
-	constructor() {
+
+	tutorialChallengeLink = '/challenges/3'
+
+	constructor(private router: Router) {
 		this.mode = Settings.MODE_NORMAL
 		this.setup = {
 			position: 250,
@@ -36,5 +40,12 @@ export class HomeComponent {
 
 		// TODO: track should what for changes in the setup object
 		this.track.refresh()
+	}
+
+	@HostListener('window:keydown', ['$event'])
+	onKeydown(ev: KeyboardEvent) {
+		if (ev.which === 39  || ev.which === 13) {
+			this.router.navigateByUrl(`${this.tutorialChallengeLink}#tutorial`)
+		}
 	}
 }

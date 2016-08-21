@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit, ViewChild } from '@angular/core'
-import { MotionSetup, ChallengeMode, MotionData } from '../types'
+import { MotionSetup, ChallengeMode, MotionData, DataType } from '../types'
 
 import * as _ from 'lodash'
 
@@ -26,6 +26,9 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 
 	@Output('roll')
 	rollBallEvent: EventEmitter<MotionSetup>
+
+	@Output()
+	change: EventEmitter<DataType> = new EventEmitter<DataType>()
 
 	setup: MotionSetup
 
@@ -87,12 +90,22 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 	}
 
 	velocitySetter = (val: number) => {
+		let changed = this.setup.velocity !== val
 		this.setup.velocity = val
+
+		if (changed) {
+			this.change.emit('v')
+		}
 	}
 
 	positionSetter = (val: number) => {
+		let changed = this.setup.position !== val
 		this.setup.position = val
 		this.track.updateBallPostion(val)
+
+		if (changed) {
+			this.change.emit('s')
+		}
 	}
 
 	animate(motion: MotionData[], duration: number) {
@@ -114,11 +127,8 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 				return
 			}
 
-			// queue next animation frame
-			requestAnimationFrame(animationFrame)
-
 			let t = elapsedTime * timeRatio
-			let currentTime, nextTime, found = false
+			let currentTime, nextTime, lastFound = idx, found = false
 			while (idx < (motion.length - 1)) {
 				currentTime = motion[idx].t * 1000
 				nextTime = motion[idx + 1].t * 1000
@@ -132,15 +142,23 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 				}
 			}
 
-			if (!found) {
-				console.log('No more data points found, ending animation!')
+			let position
+			if (found) {
+				let current = motion[idx]
+				let next = motion[idx + 1]
+				position = interpolate(t, currentTime, nextTime, current.s, next.s)
+
+				// queue next animation frame
+				requestAnimationFrame(animationFrame)
+			} else {
 				this.rolling = false
-				return
+				let lastPoint = motion[lastFound + 1]
+				position = lastPoint.s
 			}
 
-			let current = motion[idx]
-			let next = motion[idx + 1]
-			let position = interpolate(t, currentTime, nextTime, current.s, next.s)
+			if (typeof position !== 'number') {
+				throw 'Last data point not found'
+			}
 
 			this.track.updateBallPostion(position)
 		}

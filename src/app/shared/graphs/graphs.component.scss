@@ -4,6 +4,7 @@ $color-a: lighten(steelblue, 10);
 
 $ball-margin: 20px;
 $header-height: 32px;
+$header-padding: 10px;
 
 md-card {
   padding: 0 !important;
@@ -11,41 +12,35 @@ md-card {
 }
 
 #graph-header {
-  background: silver;
   height: $header-height;
   display: flex;
   white-space: nowrap;
-  padding: 0 $ball-margin;
+  padding: $header-padding 10px;
+  background: #F0F0F0;
 
-  span {
+  & > span {
     line-height: $header-height;
-  }
-
-  .graph-header-title {
-    padding-right: $header-height;
-    color: #333;
-    font-weight: bold;
-  }
-
-  .graph-selector:before, .graph-actions:before {
-    content: ' ';
-    display: inline-block;
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-bottom: $header-height solid #999;
-    border-left: $header-height solid transparent;
-    left: $header-height * -1;
-  }
-
-  .graph-selector {
     flex: 1 0 0;
     cursor: pointer;
     position: relative;
-    padding: 0 $header-height 0 0;
     color: #CCC;
-    background: #999;
     text-align: center;
+
+    b {
+      color: #666;
+      font-weight: 400;
+      border-bottom-width: 2px;
+      border-bottom-style: solid;
+      width: 100px;
+      display: inline-block;
+      height: 80%;
+      margin: 0 20px;
+
+      &.goal { border-bottom-style: dashed; }
+      &.s { border-bottom-color: $color-s; }
+      &.v { border-bottom-color: $color-v; }
+      &.a { border-bottom-color: $color-a; }
+    }
 
     &.active {
       color: white;
@@ -53,47 +48,16 @@ md-card {
       font-weight: bold;
     }
 
-    &.s.active {
-      background: $color-s;
-      &:before {
-        border-bottom-color: $color-s;
-      }
-    }
-
-    &.v.active {
-      background: $color-v;
-      &:before {
-        border-bottom-color: $color-v;
-      }
-    }
-
-    &.a.active {
-      background: $color-a;
-      &:before {
-        border-bottom-color: $color-a;
-      }
-    }
-
-  }
-
-  .graph-actions {
-    position: relative;
-    &:before {
-      border-bottom-color: silver;
-    }
-
-    md-icon {
-      font-size: 18px;
-      vertical-align: sub;
-      padding: 0 5px;
-      cursor: pointer;
-    }
+    &.s.active { background: $color-s; }
+    &.v.active { background: $color-v; }
+    &.a.active { background: $color-a; }
+    &.legend { background: lightgoldenrodyellow; }
   }
 }
 
 #chart {
   width: calc(100% - #{$ball-margin * 2});
-  height: calc(100% - #{$header-height});
+  height: calc(100% - #{$header-height + ($header-padding * 2)});
   display: block;
   box-sizing: border-box;
   margin: 0 $ball-margin;
@@ -120,7 +84,7 @@ md-card {
     }
 
     .line.trial {
-      stroke-opacity: .3 !important;
+      stroke-opacity: .2 !important;
     }
 
     .line.trial:last-of-type {

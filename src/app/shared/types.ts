@@ -96,4 +96,10 @@ export interface Ball {
 	position: Point
 }
 
-export type GraphType = 's' | 'v' | 'a'
+export interface DeadZone {
+	position: Point,
+	start: number,
+	end: number
+}
+
+export type DataType = 's' | 'v' | 'a' | 'p'

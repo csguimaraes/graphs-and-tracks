@@ -29,6 +29,6 @@
 	</md-grid-tile>
 
 	<md-grid-tile colspan="4">
-		<gt-track-panel [mode]="goalMotion.mode" (roll)="onRollBall($event)"></gt-track-panel>
+		<gt-track-panel [mode]="goalMotion.mode" (roll)="onRollBall($event)" (change)="onTrackChange($event)"></gt-track-panel>
 	</md-grid-tile>
 </md-grid-list>

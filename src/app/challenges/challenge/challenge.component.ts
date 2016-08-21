@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 
+import { Challenge, Attempt, MotionSetup, DataType } from '../../shared/types'
 import { ANIMATION_DURATION } from '../../shared/settings'
 import { StorageService } from '../../shared/storage.service'
-import { Challenge, Attempt, MotionSetup } from '../../shared/types'
 import { Motion } from '../../shared/motion.model'
 
 import { GraphsComponent } from '../../shared/graphs/graphs.component'
@@ -18,7 +18,7 @@ import { TrackPanelComponent } from '../../shared/track-panel/track-panel.compon
 		GraphsComponent
 	]
 })
-export class ChallengeComponent implements OnInit {
+export class ChallengeComponent implements OnInit, AfterViewInit {
 	@ViewChild(TrackPanelComponent)
 	trackEditor: TrackPanelComponent
 
@@ -41,6 +41,12 @@ export class ChallengeComponent implements OnInit {
 		this.graphsPanel.initialize(this.goalMotion.data, this.challenge.mode)
 	}
 
+	ngAfterViewInit() {
+		if (this.route.snapshot.fragment === 'tutorial') {
+			this.startTutorial()
+		}
+	}
+
 	onGraphZoom() {
 		this.zoom = !(this.zoom)
 	}
@@ -54,5 +60,15 @@ export class ChallengeComponent implements OnInit {
 		let motion = Motion.fromSetup(setup)
 		this.graphsPanel.addTrialData(motion.data)
 		this.trackEditor.animate(motion.data, ANIMATION_DURATION)
+	}
+
+	onTrackChange(dataType: DataType) {
+		if (dataType === 's' || dataType === 'v') {
+			this.graphsPanel.refresh(false, true)
+		}
+	}
+
+	startTutorial() {
+		// TODO
 	}
 }

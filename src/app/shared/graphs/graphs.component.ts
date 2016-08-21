@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 
 import * as Hammer from 'hammerjs'
 
-import { MotionData, ChallengeMode, GraphType } from '../types'
+import { MotionData, ChallengeMode, DataType } from '../types'
 import { printDataTable } from '../debug'
 import { ANIMATION_DURATION } from '../settings'
 
@@ -27,7 +27,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	height: number = 0
 	width: number = 0
 
-	activeGraph: GraphType
+	activeGraph: DataType
 	axisTitle: string
 	svg: any
 	trialClip: SVGRectElement
@@ -70,11 +70,10 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		this.mode = mode
 	}
 
-	selectGraph(type: GraphType) {
+	selectGraph(type: DataType) {
 		if (type !== this.activeGraph) {
 			this.activeGraph = type
-			this.trialsData = []
-			this.refresh()
+			this.refresh(false, true)
 		}
 	}
 
@@ -87,8 +86,12 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		this.refresh(true)
 	}
 
-	private refresh(animated = false) {
-		this.clear()
+	refresh(animated = false, clearTrials = false) {
+		this.clearDisposable()
+		if (clearTrials) {
+			this.trialsData = []
+		}
+
 		this.width = this.svg.clientWidth - this.margin.left - this.margin.right
 		this.height = this.svg.clientHeight - this.margin.top - this.margin.bottom
 
@@ -189,7 +192,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		recognizer.on('doubletap', ev => { this.toggleZoom() })
 	}
 
-	private getLinePath(data: MotionData[], type: GraphType) {
+	private getLinePath(data: MotionData[], type: DataType) {
 		let line = d3.line()
 			.x((d: MotionData) => this.scaleX(d.t))
 			.y((d: MotionData) => this.scaleY(d[type]))
@@ -215,7 +218,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	}
 
 
-	clear() {
+	clearDisposable() {
 		if (this.doubleTapRecognizer) {
 			this.doubleTapRecognizer.destroy()
 			this.doubleTapRecognizer = null
@@ -241,7 +244,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	}
 
 	toggleZoom() {
-		this.clear()
 		this.zoomActive = !(this.zoomActive)
 		this.zoomEvent.emit(this.zoomActive)
 
@@ -261,7 +263,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 	@HostListener('window:resize')
 	onResize(ev: any) {
-		this.clear()
+		this.clearDisposable()
 		this.refresh()
 	}
 }
