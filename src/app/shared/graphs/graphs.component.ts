@@ -4,7 +4,6 @@ import { Router } from '@angular/router'
 import * as Hammer from 'hammerjs'
 
 import { MotionData, ChallengeMode, DataType } from '../types'
-import { printDataTable } from '../debug'
 import { ANIMATION_DURATION } from '../settings'
 
 declare let d3
@@ -47,6 +46,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	activeUrl
 
 	constructor(private elementRef: ElementRef, public router: Router) {
+		// TODO: how to properly get matched url without fragment or query params?
 		this.activeUrl = router.url.split('#')[0]
 
 		this.trialsData = []
@@ -182,7 +182,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			setTimeout(() => {
 				this.trialClip.style.transition = `width ${ANIMATION_DURATION}s linear`
 				this.trialClip.style.width = `${this.width}px`
-			}, 50)
+			}, 1)
 		} else {
 			this.trialClip.style.width = `${this.width}px`
 			this.trialClip.style.transition = ''
@@ -229,22 +229,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}
 
 		this.axisGroup.html('')
-	}
-
-	debug(type: string) {
-		let trialIndex = ''
-		if (this.trialsData.length) {
-			let promptText = `Enter trial index (from 1 to ${this.trialsData.length}) or leave empty for goal:`
-			trialIndex = prompt('Which trial motion you want to debug?\n\n' + promptText)
-		}
-
-		if (trialIndex !== undefined) {
-			if (trialIndex === '') {
-				printDataTable(this.goalData, 'goal')
-			} else {
-				printDataTable(this.trialsData[+trialIndex - 1], `attempt #${trialIndex}`)
-			}
-		}
 	}
 
 	toggleZoom() {

@@ -15,8 +15,8 @@ md-card {
   height: $header-height;
   display: flex;
   white-space: nowrap;
-  padding: 0 $header-padding;
   margin: 10px 0;
+  padding: 0 32px;
   background: #F0F0F0;
 
   & > span {
@@ -24,24 +24,8 @@ md-card {
     flex: 1 0 0;
     cursor: pointer;
     position: relative;
-    color: #CCC;
+    color: #666;
     text-align: center;
-
-    b {
-      color: #666;
-      font-weight: 400;
-      border-bottom-width: 2px;
-      border-bottom-style: solid;
-      width: 100px;
-      display: inline-block;
-      height: 80%;
-      margin: 0 20px;
-
-      &.goal { border-bottom-style: dashed; }
-      &.s { border-bottom-color: $color-s; }
-      &.v { border-bottom-color: $color-v; }
-      &.a { border-bottom-color: $color-a; }
-    }
 
     &.active {
       color: white;
@@ -52,10 +36,24 @@ md-card {
     &.s.active { background: $color-s; }
     &.v.active { background: $color-v; }
     &.a.active { background: $color-a; }
-    &.legend {
-      background: #FAFAFA;
-      outline: 2px solid silver;
-    }
+  }
+}
+
+#graph-legend {
+  b {
+    color: #666;
+    font-weight: 400;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    width: 100px;
+    display: inline-block;
+    height: 80%;
+    margin: 0 20px;
+
+    &.goal { border-bottom-style: dashed; }
+    &.s { border-bottom-color: $color-s; }
+    &.v { border-bottom-color: $color-v; }
+    &.a { border-bottom-color: $color-a; }
   }
 }
 

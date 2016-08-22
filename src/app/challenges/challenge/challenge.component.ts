@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 
 import { Challenge, Attempt, MotionSetup, DataType } from '../../shared/types'
+import { printDataTable } from '../../shared/debug'
 import { ANIMATION_DURATION } from '../../shared/settings'
 import { StorageService } from '../../shared/storage.service'
 import { Motion } from '../../shared/motion.model'
@@ -52,12 +53,15 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 
 	onRollBall(setup: MotionSetup) {
+		let motion = Motion.fromSetup(setup)
+
 		this.attempts.push({
 			accuracy: -1,
-			setup: setup
+			setup: setup,
+			motion: motion
 		})
 
-		let motion = Motion.fromSetup(setup)
+
 		this.graphsPanel.addTrialData(motion.data)
 		this.trackEditor.animate(motion.data, ANIMATION_DURATION)
 	}
@@ -70,5 +74,22 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 	startTutorial() {
 		// TODO
+	}
+
+	debug(type: string) {
+		let trialIndex = ''
+		if (this.attempts.length) {
+			let promptText = `Enter trial index (from 1 to ${this.attempts.length}) or leave empty for goal:`
+			trialIndex = prompt('Which trial motion you want to debug?\n\n' + promptText)
+		}
+
+		if (trialIndex !== undefined) {
+			if (trialIndex === '') {
+				printDataTable(this.goalMotion.data, 'goal')
+			} else {
+				let attempt = this.attempts[+trialIndex - 1]
+				printDataTable(attempt.motion.data, `attempt #${trialIndex}`)
+			}
+		}
 	}
 }

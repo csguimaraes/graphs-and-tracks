@@ -6,6 +6,7 @@ export class Motion {
 
 	initialPosition: number
 	initialVelocity: number
+	single: boolean = false
 
 	junctions: Types.Junction[]
 	ramps: Types.Ramp[]
@@ -21,8 +22,11 @@ export class Motion {
 	}
 
 	static fromSetup(setup: Types.MotionSetup, mode?: Types.ChallengeMode) {
-		// TODO: fetch challenge mode
-		return new this(setup.position, setup.velocity, setup.posts, mode)
+		// TODO: move challenge mode into setup
+		let motion = new this(setup.position, setup.velocity, setup.posts, mode)
+		motion.single = setup.single === true
+
+		return motion
 	}
 
 	constructor(position: number, velocity: number, posts: number[], mode?: Types.ChallengeMode) {
@@ -131,15 +135,18 @@ export class Motion {
 				// No crossing occurred, ramp and acceleration still the same
 				s = nextPosition
 				v = v + (a * dt)
+				this.commitData(t, s, v, a)
 			} else {
 				// --------
 				// A ramp crossing occurred, here we go
 
 				// Determine crossing junction and direction
-				let leftToRight = v > 0
+				let leftToRight = nextPosition > s
 				let junctionIndex = Math.min(r.number, nextRamp.number)
 
 				if (fellOff && !leftToRight) {
+					// The only crossing which uses the junction on the right
+					// is when the ball fall out in the right edge
 					junctionIndex--
 				}
 
@@ -151,16 +158,7 @@ export class Motion {
 
 				// Distance between the previous position and the junction
 				let dsA = Math.abs(junction.position - s)
-
-				if (dsA === 0) {
-					// Ramp changed, however previous position was exactly over the junction
-					// This means we don't need to split the calculation in two, just recalculate using the new acceleration
-					// To test this edge case, use 250, -10, [0, 8, 0, 0, 6, 0]
-					r = nextRamp
-					a = r.acceleration
-					s = s + (v * dt) + (((dt ** 2) * a) / 2)
-					v = v + (a * dt)
-				} else {
+				if (dsA > 0) {
 					// --------
 					// Calculate the motion from the last postion until the ramp junction
 
@@ -187,6 +185,12 @@ export class Motion {
 						break
 					}
 
+					if (this.single && r.slope !== nextRamp.slope) {
+						// If motion is in single mode and ramp slope changed
+						// end the motion here
+						break
+					}
+
 					// Update the ramp and acceleration
 					r = nextRamp
 					a = r.acceleration
@@ -199,11 +203,27 @@ export class Motion {
 					s = junction.position + (vA * dtB) + (((dtB ** 2) * a) / 2)
 					v = vA + (a * dtB)
 
-					// Everything should be ok now, the loop can continue normally
+					// Commit the second portion of the crossing
+					this.commitData(t, s, v, a)
+				} else {
+					// If dsA === 0, a ramp crossing ocurred however previous position was exactly over the junction
+					// this means we don't need to calculate the first portion of the crossing
+
+					if (!fellOff) {
+						// We simply calculate the second portion of the crossing
+						// by using the parameters of the next ramp
+						r = nextRamp
+						a = r.acceleration
+						s = s + (v * dt) + (((dt ** 2) * a) / 2)
+						v = v + (a * dt)
+						this.commitData(t, s, v, a)
+					} else {
+						// But if the ball fell out the track
+						// we don't need to calculate the second portion either
+						break
+					}
 				}
 			}
-
-			this.commitData(t, s, v, a)
 		}
 	}
 

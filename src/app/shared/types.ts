@@ -1,3 +1,5 @@
+import { Motion } from './motion.model'
+
 export interface ChallengeMode {
 	simulation: {
 		duration: number
@@ -31,6 +33,7 @@ export interface ChallengeStats {
 export interface Attempt {
 	accuracy: number
 	setup: MotionSetup
+	motion?: Motion
 }
 
 
@@ -44,7 +47,8 @@ export interface MotionData {
 export interface MotionSetup {
 	velocity: number
 	position: number
-	posts: number[]
+	posts: number[],
+	single?: boolean
 }
 
 export interface DataDomain {

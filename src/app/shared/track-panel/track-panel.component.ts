@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit, ViewChild } from '@angular/core'
+import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core'
 import { MotionSetup, ChallengeMode, MotionData, DataType } from '../types'
 
 import * as _ from 'lodash'
+import * as Hammer from 'hammerjs'
 
 import * as Settings from '../settings'
 import { interpolate } from '../helpers'
@@ -17,7 +18,7 @@ import { TrackComponent } from '../track/track.component'
 		TrackComponent
 	]
 })
-export class TrackPanelComponent implements OnInit, AfterViewInit {
+export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild(TrackComponent)
 	track: TrackComponent
 
@@ -32,18 +33,18 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 
 	setup: MotionSetup
 
-	element: any
-	host: any
-	svg: any
+	rollButton: HTMLElement
+	longPressHandler: HammerManager
 
 	positionScale: number[]
 	velocityScale: number[]
 	postsScale: number[]
 
 	rolling = false
+	rollingSingle = false
 	colors: any
 
-	constructor() {
+	constructor(private element: ElementRef) {
 		this.rollBallEvent = new EventEmitter<MotionSetup>()
 		this.colors = Settings.THEME.colors
 	}
@@ -83,10 +84,40 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 		setTimeout(() => {
 			this.track.refresh()
 		}, 500)
+
+
+		// Initialize long press recognizer on the roll button
+		this.rollButton = this.element.nativeElement.querySelector('#ball-roller')
+		this.longPressHandler = new Hammer.Manager(this.rollButton, {
+			recognizers: [[Hammer.Press, { time: 1000 }]]
+		})
+		this.longPressHandler.on('press', () => {
+			this.rollingSingle = true
+			this.rollBall(true)
+		})
+
+		// Hammerjs has a "ghost click" after a long press
+		// this flag disable normal roll until the long press ends
+		this.longPressHandler.on('pressup', () => {
+			setTimeout(() => {
+				this.rollingSingle = false
+			}, 100)
+		})
 	}
 
-	rollBall() {
-		this.rollBallEvent.emit(_.cloneDeep(this.setup))
+	ngOnDestroy() {
+		this.longPressHandler.destroy()
+		this.longPressHandler = null
+	}
+
+	rollBall(single = false) {
+		if (single === false && this.rollingSingle) {
+			return
+		}
+
+		let setup = _.cloneDeep(this.setup)
+		setup.single = single
+		this.rollBallEvent.emit(setup)
 	}
 
 	velocitySetter = (val: number) => {
@@ -95,15 +126,17 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 
 		if (changed) {
 			this.change.emit('v')
+			// Just make sure that the ball position is up to date
+			this.track.updateBallPostion(this.setup.position)
 		}
 	}
 
 	positionSetter = (val: number) => {
 		let changed = this.setup.position !== val
-		this.setup.position = val
-		this.track.updateBallPostion(val)
 
 		if (changed) {
+			this.setup.position = val
+			this.track.updateBallPostion(val)
 			this.change.emit('s')
 		}
 	}
@@ -153,7 +186,12 @@ export class TrackPanelComponent implements OnInit, AfterViewInit {
 			} else {
 				this.rolling = false
 				let lastPoint = motion[lastFound + 1]
-				position = lastPoint.s
+				if (lastPoint) {
+					position = lastPoint.s
+				} else {
+					// It's probably a single point motion (ball fall off at T=0)
+					position = motion[0].s
+				}
 			}
 
 			if (typeof position !== 'number') {
