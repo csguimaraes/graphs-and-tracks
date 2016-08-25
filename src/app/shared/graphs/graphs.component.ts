@@ -47,8 +47,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 	constructor(private elementRef: ElementRef, public router: Router) {
 		// TODO: how to properly get matched url without fragment or query params?
-		this.activeUrl = router.url.split('#')[0]
-
+		this.activeUrl = document.location.pathname
 		this.trialsData = []
 	}
 

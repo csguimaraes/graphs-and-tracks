@@ -38,9 +38,9 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	}
 
 	margin: Margin = {
-		left: this.ball.radius + (this.trackWidth * 2),
+		left: 0,
 		top: (this.ball.radius * 2) + (this.trackWidth / 2),
-		right: this.ball.radius + (this.trackWidth * 2),
+		right: 0,
 		bottom: this.trackWidth * 2
 	}
 
@@ -85,7 +85,11 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		this.updateBallPostion(this.position)
 	}
 
-	updateBallPostion(positionX: number) {
+	updateBallPostion(positionX?: number) {
+		if (positionX === undefined) {
+			positionX = this.position
+		}
+
 		let x = positionX, y = 0
 		let posts = this.postsSetup
 		let offset = this.ball.radius + (this.trackWidth / 2)
@@ -180,16 +184,25 @@ export class TrackComponent implements OnInit, AfterViewInit {
 
 	private recalculate() {
 		let rect = this.host.getBoundingClientRect()
+		let domain = this.mode.domain
+		let pos = this.mode.domain.position
+
+		let scaleMargin = 15 + 5
+		let scaleTickSize = (rect.width - scaleMargin) / ((pos.max / pos.step) + 1)
+		let trackMargin = scaleMargin + (scaleTickSize / 2)
+		this.margin.left = trackMargin
+		this.margin.right = trackMargin
+
 		this.svg.attr('width', rect.width).attr('height', rect.height)
 		this.trackGroup.attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
 
-		let domain = this.mode.domain
+
 		let domainWidth = rect.width - this.margin.left - this.margin.right
 		let domainHeight = rect.height - this.margin.top - this.margin.bottom
 
 		this.scaleX = d3.scaleLinear()
 			.range([0, domainWidth])
-			.domain([domain.position.min, domain.position.max])
+			.domain([pos.min, pos.max])
 
 		this.scaleY = d3.scaleLinear()
 			.range([domainHeight, 0])

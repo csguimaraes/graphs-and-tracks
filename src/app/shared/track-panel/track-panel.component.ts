@@ -189,9 +189,14 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 				if (lastPoint) {
 					position = lastPoint.s
 				} else {
-					// It's probably a single point motion (ball fall off at T=0)
+					// It's probably a motion if a single data point (ball fall off right after T=0)
 					position = motion[0].s
 				}
+
+				setTimeout(() => {
+					// Reset ball position after a few seconds
+					this.track.updateBallPostion()
+				}, 3000)
 			}
 
 			if (typeof position !== 'number') {
