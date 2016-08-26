@@ -33,7 +33,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		radius: 15,
 		stroke: 3,
 		rotation: 0,
-		perimeter: Math.PI * 2 * 19,
+		perimeter: Math.PI * 2 * 15,
 		position: { x: 0, y: 0 }
 	}
 
@@ -146,14 +146,19 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		let head = this.getPostHead(idx)
 
 		let x = head.x - (width / 2)
-		let height = this.scaleY(-1) - head.y
+		let y = head.y - (this.trackWidth / 2)
+		let height = this.scaleY(-1) - y
 
-		return { x: x, y: head.y, width: width, height: height }
+		return { x: x, y: y, width: width, height: height }
 	}
 
 	incrementPost(postIndex: number) {
 		this.postsSetup[postIndex] = Math.min(this.mode.domain.posts.max, this.postsSetup[postIndex] + 1)
 		this.refresh()
+
+		if (this.postsSetup[postIndex] < this.mode.domain.posts.max) {
+			this.previewTrackChange(postIndex, this.postsSetup[postIndex] + 1)
+		}
 	}
 
 	decrementPost(postIndex: number) {
@@ -161,9 +166,20 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		this.refresh()
 	}
 
-	setPostToZero(postIndex: number) {
+	setPostToMinimum(postIndex: number) {
 		this.postsSetup[postIndex] = this.mode.domain.posts.min
 		this.refresh()
+	}
+
+	previewTrackChange(postIndex: number, value: number) {
+		let posts = this.postsSetup.slice()
+		posts[postIndex] = value
+
+		this.drawTrackLine(posts, true)
+	}
+
+	clearPreview() {
+		this.trackGroup.select(`.track-outline`).attr('d', '')
 	}
 
 	onPostDrag(position: number, postIndex: number, commit = false) {

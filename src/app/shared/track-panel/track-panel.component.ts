@@ -138,6 +138,8 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.setup.position = val
 			this.track.updateBallPostion(val)
 			this.change.emit('s')
+		} else {
+			this.track.updateBallPostion()
 		}
 	}
 
