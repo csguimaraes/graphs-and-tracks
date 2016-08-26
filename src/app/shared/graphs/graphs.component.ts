@@ -31,7 +31,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	svg: any
 	trialClip: SVGRectElement
 	mainGroup: any
-	axisGroup: any
 	scaleX: any
 	scaleY: any
 
@@ -53,7 +52,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		// Store references of the HTML
 		this.svg = this.elementRef.nativeElement.querySelector('svg#chart')
 		this.mainGroup = d3.select(this.svg.querySelector('g#main-group'))
-		this.axisGroup = this.mainGroup.select('g#axis-group')
 		this.trialClip = this.svg.querySelector('#trial-line-clip rect')
 		this.activeGraph = 's'
 	}
@@ -154,7 +152,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			.tickValues([5, 10, 15, 20, 25])
 			.tickFormat(x => x + 's')
 
-		this.axisGroup.append('g')
+		this.mainGroup.append('g')
 			.attr('class', 'axis axis-x')
 			.attr('transform', 'translate(0,' + scaleY(0) + ')')
 			.call(axisX)
@@ -163,7 +161,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		let axisY = d3
 			.axisLeft(scaleY)
 			.tickArguments([ticks])
-		this.axisGroup.append('g')
+		this.mainGroup.append('g')
 			.attr('class', 'axis')
 			.call(axisY)
 
@@ -230,7 +228,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			this.doubleTapRecognizer = null
 		}
 
-		this.axisGroup.html('')
+		this.mainGroup.selectAll('.axis').remove()
 	}
 
 	toggleZoom() {

@@ -24,9 +24,6 @@
 			</clipPath>
 		</defs>
 		<g id="main-group" [attr.transform]="'translate(' + margin.left +','+ margin.top +')'">
-			<g id="axis-group">
-
-			</g>
 			<path class="line goal" [attr.d]="goalLinePath"></path>
 			<template ngFor let-trial [ngForOf]="trialLinePaths" let-idx="index">
 				<path class="line trial" [attr.d]="trial"
