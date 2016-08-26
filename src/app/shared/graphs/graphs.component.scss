@@ -82,7 +82,7 @@ md-card {
 
     .line.goal {
       stroke-dasharray: 5 10;
-      animation: dashing 5s linear infinite;
+      animation: dashing 1s linear infinite;
     }
 
     .line.trial {
@@ -100,6 +100,6 @@ md-card {
 }
 
 @keyframes dashing {
-  0%   { stroke-dashoffset: 90; }
+  0%   { stroke-dashoffset: 15; }
   100% { stroke-dashoffset: 0; }
 }

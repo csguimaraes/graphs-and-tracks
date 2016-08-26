@@ -38,7 +38,7 @@ svg /deep/ {
   }
 
   .post-incrementer {
-    cursor: n-resize;
+    cursor: copy;
     fill: rgba(0, 0, 0, 0);
   }
 
@@ -49,7 +49,7 @@ svg /deep/ {
 
   .post-base {
     fill: $base-color;
-    cursor: s-resize;
+    cursor: pointer;
     pointer-events: bounding-box;
     &:hover {
       fill: lighten($base-color, 20);

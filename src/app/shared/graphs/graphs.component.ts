@@ -46,8 +46,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	activeUrl
 
 	constructor(private elementRef: ElementRef, public router: Router) {
-		// TODO: how to properly get matched url without fragment or query params?
-		this.activeUrl = document.location.pathname
 		this.trialsData = []
 	}
 
@@ -93,6 +91,11 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		this.clearDisposable()
 		if (clearTrials) {
 			this.trialsData = []
+		}
+
+		if (animated) {
+			// TODO: how to properly get matched url without fragment or query params?
+			this.activeUrl = document.location.pathname
 		}
 
 		this.width = this.svg.clientWidth - this.margin.left - this.margin.right

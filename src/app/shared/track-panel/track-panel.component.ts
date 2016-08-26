@@ -156,7 +156,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			let elapsedTime = now - start
 
 			if (!(this.rolling) || elapsedTime > duration) {
-				this.rolling = false
+				this.endAnimation()
 				return
 			}
 
@@ -184,19 +184,15 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 				// queue next animation frame
 				requestAnimationFrame(animationFrame)
 			} else {
-				this.rolling = false
 				let lastPoint = motion[lastFound + 1]
 				if (lastPoint) {
 					position = lastPoint.s
 				} else {
-					// It's probably a motion if a single data point (ball fall off right after T=0)
+					// It's probably a motion with a single data point (ball fall off right after T=0)
 					position = motion[0].s
 				}
 
-				setTimeout(() => {
-					// Reset ball position after a few seconds
-					this.track.updateBallPostion()
-				}, 3000)
+				this.endAnimation()
 			}
 
 			if (typeof position !== 'number') {
@@ -207,5 +203,14 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 
 		animationFrame()
+	}
+
+	endAnimation() {
+		this.rolling = false
+
+		// Reset ball position after a few seconds
+		setTimeout(() => {
+			this.track.updateBallPostion()
+		}, 3000)
 	}
 }
