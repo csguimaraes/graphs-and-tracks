@@ -19,7 +19,7 @@ md-card {
 
   & > span {
     line-height: $header-height;
-    flex: 1 0 0;
+    flex: 1 0 0px;
     cursor: pointer;
     position: relative;
     color: #666;
@@ -28,7 +28,13 @@ md-card {
 
     &.graph-selector {
       padding: 0 5px;
-      transition: all 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+      font-weight: bold;
+      will-change: margin;
+      transition: margin 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275),
+      line-height 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275),
+      color 300ms linear,
+      background 300ms linear;
+
       &:hover {
         background: #E0E0E0;
       }
@@ -37,7 +43,6 @@ md-card {
     &.active {
       color: white;
       text-shadow: 0 0 .1em gray;
-      font-weight: bold;
       margin: -4px 10px;
       flex-shrink: 1;
       line-height: 40px;

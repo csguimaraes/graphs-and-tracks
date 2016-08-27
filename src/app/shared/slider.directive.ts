@@ -38,6 +38,8 @@ export class SliderDirective implements OnInit, OnDestroy {
 	sliderEnd: number
 	sliderSize: number
 
+	cancelNextPan = false
+
 	private target: HTMLElement
 	private handler: HammerManager
 
