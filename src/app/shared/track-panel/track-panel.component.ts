@@ -42,6 +42,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	rolling = false
 	rollingSingle = false
 	colors: any
+	ballResetTimout: any
 
 	constructor(private element: ElementRef) {
 		this.rollBallEvent = new EventEmitter<MotionSetup>()
@@ -126,7 +127,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (changed) {
 			this.change.emit('v')
 			// Just make sure that the ball position is up to date
-			this.track.updateBallPostion(this.setup.position)
+			this.updateBallPostion(this.setup.position)
 		}
 	}
 
@@ -135,10 +136,10 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		if (changed) {
 			this.setup.position = val
-			this.track.updateBallPostion(val)
+			this.updateBallPostion(val)
 			this.change.emit('s')
 		} else {
-			this.track.updateBallPostion()
+			this.updateBallPostion()
 		}
 	}
 
@@ -146,12 +147,16 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.rolling = false
 
 		// Reset ball position after a few seconds
-		setTimeout(() => {
-			this.track.updateBallPostion()
+		this.ballResetTimout = setTimeout(() => {
+			this.updateBallPostion()
 		}, 3000)
 	}
 
-	updateBallPostion(position: number) {
+	updateBallPostion(position?: number) {
+		if (this.ballResetTimout) {
+			clearInterval(this.ballResetTimout)
+		}
+
 		this.track.updateBallPostion(position)
 	}
 }

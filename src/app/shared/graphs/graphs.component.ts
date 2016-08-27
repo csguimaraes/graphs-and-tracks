@@ -94,9 +94,9 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		if (clearTrials) {
 			this.trialsData = []
 		}
-
-		this.width = this.svg.clientWidth - this.margin.left - this.margin.right
-		this.height = this.svg.clientHeight - this.margin.top - this.margin.bottom
+		let svgRect = this.svg.getBoundingClientRect()
+		this.width = svgRect.width - this.margin.left - this.margin.right
+		this.height = svgRect.height - this.margin.top - this.margin.bottom
 
 		let data = this.goalData
 		let type = this.activeGraph
@@ -221,7 +221,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		this.zoomActive = !(this.zoomActive)
 		this.zoomEvent.emit(this.zoomActive)
 
-		// ev.target.innerHTML = this.zoomActive ? 'flip_to_back' : 'flip_to_front'
 		setTimeout(() => {
 			this.refresh()
 		}, 1)
