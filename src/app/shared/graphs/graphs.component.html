@@ -1,5 +1,6 @@
 <md-card>
 	<div id="graph-header">
+		<span></span>
 		<span id="graph-legend">
 			<b class="goal {{activeGraph}}">Challenge</b>
 			<b class="trial {{activeGraph}}">My Motion</b>
@@ -13,6 +14,7 @@
 		<span class="graph-selector a" [class.active]="activeGraph === 'a'" (click)="selectGraph('a')">
 			ACCELERATION
 		</span>
+		<span></span>
 	</div>
 
 	<svg id="chart" [attr.class]="activeGraph">
