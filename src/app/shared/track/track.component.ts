@@ -155,10 +155,6 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	incrementPost(postIndex: number) {
 		this.postsSetup[postIndex] = Math.min(this.mode.domain.posts.max, this.postsSetup[postIndex] + 1)
 		this.refresh()
-
-		if (this.postsSetup[postIndex] < this.mode.domain.posts.max) {
-			this.previewTrackChange(postIndex, this.postsSetup[postIndex] + 1)
-		}
 	}
 
 	decrementPost(postIndex: number) {

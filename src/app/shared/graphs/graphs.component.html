@@ -18,8 +18,9 @@
 	<svg id="chart" [attr.class]="activeGraph">
 		<defs>
 			<clipPath id="trial-line-clip">
-				<rect x="0"
-						[attr.y]="margin.top * -1" [attr.height]="height + margin.top + margin.bottom"
+				<rect x="0" width="0"
+		        [attr.y]="margin.top * -1"
+			      [attr.height]="height + margin.top + margin.bottom"
 				></rect>
 			</clipPath>
 		</defs>

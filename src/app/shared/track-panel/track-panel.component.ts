@@ -1,11 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core'
-import { MotionSetup, ChallengeMode, MotionData, DataType } from '../types'
+import { MotionSetup, ChallengeMode, DataType } from '../types'
 
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
 
 import * as Settings from '../settings'
-import { interpolate } from '../helpers'
 import { ScaleComponent } from '../scale/scale.component'
 import { TrackComponent } from '../track/track.component'
 
@@ -143,70 +142,6 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
-	animate(motion: MotionData[], duration: number) {
-		this.rolling = true
-		let start = Date.now()
-		duration *= 1000
-		// Ratio between real time and simulation time
-		let timeRatio = (this.mode.simulation.duration * 1000) / duration
-
-		// Index of which data point the animation is currently on
-		// the index will be increased accordly with the amount of time elapsed
-		let idx = 0
-		let animationFrame = () => {
-			let now = Date.now()
-			let elapsedTime = now - start
-
-			if (!(this.rolling) || elapsedTime > duration) {
-				this.endAnimation()
-				return
-			}
-
-			let t = elapsedTime * timeRatio
-			let currentTime, nextTime, lastFound = idx, found = false
-			while (idx < (motion.length - 1)) {
-				currentTime = motion[idx].t * 1000
-				nextTime = motion[idx + 1].t * 1000
-				if (currentTime <= t && t < nextTime) {
-					// This index is surrounded by two data points that have our current animation time
-					// som we can interpolate the current position value from them
-					found = true
-					break
-				} else {
-					idx++
-				}
-			}
-
-			let position
-			if (found) {
-				let current = motion[idx]
-				let next = motion[idx + 1]
-				position = interpolate(t, currentTime, nextTime, current.s, next.s)
-
-				// queue next animation frame
-				requestAnimationFrame(animationFrame)
-			} else {
-				let lastPoint = motion[lastFound + 1]
-				if (lastPoint) {
-					position = lastPoint.s
-				} else {
-					// It's probably a motion with a single data point (ball fall off right after T=0)
-					position = motion[0].s
-				}
-
-				this.endAnimation()
-			}
-
-			if (typeof position !== 'number') {
-				throw 'Last data point not found'
-			}
-
-			this.track.updateBallPostion(position)
-		}
-
-		animationFrame()
-	}
-
 	endAnimation() {
 		this.rolling = false
 
@@ -214,5 +149,9 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		setTimeout(() => {
 			this.track.updateBallPostion()
 		}, 3000)
+	}
+
+	updateBallPostion(position: number) {
+		this.track.updateBallPostion(position)
 	}
 }
