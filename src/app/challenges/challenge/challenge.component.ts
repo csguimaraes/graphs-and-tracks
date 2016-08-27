@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 
-import { Challenge, Attempt, MotionSetup, DataType } from '../../shared/types'
+import {Challenge, Attempt, MotionSetup, DataType, MotionData} from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
+import { interpolate } from '../../shared/helpers'
 import { ANIMATION_DURATION } from '../../shared/settings'
 import { StorageService } from '../../shared/storage.service'
 import { Motion } from '../../shared/motion.model'
@@ -21,7 +22,7 @@ import { TrackPanelComponent } from '../../shared/track-panel/track-panel.compon
 })
 export class ChallengeComponent implements OnInit, AfterViewInit {
 	@ViewChild(TrackPanelComponent)
-	trackEditor: TrackPanelComponent
+	trackPanel: TrackPanelComponent
 
 	@ViewChild(GraphsComponent)
 	graphsPanel: GraphsComponent
@@ -63,7 +64,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 
 		this.graphsPanel.addTrialData(motion.data)
-		this.trackEditor.animate(motion.data, ANIMATION_DURATION)
+		this.animate(motion.data, ANIMATION_DURATION)
 	}
 
 	onTrackChange(dataType: DataType) {
@@ -74,6 +75,77 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 	startTutorial() {
 		// TODO
+	}
+
+	animate(motion: MotionData[], duration: number) {
+		this.trackPanel.rolling = true
+		let start = Date.now()
+		duration *= 1000
+
+		// Ratio between real time and simulation time
+		let timeRatio = (this.challenge.mode.simulation.duration * 1000) / duration
+
+		// Index of which data point the animation is currently on
+		// the index will be increased accordly with the amount of time elapsed
+		let idx = 0
+		let animationFrame = () => {
+			let now = Date.now()
+			let elapsedTime = now - start
+
+			if (!(this.trackPanel.rolling) || elapsedTime > duration) {
+				this.endAnimation()
+				return
+			}
+
+			let t = elapsedTime * timeRatio
+			let currentTime, nextTime, lastFound = idx, found = false
+			while (idx < (motion.length - 1)) {
+				currentTime = motion[idx].t * 1000
+				nextTime = motion[idx + 1].t * 1000
+				if (currentTime <= t && t < nextTime) {
+					// This index is surrounded by two data points that have our current animation time
+					// som we can interpolate the current position value from them
+					found = true
+					break
+				} else {
+					idx++
+				}
+			}
+
+			let position
+			if (found) {
+				let current = motion[idx]
+				let next = motion[idx + 1]
+				position = interpolate(t, currentTime, nextTime, current.s, next.s)
+
+				// queue next animation frame
+				requestAnimationFrame(animationFrame)
+			} else {
+				let lastPoint = motion[lastFound + 1]
+				if (lastPoint) {
+					position = lastPoint.s
+				} else {
+					// It's probably a motion with a single data point (ball fall off right after T=0)
+					position = motion[0].s
+				}
+
+				this.endAnimation()
+			}
+
+			if (typeof position !== 'number') {
+				throw 'Last data point not found'
+			}
+
+			this.graphsPanel.setTrialLineClip(elapsedTime / duration)
+			this.trackPanel.updateBallPostion(position)
+		}
+
+		animationFrame()
+	}
+
+	endAnimation() {
+		this.graphsPanel.setTrialLineClip(1)
+		this.trackPanel.endAnimation()
 	}
 
 	debug(type: string) {

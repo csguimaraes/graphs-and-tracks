@@ -4,7 +4,6 @@ import { Router } from '@angular/router'
 import * as Hammer from 'hammerjs'
 
 import { MotionData, ChallengeMode, DataType } from '../types'
-import { ANIMATION_DURATION } from '../settings'
 
 declare let d3
 
@@ -175,19 +174,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			trialLinePaths.push(trialLinePath)
 		}
 
-		if (animated) {
-			this.trialClip.style.transition = ''
-			this.trialClip.style.width = '0px'
-
-			setTimeout(() => {
-				this.trialClip.style.transition = `width ${ANIMATION_DURATION}s linear`
-				this.trialClip.style.width = `${this.width}px`
-			}, 1)
-		} else {
-			this.trialClip.style.width = `${this.width}px`
-			this.trialClip.style.transition = ''
-		}
-
 		this.trialLinePaths = trialLinePaths
 
 
@@ -253,5 +239,10 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	onResize(ev: any) {
 		this.clearDisposable()
 		this.refresh()
+	}
+
+	setTrialLineClip(clipSizeRatio: number) {
+		let width = Math.floor(this.width * clipSizeRatio).toString()
+		this.trialClip.setAttribute('width', width)
 	}
 }
