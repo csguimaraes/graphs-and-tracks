@@ -33,6 +33,8 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	attempts: Attempt[] = []
 	zoom: boolean = false
 
+	breakdownAtIndex: number
+
 	constructor(private route: ActivatedRoute, private storage: StorageService) {
 		let id = this.route.snapshot.params['id']
 		this.challenge = this.storage.getChallenge(id)
@@ -56,15 +58,23 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	onRollBall(setup: MotionSetup) {
 		let motion = Motion.fromSetup(setup)
 
-		this.attempts.push({
-			accuracy: -1,
-			setup: setup,
-			motion: motion
-		})
+		if (this.breakdownAtIndex === undefined) {
+			// Only count this as an attempt if this roll isn't a continuation of a break down motion
+			this.graphsPanel.addTrialData(motion.data)
+			this.attempts.push({
+				accuracy: -1,
+				setup: setup,
+				motion: motion
+			})
+		}
 
+		if (setup.breakDown) {
+			if (this.breakdownAtIndex === undefined) {
+				this.breakdownAtIndex = 0
+			}
+		}
 
-		this.graphsPanel.addTrialData(motion.data)
-		this.animate(motion.data, ANIMATION_DURATION)
+		this.animate(motion.data, ANIMATION_DURATION, setup.breakDown)
 	}
 
 	onTrackChange(dataType: DataType) {
@@ -77,9 +87,9 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		// TODO
 	}
 
-	animate(motion: MotionData[], duration: number) {
+	animate(motion: MotionData[], duration: number, breakdown = false) {
 		this.trackPanel.rolling = true
-		let start = Date.now()
+		let animationStartedAt = Date.now()
 		duration *= 1000
 
 		// Ratio between real time and simulation time
@@ -87,10 +97,26 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 		// Index of which data point the animation is currently on
 		// the index will be increased accordly with the amount of time elapsed
-		let idx = 0
+		let idx = this.breakdownAtIndex || 0
+
+		// If the animation isn't starting for the beggining
+		// Adjust the real time offset to reflect that
+		if (idx !== 0) {
+			let timeToSkip = (motion[idx].t * 1000) / timeRatio
+			console.log(animationStartedAt)
+			animationStartedAt -= timeToSkip
+
+			console.log('removed time', timeToSkip, animationStartedAt)
+		}
+
+		// If animating in breakdown mode, make the accelaration of the initial frame
+		// required to keep the animation going
+		let requiredAcceleration = breakdown ? motion[idx].a : undefined
+
+
 		let animationFrame = () => {
 			let now = Date.now()
-			let elapsedTime = now - start
+			let elapsedTime = now - animationStartedAt
 
 			if (!(this.trackPanel.rolling) || elapsedTime > duration) {
 				this.endAnimation()
@@ -100,6 +126,14 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 			let t = elapsedTime * timeRatio
 			let currentTime, nextTime, lastFound = idx, found = false
 			while (idx < (motion.length - 1)) {
+				if (requiredAcceleration !== undefined && motion[idx + 1].a !== requiredAcceleration) {
+					// TODO: accelleration change isn't detected EXACTLY over a post head (interpolate?)
+					// Suspend the animation until the user rolls again
+					this.breakdownAtIndex = idx + 1
+					this.endAnimation(true)
+					return
+				}
+
 				currentTime = motion[idx].t * 1000
 				nextTime = motion[idx + 1].t * 1000
 				if (currentTime <= t && t < nextTime) {
@@ -143,9 +177,12 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		animationFrame()
 	}
 
-	endAnimation() {
-		this.graphsPanel.setTrialLineClip(1)
-		this.trackPanel.endAnimation()
+	endAnimation(justPause = false) {
+		if (!justPause) {
+			this.graphsPanel.setTrialLineClip(1)
+		}
+
+		this.trackPanel.endAnimation(justPause)
 	}
 
 	debug(type: string) {

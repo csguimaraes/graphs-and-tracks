@@ -6,7 +6,6 @@ export class Motion {
 
 	initialPosition: number
 	initialVelocity: number
-	single: boolean = false
 
 	junctions: Types.Junction[]
 	ramps: Types.Ramp[]
@@ -23,13 +22,10 @@ export class Motion {
 
 	static fromSetup(setup: Types.MotionSetup, mode?: Types.ChallengeMode) {
 		// TODO: move challenge mode into setup
-		let motion = new this(setup.position, setup.velocity, setup.posts, mode)
-		motion.single = setup.single === true
-
-		return motion
+		return new this(setup.position, setup.velocity, setup.posts, setup.breakDown, mode)
 	}
 
-	constructor(position: number, velocity: number, posts: number[], mode?: Types.ChallengeMode) {
+	constructor(position: number, velocity: number, posts: number[], breakDown?: boolean, mode?: Types.ChallengeMode) {
 		// For now only NORMAL mode is available
 		this.mode = mode || Settings.MODE_NORMAL
 
@@ -182,12 +178,6 @@ export class Motion {
 					if (fellOff) {
 						// End the simulation here if the ball fell off the track
 						// it has just crossed the junction on the track edge
-						break
-					}
-
-					if (this.single && r.slope !== nextRamp.slope) {
-						// If motion is in single mode and ramp slope changed
-						// end the motion here
 						break
 					}
 

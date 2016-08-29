@@ -49,6 +49,9 @@
 			<rect
 					class="post-dragger"
 
+					(mouseover)="postsSetup[idx] > mode.domain.posts.min ? previewTrackChange(idx, postsSetup[idx] - 1) : false"
+					(mouseout)="clearPreview()"
+
 					gtSlider [vertical]="true" [reference]="svg.node()"
 					[start]="margin.top" [end]="margin.bottom"
 					(slide)="onPostDrag($event, idx)" (change)="onPostDrag($event, idx, true)"

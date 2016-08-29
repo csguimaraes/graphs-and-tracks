@@ -48,7 +48,7 @@ export interface MotionSetup {
 	velocity: number
 	position: number
 	posts: number[],
-	single?: boolean
+	breakDown?: boolean
 }
 
 export interface DataDomain {

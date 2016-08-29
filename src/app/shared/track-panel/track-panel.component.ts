@@ -70,12 +70,12 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.velocityScale.push(value)
 		}
 
-		let midPos = Math.ceil(this.positionScale.length / 2) - 1
-		let midVel = Math.ceil(this.velocityScale.length / 2) - 1
+		// let midPos = Math.ceil(this.positionScale.length / 2) - 1
+		// let midVel = Math.ceil(this.velocityScale.length / 2) - 1
 		this.setup = {
-			position: this.positionScale[midPos],
-			velocity: this.velocityScale[midVel],
-			posts: [5, 4, 3, 2, 1, 0]
+			position: 0, // this.positionScale[midPos],
+			velocity: 10, // this.velocityScale[midVel],
+			posts: [1, 0, 1, 0, 1, 0]
 			// new Array(this.mode.postsCount).fill(0)
 		}
 	}
@@ -116,7 +116,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 
 		let setup = _.cloneDeep(this.setup)
-		setup.single = single
+		setup.breakDown = single
 		this.rollBallEvent.emit(setup)
 	}
 
@@ -143,13 +143,15 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
-	endAnimation() {
+	endAnimation(justPause = false) {
 		this.rolling = false
 
-		// Reset ball position after a few seconds
-		this.ballResetTimout = setTimeout(() => {
-			this.updateBallPostion()
-		}, 3000)
+		if (!justPause) {
+			// Reset ball position after a few seconds
+			this.ballResetTimout = setTimeout(() => {
+				this.updateBallPostion()
+			}, 3000)
+		}
 	}
 
 	updateBallPostion(position?: number) {

@@ -165,12 +165,12 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			.call(axisY)
 
 		// Plot goal line
-		this.goalLinePath = this.getLinePath(data, type)
+		this.goalLinePath = this.generateLinePath(data, type)
 
 		// Plot available trial lines
 		let trialLinePaths = []
 		for (let trialData of this.trialsData) {
-			let trialLinePath = this.getLinePath(trialData, type)
+			let trialLinePath = this.generateLinePath(trialData, type)
 			trialLinePaths.push(trialLinePath)
 		}
 
@@ -182,18 +182,18 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		recognizer.on('doubletap', ev => { this.toggleZoom() })
 	}
 
-	private getLinePath(data: MotionData[], type: DataType) {
-		let line = d3.line()
+	private generateLinePath(data: MotionData[], type: DataType) {
+		let lineGenerator = d3.line()
 			.x((d: MotionData) => this.scaleX(d.t))
 			.y((d: MotionData) => this.scaleY(d[type]))
 
 		if (type === 'a') {
 			// Change the shape of the acceleration line
 			// https://github.com/d3/d3-shape#curveStepBefore
-			line.curve(d3.curveStepBefore)
+			lineGenerator.curve(d3.curveStepBefore)
 		}
 
-		return line(data)
+		return lineGenerator(data)
 	}
 
 	getVelocityDomain() {
