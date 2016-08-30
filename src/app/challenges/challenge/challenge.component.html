@@ -25,10 +25,10 @@
 	</md-grid-tile>
 
 	<md-grid-tile [class.zoom]="zoom" colspan="3">
-		<gt-graphs (zoom)="onGraphZoom()"></gt-graphs>
+		<gt-graphs (zoom)="onGraphZoom()" (change)="onGraphPanelChange($event)"></gt-graphs>
 	</md-grid-tile>
 
 	<md-grid-tile colspan="4">
-		<gt-track-panel [mode]="goalMotion.mode" (roll)="onRollBall($event)" (change)="onTrackChange($event)"></gt-track-panel>
+		<gt-track-panel [mode]="goalMotion.mode" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"></gt-track-panel>
 	</md-grid-tile>
 </md-grid-list>

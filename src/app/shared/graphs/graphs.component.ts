@@ -41,6 +41,9 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 
 	doubleTapRecognizer: HammerManager
 
+	@Output()
+	change: EventEmitter<DataType> = new EventEmitter<DataType>()
+
 	activeUrl
 
 	constructor(private elementRef: ElementRef, router: Router) {
@@ -72,6 +75,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		if (type !== this.activeGraph) {
 			this.activeGraph = type
 			this.refresh(false, true)
+			this.change.emit(type)
 		}
 	}
 

@@ -1,7 +1,7 @@
-import { Component, OnInit, ElementRef, HostListener, AfterViewInit, Input } from '@angular/core'
+import { Component, OnInit, ElementRef, HostListener, AfterViewInit, Input, Output, EventEmitter } from '@angular/core'
 import { Router } from '@angular/router'
 
-import { ChallengeMode, Ball, Margin, Point, Dimensions, DeadZone } from '../types'
+import { ChallengeMode, Ball, Margin, Point, Dimensions, DeadZone, DataType } from '../types'
 import { Angle, translate, getDistance } from '../helpers'
 
 import { SliderDirective } from '../slider.directive'
@@ -27,6 +27,9 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	@Input()
 	position: number
 
+	@Output()
+	change: EventEmitter<DataType> = new EventEmitter<DataType>()
+
 	// TODO: get from THEME settings
 	trackWidth = 10
 	ball: Ball = {
@@ -36,6 +39,9 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		perimeter: Math.PI * 2 * 15,
 		position: { x: 0, y: 0 }
 	}
+
+	ballDebugX = 0
+	ballDebugY = 0
 
 	margin: Margin = {
 		left: 0,
@@ -79,10 +85,14 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		this.refresh()
 	}
 
-	refresh() {
+	refresh(fireChange = false) {
 		this.recalculate()
 		this.drawTrackLine(this.postsSetup)
 		this.updateBallPostion(this.position)
+
+		if (fireChange) {
+			this.change.emit('p')
+		}
 	}
 
 	updateBallPostion(positionX?: number) {
@@ -110,31 +120,34 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		let rampSlope = right - left
 		let offsetAngle: Angle, newPosition: Point
 
+		if (isOverPost) {
+			y = posts[postIndex]
+			if (isOverEdge) {
+				offsetAngle = this.getRampInclination(rampIndex, true)
+			}
+		} else {
+			// The ball is between two postsSetup
+			y = left + (rampSlope * rampPositionRatio)
+			offsetAngle = this.getRampInclination(rampIndex, true)
+		}
+
+		newPosition = {
+			x: this.scaleX(x),
+			y: this.scaleY(y)
+		}
+
+		this.ballDebugX = newPosition.x
+		this.ballDebugY = newPosition.y
+
+		if (offsetAngle) {
+			newPosition = translate(newPosition, offsetAngle.rad, offset)
+		} else {
+			newPosition.y = newPosition.y - offset
+		}
+
 		let deadZone = this.getDeadZone(positionX, rampIndex)
 		if (deadZone) {
 			newPosition = deadZone.position
-		} else {
-			if (isOverPost) {
-				y = posts[postIndex]
-				if (isOverEdge) {
-					offsetAngle = this.getRampInclination(rampIndex, true)
-				}
-			} else {
-				// The ball is between two postsSetup
-				y = left + (rampSlope * rampPositionRatio)
-				offsetAngle = this.getRampInclination(rampIndex, true)
-			}
-
-			newPosition = {
-				x: this.scaleX(x),
-				y: this.scaleY(y)
-			}
-
-			if (offsetAngle) {
-				newPosition = translate(newPosition, offsetAngle.rad, offset)
-			} else {
-				newPosition.y = newPosition.y - offset
-			}
 		}
 
 		this.rotateBall(newPosition, this.ball.position)
@@ -154,17 +167,17 @@ export class TrackComponent implements OnInit, AfterViewInit {
 
 	incrementPost(postIndex: number) {
 		this.postsSetup[postIndex] = Math.min(this.mode.domain.posts.max, this.postsSetup[postIndex] + 1)
-		this.refresh()
+		this.refresh(true)
 	}
 
 	decrementPost(postIndex: number) {
 		this.postsSetup[postIndex] = Math.max(this.mode.domain.posts.min, this.postsSetup[postIndex] - 1)
-		this.refresh()
+		this.refresh(true)
 	}
 
 	setPostToMinimum(postIndex: number) {
 		this.postsSetup[postIndex] = this.mode.domain.posts.min
-		this.refresh()
+		this.refresh(true)
 	}
 
 	previewTrackChange(postIndex: number, value: number) {
@@ -186,7 +199,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 
 		if (commit) {
 			this.postsSetup[postIndex] = value
-			this.refresh()
+			this.refresh(true)
 		} else {
 			let posts = this.postsSetup.slice()
 			posts[postIndex] = value

@@ -1,6 +1,6 @@
 <svg>
 	<g id="track-group">
-		<circle
+		<circle id="ball"
 				[attr.r]="ball.radius - ball.stroke"
 				[attr.cx]="ball.position.x"
 				[attr.cy]="ball.position.y"
@@ -61,5 +61,12 @@
 					[attr.width]="post.width * 3" [attr.height]="post.height + (postsSetup[idx] === mode.domain.posts.min ? (trackWidth * 2) : 0)"
 			></rect>
 		</template>
+
+		<!--<circle
+				r="3"
+				[attr.cx]="ballDebugX"
+				[attr.cy]="ballDebugY"
+				fill="white"
+		></circle>-->
 	</g>
 </svg>

@@ -8,6 +8,9 @@ import * as Settings from '../settings'
 import { ScaleComponent } from '../scale/scale.component'
 import { TrackComponent } from '../track/track.component'
 
+// Method located at /public/js/prevent-ghost.js
+declare let PreventGhostClick: (HTMLElement) => void
+
 @Component({
 	selector: 'gt-track-panel',
 	templateUrl: './track-panel.component.html',
@@ -41,6 +44,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	rolling = false
 	rollingSingle = false
+	ignoreNext = false
 	colors: any
 	ballResetTimout: any
 
@@ -88,21 +92,16 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		// Initialize long press recognizer on the roll button
 		this.rollButton = this.element.nativeElement.querySelector('#ball-roller')
+
 		this.longPressHandler = new Hammer.Manager(this.rollButton, {
 			recognizers: [[Hammer.Press, { time: 1000 }]]
 		})
+
 		this.longPressHandler.on('press', () => {
-			this.rollingSingle = true
 			this.rollBall(true)
 		})
 
-		// Hammerjs has a "ghost click" after a long press
-		// this flag disable normal roll until the long press ends
-		this.longPressHandler.on('pressup', () => {
-			setTimeout(() => {
-				this.rollingSingle = false
-			}, 100)
-		})
+		PreventGhostClick(this.rollButton)
 	}
 
 	ngOnDestroy() {
@@ -111,8 +110,16 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	rollBall(single = false) {
-		if (single === false && this.rollingSingle) {
+		if (single) {
+			// Hammerjs has a "ghost click" after a long press
+			// this flag disable normal roll until the long press ends
+			this.ignoreNext = true
+			this.rollingSingle = true
+		} else if (this.ignoreNext) {
+			this.ignoreNext = false
 			return
+		} else {
+			this.rollingSingle = false
 		}
 
 		let setup = _.cloneDeep(this.setup)
@@ -138,27 +145,37 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.setup.position = val
 			this.updateBallPostion(val)
 			this.change.emit('s')
-		} else {
+		} else if (!this.rollingSingle) {
 			this.updateBallPostion()
 		}
 	}
 
-	endAnimation(justPause = false) {
+	onTrackChange(type: DataType) {
+		this.change.emit('p')
+	}
+
+	onAnimationEnded(pausing = false) {
 		this.rolling = false
 
-		if (!justPause) {
+		if (!pausing) {
+			this.rollingSingle = false
+
 			// Reset ball position after a few seconds
 			this.ballResetTimout = setTimeout(() => {
 				this.updateBallPostion()
+				this.cancelBallReset()
 			}, 3000)
 		}
 	}
 
 	updateBallPostion(position?: number) {
+		this.track.updateBallPostion(position)
+	}
+
+	cancelBallReset() {
 		if (this.ballResetTimout) {
 			clearInterval(this.ballResetTimout)
+			this.ballResetTimout = undefined
 		}
-
-		this.track.updateBallPostion(position)
 	}
 }
