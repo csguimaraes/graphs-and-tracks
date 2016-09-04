@@ -42,6 +42,10 @@ md-card {
     &#velocity-scale {
       border-radius: 0 0 $radius $radius;
     }
+
+    &.pulsing-scale /deep/ #slider {
+      animation: pulse 1s linear infinite;
+    }
   }
 
   $h: 20px;

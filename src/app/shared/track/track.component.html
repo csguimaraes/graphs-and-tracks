@@ -68,5 +68,10 @@
 				[attr.cy]="ballDebugY"
 				fill="white"
 		></circle>-->
+
+		<path id="ramp-error"
+				*ngIf="wrongRamp !== undefined"
+				[attr.d]="wrongRampOutline"
+		></path>
 	</g>
 </svg>

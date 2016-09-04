@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core'
-import { MotionSetup, ChallengeMode, DataType } from '../types'
+import { MotionSetup, ChallengeMode, DataType, AttemptError } from '../types'
 
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
@@ -7,9 +7,6 @@ import * as Hammer from 'hammerjs'
 import * as Settings from '../settings'
 import { ScaleComponent } from '../scale/scale.component'
 import { TrackComponent } from '../track/track.component'
-
-// Method located at /public/js/prevent-ghost.js
-declare let PreventGhostClick: (HTMLElement) => void
 
 @Component({
 	selector: 'gt-track-panel',
@@ -48,6 +45,8 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	colors: any
 	ballResetTimout: any
 
+	requestingSelectionOf: DataType
+
 	constructor(private element: ElementRef) {
 		this.rollBallEvent = new EventEmitter<MotionSetup>()
 		this.colors = Settings.THEME.colors
@@ -77,9 +76,9 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		// let midPos = Math.ceil(this.positionScale.length / 2) - 1
 		// let midVel = Math.ceil(this.velocityScale.length / 2) - 1
 		this.setup = {
-			position: 0, // this.positionScale[midPos],
-			velocity: 10, // this.velocityScale[midVel],
-			posts: [1, 0, 1, 0, 1, 0]
+			position: 350, // this.positionScale[midPos],
+			velocity: 60, // this.velocityScale[midVel],
+			posts: [4, 2, 0, 0, 2, 4]
 			// new Array(this.mode.postsCount).fill(0)
 		}
 	}
@@ -100,13 +99,29 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.longPressHandler.on('press', () => {
 			this.rollBall(true)
 		})
-
-		PreventGhostClick(this.rollButton)
 	}
 
 	ngOnDestroy() {
 		this.longPressHandler.destroy()
 		this.longPressHandler = null
+	}
+
+	onTrackChange(type: DataType) {
+		this.change.emit('p')
+	}
+
+	onAnimationEnded(pausing = false) {
+		this.rolling = false
+
+		if (!pausing) {
+			this.rollingSingle = false
+
+			// Reset ball position after a few seconds
+			this.ballResetTimout = setTimeout(() => {
+				this.updateBallPostion()
+				this.cancelBallReset()
+			}, 3000)
+		}
 	}
 
 	rollBall(single = false) {
@@ -136,6 +151,10 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			// Just make sure that the ball position is up to date
 			this.updateBallPostion(this.setup.position)
 		}
+
+		if (this.requestingSelectionOf === 'v') {
+			this.requestingSelectionOf = undefined
+		}
 	}
 
 	positionSetter = (val: number) => {
@@ -148,24 +167,24 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		} else if (!this.rollingSingle) {
 			this.updateBallPostion()
 		}
-	}
 
-	onTrackChange(type: DataType) {
-		this.change.emit('p')
-	}
-
-	onAnimationEnded(pausing = false) {
-		this.rolling = false
-
-		if (!pausing) {
-			this.rollingSingle = false
-
-			// Reset ball position after a few seconds
-			this.ballResetTimout = setTimeout(() => {
-				this.updateBallPostion()
-				this.cancelBallReset()
-			}, 3000)
+		if (this.requestingSelectionOf === 's') {
+			this.requestingSelectionOf = undefined
 		}
+	}
+
+	highlightError(error?: AttemptError) {
+		if (error) {
+			if (error.type === 'a') {
+				this.track.highlightRamp(error.position)
+			} else {
+				this.requestingSelectionOf = error.type
+			}
+		} else {
+			this.track.highlightRamp()
+			this.requestingSelectionOf = undefined
+		}
+
 	}
 
 	updateBallPostion(position?: number) {

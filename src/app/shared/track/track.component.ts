@@ -61,6 +61,9 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	rampSize: number
 	showHeights = true
 
+	wrongRamp: number
+	wrongRampOutline: string
+
 	constructor(elementRef: ElementRef, public router: Router) {
 		this.host = elementRef.nativeElement
 	}
@@ -83,6 +86,39 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	@HostListener('window:resize')
 	onResize(ev) {
 		this.refresh()
+	}
+
+	onPostDrag(position: number, postIndex: number, commit = false) {
+		position = 1 - position
+		let domain = this.mode.domain.posts
+		let range = domain.max - domain.min
+		let value = Math.round((range * position) / domain.step) * domain.step
+
+		if (commit) {
+			this.postsSetup[postIndex] = value
+			this.refresh(true)
+		} else {
+			let posts = this.postsSetup.slice()
+			posts[postIndex] = value
+			this.drawTrackLine(posts, true)
+		}
+	}
+
+	highlightRamp(atPosition?: number) {
+		if (atPosition !== undefined) {
+			this.wrongRamp = Math.floor(atPosition / this.rampSize)
+
+			let rampHeads = this.getRampHeads(this.wrongRamp)
+
+			let x1 = rampHeads.left.x, y1 = rampHeads.left.y,
+				x2 = rampHeads.right.x, y2 = rampHeads.right.y,
+				r = this.trackWidth / 2
+
+			this.wrongRampOutline = `M${x1},${y1 - r} L${x2},${y2 - r} L${x2},${y2 + r} L${x1},${y1 + r} Z`
+		} else {
+			this.wrongRamp = undefined
+			this.wrongRampOutline = undefined
+		}
 	}
 
 	refresh(fireChange = false) {
@@ -166,17 +202,34 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	}
 
 	incrementPost(postIndex: number) {
-		this.postsSetup[postIndex] = Math.min(this.mode.domain.posts.max, this.postsSetup[postIndex] + 1)
-		this.refresh(true)
+		this.setPost(
+			postIndex,
+			Math.min(this.mode.domain.posts.max, this.postsSetup[postIndex] + 1)
+		)
 	}
 
 	decrementPost(postIndex: number) {
-		this.postsSetup[postIndex] = Math.max(this.mode.domain.posts.min, this.postsSetup[postIndex] - 1)
-		this.refresh(true)
+		this.setPost(
+			postIndex,
+			Math.max(this.mode.domain.posts.min, this.postsSetup[postIndex] - 1)
+		)
 	}
 
 	setPostToMinimum(postIndex: number) {
-		this.postsSetup[postIndex] = this.mode.domain.posts.min
+		this.setPost(
+			postIndex,
+			this.mode.domain.posts.min
+		)
+	}
+
+	setPost(postIndex: number, value: number) {
+		this.postsSetup[postIndex] = value
+
+		if (postIndex === this.wrongRamp || postIndex === (this.wrongRamp + 1)) {
+			this.wrongRamp = undefined
+			this.wrongRampOutline = undefined
+		}
+
 		this.refresh(true)
 	}
 
@@ -191,20 +244,20 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		this.trackGroup.select(`.track-outline`).attr('d', '')
 	}
 
-	onPostDrag(position: number, postIndex: number, commit = false) {
-		position = 1 - position
-		let domain = this.mode.domain.posts
-		let range = domain.max - domain.min
-		let value = Math.round((range * position) / domain.step) * domain.step
-
-		if (commit) {
-			this.postsSetup[postIndex] = value
-			this.refresh(true)
-		} else {
-			let posts = this.postsSetup.slice()
-			posts[postIndex] = value
-			this.drawTrackLine(posts, true)
+	getRampHeads(rampIndex): { left: Point, right: Point } {
+		let result = {
+			left: { x: 0, y: 0 },
+			right: { x: 0, y: 0 }
 		}
+
+		if (rampIndex !== undefined) {
+			result = {
+				left: this.getPostHead(rampIndex),
+				right: this.getPostHead(rampIndex + 1)
+			}
+		}
+
+		return result
 	}
 
 	private recalculate() {

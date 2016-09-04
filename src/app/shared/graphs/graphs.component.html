@@ -5,13 +5,25 @@
 			<b class="goal {{activeGraph}}">Challenge</b>
 			<b class="trial {{activeGraph}}">My Motion</b>
 		</span>
-		<span class="graph-selector s" [class.active]="activeGraph === 's'" (click)="selectGraph('s')">
+		<span class="graph-selector s"
+				[class.active]="activeGraph === 's'"
+				[class.pulsing]="requestingSelectionOf === 's'"
+				(click)="selectGraph('s', $event)"
+		>
 			POSITION
 		</span>
-		<span class="graph-selector v" [class.active]="activeGraph === 'v'" (click)="selectGraph('v')">
+		<span class="graph-selector v"
+				[class.active]="activeGraph === 'v'"
+				[class.pulsing]="requestingSelectionOf === 'v'"
+				(click)="selectGraph('v', $event)"
+		>
 			VELOCITY
 		</span>
-		<span class="graph-selector a" [class.active]="activeGraph === 'a'" (click)="selectGraph('a')">
+		<span class="graph-selector a"
+				[class.active]="activeGraph === 'a'"
+				[class.pulsing]="requestingSelectionOf === 'a'"
+				(click)="selectGraph('a', $event)"
+		>
 			ACCELERATION
 		</span>
 		<span></span>

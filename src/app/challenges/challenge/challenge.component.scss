@@ -1,5 +1,77 @@
-#help-button {
+$color-s: lighten(orangered, 10);
+$color-v: lighten(forestgreen, 10);
+$color-a: lighten(steelblue, 10);
+
+md-card-title .card-button {
   float: right;
+  margin: 0 5px;
+}
+
+#hints-button.active {
+  color: darkorange;
+  background: papayawhip;
+  md-icon {
+    color: orange;
+  }
+}
+
+#hint-card {
+  background: papayawhip;
+  visibility: hidden;
+  transform: scale(0.6);
+  transform-origin: 50% 50%;
+  will-change: transform;
+
+  &.visible {
+    transform: scale(1);
+    visibility: visible;
+    transition: transform 150ms cubic-bezier(0.175, 0.885, 0.320, 1.275) 10ms;
+  }
+
+  &.visible.bump {
+    transform: scale(.6);
+    transition: none;
+  }
+
+  #hint-close {
+    float: right;
+    margin: 5px;
+    font-size: 14px;
+    line-height: 24px;
+    cursor: pointer;
+    padding: 4px;
+    text-align: center;
+    &:hover {
+      background: darken(papayawhip, 20);
+    }
+  }
+
+  #hint-title {
+    display: inline-block;
+    line-height: 24px;
+    margin: 5px;
+    padding: 4px 0;
+    color: darkorange;
+
+    md-icon {
+      vertical-align: top;
+    }
+
+    span {
+      font-size: 18px;
+    }
+  }
+
+  p {
+    color: #333;
+    padding: 0 10px 10px 10px;
+    margin: 0;
+    /deep/ {
+      b.s { color: $color-s; }
+      b.v { color: $color-v; }
+      b.a { color: $color-a; }
+    }
+  }
 }
 
 #attempt-list {
@@ -27,6 +99,7 @@
 
 .setup-info {
   font-size: 80%;
+
   span {
     background: #AAA;
     border-radius: 3px;
@@ -35,4 +108,3 @@
     margin-right: 15px;
   }
 }
-

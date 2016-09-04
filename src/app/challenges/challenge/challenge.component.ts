@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 
-import {Challenge, Attempt, MotionSetup, DataType, MotionData} from '../../shared/types'
+import { Challenge, Attempt, MotionSetup, DataType, MotionData, Hint, AttemptError } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
 import { interpolate } from '../../shared/helpers'
-import { ANIMATION_DURATION } from '../../shared/settings'
+import { HINTS, ANIMATION_DURATION } from '../../shared/settings'
 import { StorageService } from '../../shared/storage.service'
 import { Motion } from '../../shared/motion.model'
 
@@ -35,6 +35,11 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 	animationIndex: number
 
+	hintsEnabled: boolean = false
+	hintsBump: boolean = false
+	currentHint: Hint
+	latestError: AttemptError
+
 	constructor(private route: ActivatedRoute, private storage: StorageService) {
 		let id = this.route.snapshot.params['id']
 		this.challenge = this.storage.getChallenge(id)
@@ -56,26 +61,37 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 
 	onRollBall(setup: MotionSetup) {
-		let motion = Motion.fromSetup(setup)
+		let trialMotion = Motion.fromSetup(setup)
 
-		if (this.animationIndex === undefined) {
-			// Only count this as an attempt if this roll isn't a continuation of a break down motion
-			this.graphsPanel.addTrialData(motion.data)
-			this.attempts.push({
-				accuracy: -1,
-				setup: setup,
-				motion: motion
-			})
-		}
+		let isContinuation = this.animationIndex !== undefined
 
-		if (setup.breakDown) {
-			if (this.animationIndex === undefined) {
+		if (!isContinuation) {
+			this.graphsPanel.addTrialData(trialMotion.data)
+
+			if (setup.breakDown) {
+				// TODO: how to deal with hints and partial motions ?
+				this.hintsEnabled = false
 				this.animationIndex = 0
+			}
+
+			let trialError = this.goalMotion.findTrialError(trialMotion)
+			if (trialError) {
+				this.latestError = trialError
+				this.attempts.push({
+					accuracy: -1,
+					setup: setup,
+					motion: trialMotion
+				})
+			} else {
+				this.latestError = undefined
+				// alert('YAY')
 			}
 		}
 
+		this.graphsPanel.highlightError()
+		this.trackPanel.highlightError()
 		this.trackPanel.cancelBallReset()
-		this.animate(motion.data, ANIMATION_DURATION, setup.breakDown)
+		this.animate(trialMotion.data, ANIMATION_DURATION, setup.breakDown)
 	}
 
 	onGraphPanelChange(dataType: DataType) {
@@ -88,6 +104,11 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		if (dataType === 's' || dataType === 'v') {
 			this.graphsPanel.refresh(false, true)
 		}
+	}
+
+	onHintToggle() {
+		this.hintsEnabled = !(this.hintsEnabled)
+		this.currentHint = this.hintsEnabled ? HINTS['intro'] : undefined
 	}
 
 	startTutorial() {
@@ -186,6 +207,38 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		if (justPause === false) {
 			this.animationIndex = undefined
 			this.graphsPanel.setTrialLineClip(1)
+		}
+
+		// TODO: how to deal with hints and partial motions ?
+		if (justPause === false) {
+			if (this.hintsEnabled && this.latestError) {
+				let bumpDelay = 1000
+				this.hintsBump = true
+
+				setTimeout(() => {
+					this.graphsPanel.highlightError(this.latestError)
+					this.trackPanel.highlightError(this.latestError)
+
+					switch (this.latestError.type) {
+						case 's':
+							this.currentHint = HINTS['position']
+							break
+						case 'v':
+							this.currentHint = HINTS['velocity']
+							break
+						case 'a':
+							this.currentHint = HINTS['posts']
+							break
+						default:
+							this.currentHint = HINTS['intro']
+							break
+					}
+				}, bumpDelay)
+
+				setTimeout(() => {
+					this.hintsBump = false
+				}, bumpDelay + 50)
+			}
 		}
 
 		this.trackPanel.onAnimationEnded(justPause)

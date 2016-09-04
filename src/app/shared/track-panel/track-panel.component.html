@@ -6,8 +6,9 @@
 		></gt-track>
 	</md-card-content>
 	<md-card-content id="track-controls">
-		<gt-scale id="position-scale" [color]="colors.position"
-				[domain]="mode.domain.position" [value]="setup.position"
+		<gt-scale id="position-scale"
+				[class.pulsing-scale]="requestingSelectionOf === 's'"
+				[color]="colors.position" [domain]="mode.domain.position" [value]="setup.position"
 				(slide)="!rollingSingle && track.updateBallPostion($event)" (change)="positionSetter($event)"
 		></gt-scale>
 
@@ -25,8 +26,9 @@
 			</span>
 		</div>
 
-		<gt-scale id="velocity-scale" [color]="colors.velocity"
-				[domain]="mode.domain.velocity" [value]="setup.velocity"
+		<gt-scale id="velocity-scale"
+				[class.pulsing-scale]="requestingSelectionOf === 'v'"
+				[color]="colors.velocity" [domain]="mode.domain.velocity" [value]="setup.velocity"
 				(change)="velocitySetter($event)"
 		></gt-scale>
 	</md-card-content>

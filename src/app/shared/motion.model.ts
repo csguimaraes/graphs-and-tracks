@@ -22,10 +22,10 @@ export class Motion {
 
 	static fromSetup(setup: Types.MotionSetup, mode?: Types.ChallengeMode) {
 		// TODO: move challenge mode into setup
-		return new this(setup.position, setup.velocity, setup.posts, setup.breakDown, mode)
+		return new this(setup.position, setup.velocity, setup.posts, mode)
 	}
 
-	constructor(position: number, velocity: number, posts: number[], breakDown?: boolean, mode?: Types.ChallengeMode) {
+	constructor(position: number, velocity: number, posts: number[], mode?: Types.ChallengeMode) {
 		// For now only NORMAL mode is available
 		this.mode = mode || Settings.MODE_NORMAL
 
@@ -215,6 +215,34 @@ export class Motion {
 				}
 			}
 		}
+	}
+
+	findTrialError(trial: Motion): Types.AttemptError {
+		let result
+
+		if (trial.initialPosition !== this.initialPosition) {
+			result = { type: 's' }
+		} else if (trial.initialVelocity !== this.initialVelocity) {
+			result = { type: 'v' }
+		} else {
+			for (let idx = 0; idx < this.data.length; idx++) {
+				let dataPoint = trial.data[idx]
+
+				if (dataPoint === undefined) {
+					// AFAIK this should never happen
+					console.warn('Missing data point on trial data')
+					continue
+				}
+
+				if (dataPoint.a !== this.data[idx].a) {
+					// Found different acceleration
+					result = { type: 'a', position: this.data[idx].s }
+					break
+				}
+			}
+		}
+
+		return result
 	}
 
 	private getRampAt(position: number, velocity: number) {

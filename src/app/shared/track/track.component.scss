@@ -49,7 +49,6 @@ svg /deep/ {
   .post-base {
     fill: $base-color;
     cursor: pointer;
-    pointer-events: bounding-box;
     &:hover {
       fill: lighten($base-color, 20);
     }
@@ -69,5 +68,13 @@ svg /deep/ {
     // R = 10, N = 5, GAP = 2x
     // ((Math.PI * 2 * R) / N) - GAP
     stroke-dasharray: 13.079644737231007px 2px;
+  }
+
+  path#ramp-error {
+    fill: rgba(255,0,0,.3);
+    stroke: orange;
+    stroke-width: 2px;
+    stroke-dasharray: 10 5;
+    animation: dashing 1.5s linear infinite, pulse 1.5s linear infinite;
   }
 }

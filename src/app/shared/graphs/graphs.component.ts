@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 
 import * as Hammer from 'hammerjs'
 
-import { MotionData, ChallengeMode, DataType } from '../types'
+import { MotionData, ChallengeMode, DataType, AttemptError } from '../types'
 
 declare let d3
 
@@ -45,6 +45,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	change: EventEmitter<DataType> = new EventEmitter<DataType>()
 
 	activeUrl
+	requestingSelectionOf: DataType
 
 	constructor(private elementRef: ElementRef, router: Router) {
 		this.trialsData = []
@@ -63,7 +64,7 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		// This way we make sure that the parent container has the correct dimensions
 		setTimeout(() => {
 			this.refresh()
-		}, 500)
+		}, 200)
 	}
 
 	initialize(goalData: MotionData[], mode: ChallengeMode) {
@@ -71,11 +72,25 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		this.mode = mode
 	}
 
+	highlightError(error?: AttemptError) {
+		if (error) {
+			if (error.type !== this.activeGraph) {
+				this.requestingSelectionOf = error.type
+			}
+		} else {
+			this.requestingSelectionOf = undefined
+		}
+	}
+
 	selectGraph(type: DataType) {
 		if (type !== this.activeGraph) {
 			this.activeGraph = type
 			this.refresh(false, true)
 			this.change.emit(type)
+		}
+
+		if (type === this.requestingSelectionOf) {
+			this.requestingSelectionOf = undefined
 		}
 	}
 

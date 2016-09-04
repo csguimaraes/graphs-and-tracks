@@ -40,17 +40,20 @@ md-card {
       }
     }
 
-    &.active {
+    &.active, &.pulsing {
       color: white;
       text-shadow: 0 0 .1em gray;
+    }
+
+    &.active {
       margin: -4px 10px;
       flex-shrink: 1;
       line-height: 40px;
     }
 
-    &.s.active { background: $color-s; }
-    &.v.active { background: $color-v; }
-    &.a.active { background: $color-a; }
+    &.s.active, &.s.pulsing { background: $color-s; }
+    &.v.active, &.v.pulsing { background: $color-v; }
+    &.a.active, &.a.pulsing { background: $color-a; }
 
     &:first-child, &:last-child {
       flex: 0 1 $header-height;
@@ -100,8 +103,8 @@ md-card {
     }
 
     .line.goal {
-      stroke-dasharray: 5 10;
-      animation: dashing 1s linear infinite;
+      stroke-dasharray: 3 12;
+      animation: dashing .5s linear infinite;
     }
 
     .line.trial {

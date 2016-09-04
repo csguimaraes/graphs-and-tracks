@@ -36,6 +36,10 @@ export interface Attempt {
 	motion?: Motion
 }
 
+export interface AttemptError {
+	type: DataType,
+	position?: number
+}
 
 export interface MotionData {
 	t: number
@@ -104,6 +108,11 @@ export interface DeadZone {
 	position: Point,
 	start: number,
 	end: number
+}
+
+export interface Hint {
+	title: string,
+	message: string
 }
 
 export type DataType = 's' | 'v' | 'a' | 'p'

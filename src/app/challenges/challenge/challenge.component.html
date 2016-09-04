@@ -1,34 +1,45 @@
 <md-grid-list card-fill rowHeight="fit" cols="4" gutterSize="16px" [class.zoom]="zoom">
 
-	<md-grid-tile colspan="1">
+	<md-grid-tile colspan="1" rowspan="3">
 		<md-card class="info-card" scroll-y>
 			<md-card-title>
 				{{ challenge.name }}
+
+				<span id="hints-button" class="card-button"
+						[class.active]="hintsEnabled"
+						(click)="onHintToggle()"
+						title="{{ hintsEnabled ? 'Disable' : 'Enable' }} hint messages"
+				>
+					<md-icon small>lightbulb_outline</md-icon>
+					HINTS
+				</span>
+
 				<span id="help-button" class="card-button" (click)="debug()">
-					<md-icon small>help_outline</md-icon>
-					HELP
+					<md-icon small>school</md-icon>
+					TUTORIAL
 				</span>
 			</md-card-title>
 
 			<md-card-content>
-				<p>
-					Imagine that someone has set up an arrangement of tracks on which they have rolled a ball.
-					The position, velocity and accelerations shown here represent the ball’s motion.
-				</p>
-				<p>
-					Try to discover the arrangement by examining the challenge graphs by adjusting the tracks yourself and rolling the ball.
-					Set the initial position and initial velocity of the ball by clicking on the scales. Raise or lower the posts as necessary.
-					Then click Roll Ball to see the resulting graphs for your trial motion.
-				</p>
+
+				<div id="hint-card" [class.visible]="hintsEnabled && !hintsBump">
+					<md-icon id="hint-close" (click)="onHintToggle()">close</md-icon>
+					<b id="hint-title">
+						<md-icon>lightbulb_outline</md-icon>
+						<span [innerHTML]="currentHint && currentHint.title"></span>
+					</b>
+					<p [innerHTML]="currentHint && currentHint.message"></p>
+				</div>
+
 			</md-card-content>
 		</md-card>
 	</md-grid-tile>
 
-	<md-grid-tile [class.zoom]="zoom" colspan="3">
+	<md-grid-tile [class.zoom]="zoom" colspan="3" rowspan="3">
 		<gt-graphs (zoom)="onGraphZoom()" (change)="onGraphPanelChange($event)"></gt-graphs>
 	</md-grid-tile>
 
-	<md-grid-tile colspan="4">
+	<md-grid-tile colspan="4" rowspan="2">
 		<gt-track-panel [mode]="goalMotion.mode" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"></gt-track-panel>
 	</md-grid-tile>
 </md-grid-list>
