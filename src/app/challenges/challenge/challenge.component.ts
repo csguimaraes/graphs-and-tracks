@@ -30,15 +30,18 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	challenge: Challenge
 	goalMotion: Motion
 
-	attempts: Attempt[] = []
+	ballAnimationIndex: number
+
 	zoom: boolean = false
-
-	animationIndex: number
-
 	hintsEnabled: boolean = false
-	hintsBump: boolean = false
+	hintDismissed: boolean = false
 	currentHint: Hint
+
+	attempts: Attempt[] = []
+	commitedAttempts: number = 0
+	latestAttempt: Attempt
 	latestError: AttemptError
+	attemptAnimationState: 'pre-bump' | 'normal' = 'normal'
 
 	constructor(private route: ActivatedRoute, private storage: StorageService) {
 		let id = this.route.snapshot.params['id']
@@ -63,44 +66,41 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	onRollBall(setup: MotionSetup) {
 		let trialMotion = Motion.fromSetup(setup)
 
-		let isContinuation = this.animationIndex !== undefined
+		let isContinuation = this.ballAnimationIndex !== undefined
 
-		if (!isContinuation) {
+		if (isContinuation) {
+			this.latestError = undefined
+		} else {
 			this.graphsPanel.addTrialData(trialMotion.data)
 
 			if (setup.breakDown) {
 				// TODO: how to deal with hints and partial motions ?
 				this.hintsEnabled = false
-				this.animationIndex = 0
+				this.ballAnimationIndex = 0
 			}
 
-			let trialError = this.goalMotion.findTrialError(trialMotion)
-			if (trialError) {
-				this.latestError = trialError
+			this.latestError = this.goalMotion.findTrialError(trialMotion)
+			if (this.latestError) {
 				this.attempts.push({
 					accuracy: -1,
 					setup: setup,
 					motion: trialMotion
 				})
-			} else {
-				this.latestError = undefined
-				// alert('YAY')
 			}
 		}
 
-		this.graphsPanel.highlightError()
-		this.trackPanel.highlightError()
+		this.clearHints()
 		this.trackPanel.cancelBallReset()
 		this.animate(trialMotion.data, ANIMATION_DURATION, setup.breakDown)
 	}
 
 	onGraphPanelChange(dataType: DataType) {
-		this.animationIndex = undefined
+		this.ballAnimationIndex = undefined
 		this.trackPanel.updateBallPostion()
 	}
 
 	onTrackPanelChange(dataType: DataType) {
-		this.animationIndex = undefined
+		this.ballAnimationIndex = undefined
 		if (dataType === 's' || dataType === 'v') {
 			this.graphsPanel.refresh(false, true)
 		}
@@ -108,7 +108,13 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 	onHintToggle() {
 		this.hintsEnabled = !(this.hintsEnabled)
-		this.currentHint = this.hintsEnabled ? HINTS['intro'] : undefined
+
+		if (this.hintsEnabled) {
+			this.hintDismissed = false
+			this.currentHint = HINTS['intro']
+		} else {
+			this.clearHints()
+		}
 	}
 
 	startTutorial() {
@@ -125,7 +131,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 		// Index of which data point the animation is currently on
 		// the index will be increased accordly with the amount of time elapsed
-		let idx = this.animationIndex || 0
+		let idx = this.ballAnimationIndex || 0
 		let firstPoint = motion[idx]
 
 		// If the animation isn't starting from the beggining
@@ -155,7 +161,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 				if (requiredAcceleration !== undefined && motion[idx + 1].a !== requiredAcceleration) {
 					// TODO: accelleration change isn't detected EXACTLY over a post head (interpolate?)
 					// Suspend the animation until the user rolls again
-					this.animationIndex = idx + 1
+					this.ballAnimationIndex = idx + 1
 					this.endAnimation(true)
 					return
 				}
@@ -204,18 +210,20 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 
 	endAnimation(justPause = false) {
+		this.commitedAttempts = this.attempts.length
+		this.trackPanel.onAnimationEnded(justPause)
+
 		if (justPause === false) {
-			this.animationIndex = undefined
+			this.ballAnimationIndex = undefined
 			this.graphsPanel.setTrialLineClip(1)
 		}
 
 		// TODO: how to deal with hints and partial motions ?
 		if (justPause === false) {
-			if (this.hintsEnabled && this.latestError) {
-				let bumpDelay = 1000
-				this.hintsBump = true
-
-				setTimeout(() => {
+			this.hintDismissed = true
+			let bumpDelay = 500
+			setTimeout(() => {
+				if (this.latestError && this.hintsEnabled) {
 					this.graphsPanel.highlightError(this.latestError)
 					this.trackPanel.highlightError(this.latestError)
 
@@ -233,15 +241,20 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 							this.currentHint = HINTS['intro']
 							break
 					}
-				}, bumpDelay)
+				}
+			}, bumpDelay)
 
-				setTimeout(() => {
-					this.hintsBump = false
-				}, bumpDelay + 50)
-			}
+			setTimeout(() => {
+				this.hintDismissed = false
+			}, bumpDelay + 50)
 		}
+	}
 
-		this.trackPanel.onAnimationEnded(justPause)
+	clearHints() {
+		this.currentHint = undefined
+		this.hintDismissed = true
+		this.graphsPanel.highlightError()
+		this.trackPanel.highlightError()
 	}
 
 	debug(type: string) {

@@ -1,10 +1,10 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
 import { AppModule } from './app/app.module'
 
-import '../public/icons.scss'
-import '../public/utils.scss'
-import '../public/main.scss'
-import '../public/hacks.scss'
+import '../public/styles/icons.scss'
+import '../public/styles/utils.scss'
+import '../public/styles/main.scss'
+import '../public/styles/hacks.scss'
 
 platformBrowserDynamic()
 	.bootstrapModule(AppModule)

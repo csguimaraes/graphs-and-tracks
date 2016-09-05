@@ -8,8 +8,7 @@ const APP_ROUTES: Routes = [
 	{ path: '', component: HomeComponent },
 	{ path: 'challenges', component: ChallengeListComponent },
 	{ path: 'challenges/:id', component: ChallengeComponent },
-/**
-	Some useful samples
+/** Some useful samples
 	{
 	 path: 'heroes',
 	 component: HeroListComponent,

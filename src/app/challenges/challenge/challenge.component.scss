@@ -2,9 +2,14 @@ $color-s: lighten(orangered, 10);
 $color-v: lighten(forestgreen, 10);
 $color-a: lighten(steelblue, 10);
 
-md-card-title .card-button {
+md-card-title #challenge-help {
+  white-space: nowrap;
   float: right;
   margin: 0 5px;
+
+  .card-button {
+    float: right;
+  }
 }
 
 #hints-button.active {
@@ -15,11 +20,31 @@ md-card-title .card-button {
   }
 }
 
+#attempts {
+  color: salmon;
+  font-size: 18px;
+  line-height: 18px;
+
+  md-icon {
+    transform-origin: 50% 50%;
+    transform: scale(1);
+    vertical-align: middle;
+    margin-top: -3px;
+  }
+
+  b {
+    transform-origin: 50% 50%;
+    transform: scale(1);
+    display: inline-block;
+  }
+}
+
 #hint-card {
   background: papayawhip;
+  border-radius: 4px;
   visibility: hidden;
   transform: scale(0.6);
-  transform-origin: 50% 50%;
+  transform-origin: 100% 0%;
   will-change: transform;
 
   &.visible {
@@ -71,29 +96,6 @@ md-card-title .card-button {
       b.v { color: $color-v; }
       b.a { color: $color-a; }
     }
-  }
-}
-
-#attempt-list {
-  .attempt-list-item {
-    padding: 8px 24px !important;
-    margin: 0 -24px;
-    line-height: 2em;
-
-    &:hover {
-      background: #F0F0F0;
-    }
-
-    .attempt-title {
-      small {
-        color: #AAA;
-        font-weight: 400;
-      }
-    }
-  }
-
-  /deep/ .attempt-info {
-    color: #AAA;
   }
 }
 

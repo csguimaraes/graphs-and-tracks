@@ -24,7 +24,7 @@ export class HomeComponent {
 	mode: Types.ChallengeMode
 
 
-	tutorialChallengeLink = '/challenges/3'
+	tutorialChallengeLink = '/challenges/tutorial'
 
 	constructor(private router: Router) {
 		this.mode = Settings.MODE_NORMAL

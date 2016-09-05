@@ -6,7 +6,7 @@ export const ANIMATION_DURATION = 5
 export const MODE_NORMAL: Types.ChallengeMode = {
 	simulation: {
 		duration: 25,
-		precision: 5
+		precision: 25
 	},
 	domain: {
 		position: { min: 0, max: 500, step: 50 },
@@ -30,6 +30,7 @@ export const DEFAULT_CHALLENGES: Types.MotionSetup[] = [
 	{ position: 100, velocity: -60, posts: [0, 10, 4, 0, 0, 0] }
 ]
 
+export const TUTORIAL_CHALLENGE: Types.MotionSetup = { position: 50, velocity: -30, posts: [4, 2, 0, 0, 0, 0] }
 
 export const THEME = {
 	colors: {
@@ -58,7 +59,7 @@ export const HINTS: { [name: string]: Types.Hint } = {
 		`
 	},
 	velocity: {
-		title: 'Need for speed!',
+		title: 'Wrong veyour speed!',
 		message: `
 			Starting with this velocity the ball will produce a different motion.<br><br>
 			Is it too fast? Too slow? Take a look on the <b class="v">velocity graph</b> to find out how much is the <b>initial velocity</b>.

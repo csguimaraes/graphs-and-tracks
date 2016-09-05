@@ -1,5 +1,8 @@
 import { Motion } from './motion.model'
 
+export type DataType = 's' | 'v' | 'a' | 'p'
+export type ChallengeType = 'example' | 'custom' | 'tutorial'
+
 export interface ChallengeMode {
 	simulation: {
 		duration: number
@@ -22,6 +25,7 @@ export interface Challenge {
 	goal: MotionSetup,
 	// TODO mark as required
 	mode?: ChallengeMode
+	type: ChallengeType
 }
 
 export interface ChallengeStats {
@@ -114,5 +118,3 @@ export interface Hint {
 	title: string,
 	message: string
 }
-
-export type DataType = 's' | 'v' | 'a' | 'p'
