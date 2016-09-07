@@ -5,16 +5,11 @@ import * as Types from '../shared/types'
 import * as Settings from '../shared/settings'
 
 import { TrackComponent } from '../shared/track/track.component'
-import { ScaleComponent } from '../shared/scale/scale.component'
 
 @Component({
 	selector: 'gt-home',
 	templateUrl: './home.component.html',
-	styleUrls: ['./home.component.scss'],
-	directives: [
-		TrackComponent,
-		ScaleComponent
-	]
+	styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
 	@ViewChild(TrackComponent)

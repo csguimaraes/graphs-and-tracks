@@ -19,17 +19,20 @@ import { ChallengeComponent } from './challenges/challenge/challenge.component'
 import { ChallengeListComponent } from './challenges/challenge-list/challenge-list.component'
 import { TrackPanelComponent } from './shared/track-panel/track-panel.component'
 import { GraphsComponent } from './shared/graphs/graphs.component'
+import { ScaleComponent } from './shared/scale/scale.component'
+import { TrackComponent } from './shared/track/track.component'
+import { SliderDirective } from './shared/slider.directive'
 
 @NgModule({
 	imports: [
 		BrowserModule,
 
 		// Material 2
-		MdIconModule,
-		MdToolbarModule,
-		MdCardModule,
-		MdGridListModule,
-		MdListModule,
+		MdIconModule.forRoot(),
+		MdToolbarModule.forRoot(),
+		MdCardModule.forRoot(),
+		MdGridListModule.forRoot(),
+		MdListModule.forRoot(),
 
 		APP_ROUTING
 	],
@@ -42,8 +45,11 @@ import { GraphsComponent } from './shared/graphs/graphs.component'
 		TrackPanelComponent,
 		GraphsComponent,
 
+		SliderDirective,
+		ScaleComponent,
+		TrackComponent,
+
 		DumpPipe
-		// HighlightDirective
 	],
 	providers: [
 		APP_ROUTING_PROVIDERS,

@@ -1,31 +1,29 @@
-<md-sidenav-layout fullscreen>
-	<md-toolbar color="primary">
-		<a [routerLink]="['']" class="logo">
-			<md-icon>multiline_chart</md-icon>
-			Graphs and Tracks
+<md-toolbar color="primary">
+	<a [routerLink]="['']" class="logo">
+		<md-icon>multiline_chart</md-icon>
+		Graphs and Tracks
+	</a>
+
+	<div id="app-menu" class="filler">
+		<a [routerLink]="['challenges']">
+			<md-icon>star</md-icon>
+			Challenges
 		</a>
 
-		<filler id="app-menu">
-			<a [routerLink]="['challenges']">
-				<md-icon>star</md-icon>
-				Challenges
-			</a>
+		<a [routerLink]="['playground']" class="todo">
+			<md-icon>broken_image</md-icon>
+			Playground
+		</a>
 
-			<a [routerLink]="['playground']" class="todo">
-				<md-icon>broken_image</md-icon>
-				Playground
-			</a>
-
-			<a [routerLink]="['settings']" class="todo">
-				<md-icon>settings</md-icon>
-				Settings
-			</a>
-		</filler>
-
-		<md-icon id="menu-about" class="todo" alt="About">info_outline</md-icon>
-	</md-toolbar>
-
-	<div id="main-container">
-		<router-outlet></router-outlet>
+		<a [routerLink]="['settings']" class="todo">
+			<md-icon>settings</md-icon>
+			Settings
+		</a>
 	</div>
-</md-sidenav-layout>
+
+	<md-icon id="menu-about" class="todo" alt="About">info_outline</md-icon>
+</md-toolbar>
+
+<div id="main-container">
+	<router-outlet></router-outlet>
+</div>

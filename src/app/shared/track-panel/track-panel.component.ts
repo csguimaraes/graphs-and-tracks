@@ -5,17 +5,12 @@ import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
 
 import * as Settings from '../settings'
-import { ScaleComponent } from '../scale/scale.component'
 import { TrackComponent } from '../track/track.component'
 
 @Component({
 	selector: 'gt-track-panel',
 	templateUrl: './track-panel.component.html',
-	styleUrls: ['./track-panel.component.scss'],
-	directives: [
-		ScaleComponent,
-		TrackComponent
-	]
+	styleUrls: ['./track-panel.component.scss']
 })
 export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild(TrackComponent)

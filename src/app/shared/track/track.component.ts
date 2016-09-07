@@ -4,17 +4,12 @@ import { Router } from '@angular/router'
 import { ChallengeMode, Ball, Margin, Point, Dimensions, DeadZone, DataType } from '../types'
 import { Angle, translate, getDistance } from '../helpers'
 
-import { SliderDirective } from '../slider.directive'
-
 declare let d3
 
 @Component({
 	selector: 'gt-track',
 	templateUrl: './track.component.html',
-	styleUrls: ['./track.component.scss'],
-	directives: [
-		SliderDirective
-	]
+	styleUrls: ['./track.component.scss']
 })
 export class TrackComponent implements OnInit, AfterViewInit {
 	@Input()

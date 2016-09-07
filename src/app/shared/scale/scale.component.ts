@@ -6,10 +6,7 @@ import { DataDomain } from '../types'
 @Component({
 	selector: 'gt-scale',
 	templateUrl: './scale.component.html',
-	styleUrls: ['./scale.component.scss'],
-	directives: [
-		SliderDirective
-	]
+	styleUrls: ['./scale.component.scss']
 })
 export class ScaleComponent implements OnInit, AfterViewInit {
 	@Input() min: number

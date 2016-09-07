@@ -14,11 +14,7 @@ import { TrackPanelComponent } from '../../shared/track-panel/track-panel.compon
 @Component({
 	selector: 'gt-challenge',
 	templateUrl: './challenge.component.html',
-	styleUrls: ['./challenge.component.scss'],
-	directives: [
-		TrackPanelComponent,
-		GraphsComponent
-	]
+	styleUrls: ['./challenge.component.scss']
 })
 export class ChallengeComponent implements OnInit, AfterViewInit {
 	@ViewChild(TrackPanelComponent)
@@ -39,9 +35,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 	attempts: Attempt[] = []
 	commitedAttempts: number = 0
-	latestAttempt: Attempt
 	latestError: AttemptError
-	attemptAnimationState: 'pre-bump' | 'normal' = 'normal'
 
 	constructor(private route: ActivatedRoute, private storage: StorageService) {
 		let id = this.route.snapshot.params['id']
