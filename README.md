@@ -10,8 +10,8 @@ The demo will be updated to the latest version every few days.
 To know when the demo was last updated see the latest commit at the [gh-pages](https://github.com/snolflake/gt/commits/gh-pages) branch.
 
 ## Motion Calculation
-Most of the motion calculations take place in the [Motion Class](src/models/motion.model.ts).
-Some other parameters used in calculations can also be found under the [app settings](src/settings.ts).
+Most of the motion calculations take place in the [Motion Class](src/app/shared/motion.model.ts).
+Some other parameters used in calculations can also be found under the [app settings](src/app/shared/settings.ts).
 
 ## Build and run the beta version
 - Download and install [Node v6+](https://nodejs.org/en/download/current/)

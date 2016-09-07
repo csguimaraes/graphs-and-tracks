@@ -5,7 +5,7 @@
 			<md-card-title>
 				{{ challenge.name }}
 
-				<div id="challenge-help" *ngIf="challenge.type === 'example' || challenge.type === 'custom'">
+				<div id="challenge-help" *ngIf="!isDemo">
 					<span id="hints-button" class="card-button"
 							[class.active]="hintsEnabled"
 							(click)="onHintToggle()"
@@ -15,7 +15,7 @@
 						HINTS
 					</span>
 
-					<span id="help-button" class="card-button">
+					<span id="help-button" class="card-button" [routerLink]="'/challenges/tutorial'">
 						<md-icon small>school</md-icon>
 						TUTORIAL
 					</span>
@@ -23,6 +23,7 @@
 			</md-card-title>
 
 			<md-card-content>
+				<b [routerLink]="'/challenges/8'">test</b>
 				<div id="attempts">
 					<span *ngIf="commitedAttempts === 0">
 						No attempts made yet...
@@ -38,7 +39,8 @@
 				<div id="hint-card" [class.visible]="hintsEnabled && !hintDismissed">
 					<md-icon id="hint-close" (click)="clearHints()">close</md-icon>
 					<b id="hint-title">
-						<md-icon>lightbulb_outline</md-icon>
+						<md-icon *ngIf="challenge.type !== 'tutorial'">lightbulb_outline</md-icon>
+						<md-icon *ngIf="challenge.type === 'tutorial'">school</md-icon>
 						<span [innerHTML]="currentHint && currentHint.title"></span>
 					</b>
 					<p [innerHTML]="currentHint && currentHint.message"></p>

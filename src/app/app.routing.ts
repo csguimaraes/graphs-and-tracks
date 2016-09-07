@@ -25,6 +25,6 @@ export const APP_ROUTING_PROVIDERS: any[] = [
 	// NOTE: Router dependencies may be placed here later on (e.g auth provider)
 ]
 
-export const APP_ROUTING = RouterModule.forRoot(APP_ROUTES)
+export const APP_ROUTING = RouterModule.forRoot(APP_ROUTES, { useHash: true })
 
 

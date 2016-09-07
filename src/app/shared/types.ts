@@ -1,7 +1,7 @@
 import { Motion } from './motion.model'
 
 export type DataType = 's' | 'v' | 'a' | 'p'
-export type ChallengeType = 'example' | 'custom' | 'tutorial'
+export type ChallengeType = 'example' | 'custom' | 'tutorial' | 'playground'
 
 export interface ChallengeMode {
 	simulation: {

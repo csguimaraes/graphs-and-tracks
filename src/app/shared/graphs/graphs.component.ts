@@ -67,9 +67,13 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}, 200)
 	}
 
-	initialize(goalData: MotionData[], mode: ChallengeMode) {
+	initialize(goalData: MotionData[], mode: ChallengeMode, refresh = false) {
 		this.goalData = goalData
 		this.mode = mode
+
+		if (refresh) {
+			this.refresh()
+		}
 	}
 
 	highlightError(error?: AttemptError) {

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { ActivatedRoute, Params } from '@angular/router'
 
 import { Challenge, Attempt, MotionSetup, DataType, MotionData, Hint, AttemptError } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
@@ -16,17 +16,20 @@ import { TrackPanelComponent } from '../../shared/track-panel/track-panel.compon
 	templateUrl: './challenge.component.html',
 	styleUrls: ['./challenge.component.scss']
 })
-export class ChallengeComponent implements OnInit, AfterViewInit {
+export class ChallengeComponent implements OnInit {
 	@ViewChild(TrackPanelComponent)
 	trackPanel: TrackPanelComponent
 
 	@ViewChild(GraphsComponent)
 	graphsPanel: GraphsComponent
 
+	challengeId: string
 	challenge: Challenge
 	goalMotion: Motion
+	isDemo: boolean = false
+	isReady: boolean = false
 
-	ballAnimationIndex: number
+	segmentedAnimationIndex: number
 
 	zoom: boolean = false
 	hintsEnabled: boolean = false
@@ -37,20 +40,20 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	commitedAttempts: number = 0
 	latestError: AttemptError
 
-	constructor(private route: ActivatedRoute, private storage: StorageService) {
-		let id = this.route.snapshot.params['id']
-		this.challenge = this.storage.getChallenge(id)
-		this.goalMotion = Motion.fromSetup(this.challenge.goal, this.challenge.mode)
+	constructor(route: ActivatedRoute, private storage: StorageService) {
+		route.params.subscribe(this.onRouteChange)
+		this.challengeId = route.snapshot.params['id']
 	}
 
 	ngOnInit() {
-		this.graphsPanel.initialize(this.goalMotion.data, this.challenge.mode)
+		this.isReady = true
+		this.loadChallenge()
 	}
 
-	ngAfterViewInit() {
-		if (this.route.snapshot.fragment === 'tutorial') {
-			this.startTutorial()
-		}
+	onRouteChange = (params: Params) => {
+		console.log('change')
+		this.challengeId = params['id']
+		this.loadChallenge(true)
 	}
 
 	onGraphZoom() {
@@ -58,9 +61,59 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 
 	onRollBall(setup: MotionSetup) {
+		this.executeMotion(setup)
+	}
+
+	onGraphPanelChange(dataType: DataType) {
+		this.segmentedAnimationIndex = undefined
+		this.trackPanel.updateBallPostion()
+	}
+
+	onTrackPanelChange(dataType: DataType) {
+		this.segmentedAnimationIndex = undefined
+		if (dataType === 's' || dataType === 'v') {
+			this.graphsPanel.refresh(false, true)
+		}
+	}
+
+	onHintToggle() {
+		this.hintsEnabled = !(this.hintsEnabled)
+
+		if (this.hintsEnabled) {
+			this.hintDismissed = false
+			this.currentHint = HINTS['intro']
+		} else {
+			this.clearHints()
+		}
+	}
+
+	loadChallenge(forceRefresh = false) {
+		if (this.isReady === false) {
+			return
+		}
+
+		this.challenge = this.storage.getChallenge(this.challengeId)
+
+		this.goalMotion = Motion.fromSetup(this.challenge.goal, this.challenge.mode)
+		this.graphsPanel.initialize(this.goalMotion.data, this.challenge.mode, forceRefresh)
+
+		this.isDemo =
+			this.challenge.type === 'tutorial' ||
+			this.challenge.type === 'playground'
+
+		if (this.challenge.type === 'tutorial') {
+			this.startTutorial()
+		}
+	}
+
+	startTutorial() {
+		// TODO
+	}
+
+	executeMotion(setup: MotionSetup) {
 		let trialMotion = Motion.fromSetup(setup)
 
-		let isContinuation = this.ballAnimationIndex !== undefined
+		let isContinuation = this.segmentedAnimationIndex !== undefined
 
 		if (isContinuation) {
 			this.latestError = undefined
@@ -70,7 +123,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 			if (setup.breakDown) {
 				// TODO: how to deal with hints and partial motions ?
 				this.hintsEnabled = false
-				this.ballAnimationIndex = 0
+				this.segmentedAnimationIndex = 0
 			}
 
 			this.latestError = this.goalMotion.findTrialError(trialMotion)
@@ -88,33 +141,6 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		this.animate(trialMotion.data, ANIMATION_DURATION, setup.breakDown)
 	}
 
-	onGraphPanelChange(dataType: DataType) {
-		this.ballAnimationIndex = undefined
-		this.trackPanel.updateBallPostion()
-	}
-
-	onTrackPanelChange(dataType: DataType) {
-		this.ballAnimationIndex = undefined
-		if (dataType === 's' || dataType === 'v') {
-			this.graphsPanel.refresh(false, true)
-		}
-	}
-
-	onHintToggle() {
-		this.hintsEnabled = !(this.hintsEnabled)
-
-		if (this.hintsEnabled) {
-			this.hintDismissed = false
-			this.currentHint = HINTS['intro']
-		} else {
-			this.clearHints()
-		}
-	}
-
-	startTutorial() {
-		// TODO
-	}
-
 	animate(motion: MotionData[], duration: number, breakdown = false) {
 		this.trackPanel.rolling = true
 		let animationStartedAt = Date.now()
@@ -125,7 +151,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 
 		// Index of which data point the animation is currently on
 		// the index will be increased accordly with the amount of time elapsed
-		let idx = this.ballAnimationIndex || 0
+		let idx = this.segmentedAnimationIndex || 0
 		let firstPoint = motion[idx]
 
 		// If the animation isn't starting from the beggining
@@ -155,7 +181,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 				if (requiredAcceleration !== undefined && motion[idx + 1].a !== requiredAcceleration) {
 					// TODO: accelleration change isn't detected EXACTLY over a post head (interpolate?)
 					// Suspend the animation until the user rolls again
-					this.ballAnimationIndex = idx + 1
+					this.segmentedAnimationIndex = idx + 1
 					this.endAnimation(true)
 					return
 				}
@@ -208,7 +234,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		this.trackPanel.onAnimationEnded(justPause)
 
 		if (justPause === false) {
-			this.ballAnimationIndex = undefined
+			this.segmentedAnimationIndex = undefined
 			this.graphsPanel.setTrialLineClip(1)
 		}
 
