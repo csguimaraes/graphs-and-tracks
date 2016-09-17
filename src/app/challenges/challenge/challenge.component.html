@@ -1,12 +1,21 @@
-<md-grid-list card-fill rowHeight="fit" cols="4" gutterSize="16px" [class.zoom]="zoom">
-
+<md-grid-list card-no-pad card-fill rowHeight="fit" cols="4" gutterSize="16px" [class.zoom]="zoom">
 	<md-grid-tile colspan="1" rowspan="4">
-		<md-card class="info-card" scroll-y>
-			<md-card-title>
-				{{ challenge.name }}
+		<md-card id="info-card">
+			<div class="content-wrapper">
+				<div class="card-header">
+					<span id="challenge-previous" class="card-header-selector challenge-selector" (click)="selectChallenge('previous', $event)">
+						<md-icon>chevron_left</md-icon>
+					</span>
+					<span class="active">
+						{{ challenge.name }}
+					</span>
+					<span id="challenge-next" class="card-header-selector challenge-selector" (click)="selectChallenge('next', $event)">
+						<md-icon>chevron_right</md-icon>
+					</span>
+				</div>
 
-				<div id="challenge-help" *ngIf="!isDemo">
-					<span id="hints-button" class="card-button"
+				<div id="challenge-help" *ngIf="!isDemo" class="card-header-actions card-header-actions-right">
+					<span id="hints-button"
 							[class.active]="hintsEnabled"
 							(click)="onHintToggle()"
 							title="{{ hintsEnabled ? 'Disable' : 'Enable' }} hint messages"
@@ -15,37 +24,36 @@
 						HINTS
 					</span>
 
-					<span id="help-button" class="card-button" [routerLink]="'/challenges/tutorial'">
+				<span id="help-button" [routerLink]="'/challenges/tutorial'">
 						<md-icon small>school</md-icon>
 						TUTORIAL
 					</span>
 				</div>
-			</md-card-title>
 
-			<md-card-content>
-				<b [routerLink]="'/challenges/8'">test</b>
-				<div id="attempts">
-					<span *ngIf="commitedAttempts === 0">
-						No attempts made yet...
-					</span>
-					<span *ngIf="commitedAttempts > 0">
-						<md-icon [class.one-bump]="attempts.length === commitedAttempts">cancel</md-icon>
-						<b [class.one-bumpy]="attempts.length === commitedAttempts">
-							{{ commitedAttempts }} attempt{{ commitedAttempts > 1 ? 's' : ''}} made
+				<md-card-content class="card-content-with-header-and-actions" scroll-y>
+					<div id="attempts">
+						<span *ngIf="commitedAttempts === 0">
+							No attempts made yet...
+						</span>
+						<span *ngIf="commitedAttempts > 0">
+							<md-icon [class.one-bump]="attempts.length === commitedAttempts">not_interested</md-icon>
+							<b [class.one-bumpy]="attempts.length === commitedAttempts">
+								{{ commitedAttempts }} attempt{{ commitedAttempts > 1 ? 's' : ''}} made
+							</b>
+						</span>
+					</div>
+
+					<div id="hint-card" [class.visible]="hintsEnabled && !hintDismissed">
+						<md-icon id="hint-close" (click)="clearHints()">close</md-icon>
+						<b id="hint-title">
+							<md-icon *ngIf="challenge.type !== 'tutorial'">lightbulb_outline</md-icon>
+							<md-icon *ngIf="challenge.type === 'tutorial'">school</md-icon>
+							<span [innerHTML]="currentHint && currentHint.title"></span>
 						</b>
-					</span>
-				</div>
-
-				<div id="hint-card" [class.visible]="hintsEnabled && !hintDismissed">
-					<md-icon id="hint-close" (click)="clearHints()">close</md-icon>
-					<b id="hint-title">
-						<md-icon *ngIf="challenge.type !== 'tutorial'">lightbulb_outline</md-icon>
-						<md-icon *ngIf="challenge.type === 'tutorial'">school</md-icon>
-						<span [innerHTML]="currentHint && currentHint.title"></span>
-					</b>
-					<p [innerHTML]="currentHint && currentHint.message"></p>
-				</div>
-			</md-card-content>
+						<p [innerHTML]="currentHint && currentHint.message"></p>
+					</div>
+				</md-card-content>
+			</div>
 		</md-card>
 	</md-grid-tile>
 

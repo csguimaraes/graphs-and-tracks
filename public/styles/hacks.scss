@@ -38,6 +38,13 @@ md-card-actions {
 }
 
 
+md-grid-list[card-no-pad] {
+  md-grid-tile md-card {
+    padding: 0 !important;
+    overflow:hidden;
+  }
+}
+
 md-grid-list[card-fill] {
   height: 100%;
 
@@ -45,6 +52,11 @@ md-grid-list[card-fill] {
     height: 100%;
     width: 100%;
     box-sizing: border-box;
+    .content-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+    }
   }
 }
 
@@ -72,4 +84,9 @@ md-card top-actions {
     cursor: pointer;
     font-size: 18px !important;
   }
+}
+
+md-toolbar, md-toolbar-row {
+  min-height: unset !important;
+  height: 36px !important;
 }

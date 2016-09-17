@@ -1,3 +1,5 @@
+@import '~app/app.theme.scss';
+
 $color-s: orangered;
 $color-v: forestgreen;
 $color-a: steelblue;
@@ -14,12 +16,6 @@ $slider-font-size: 16px;
 $track-controls-height: 110px;
 $track-height: calc(100% - #{$track-controls-height});
 $slider-line-height: $track-controls-height / 3;
-
-
-md-card {
-  padding: 0 !important;
-  overflow: hidden;
-}
 
 #track {
   height: $track-height;
@@ -44,7 +40,11 @@ md-card {
     }
 
     &.pulsing-scale /deep/ #slider {
-      animation: pulse 1s linear infinite;
+      @if $effects-enabled {
+        animation: pulse 1s linear infinite;
+      } @else {
+        animation: pulse 2s steps(2) infinite;
+      }
     }
   }
 

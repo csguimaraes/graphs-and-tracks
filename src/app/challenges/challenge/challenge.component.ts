@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Params } from '@angular/router'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 
 import { Challenge, Attempt, MotionSetup, DataType, MotionData, Hint, AttemptError } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
@@ -40,7 +40,7 @@ export class ChallengeComponent implements OnInit {
 	commitedAttempts: number = 0
 	latestError: AttemptError
 
-	constructor(route: ActivatedRoute, private storage: StorageService) {
+	constructor(route: ActivatedRoute, private router: Router, private storage: StorageService) {
 		route.params.subscribe(this.onRouteChange)
 		this.challengeId = route.snapshot.params['id']
 	}
@@ -51,7 +51,7 @@ export class ChallengeComponent implements OnInit {
 	}
 
 	onRouteChange = (params: Params) => {
-		console.log('change')
+		console.log('route change')
 		this.challengeId = params['id']
 		this.loadChallenge(true)
 	}
@@ -87,10 +87,42 @@ export class ChallengeComponent implements OnInit {
 		}
 	}
 
+	selectChallenge(which: string, ev: MouseEvent) {
+		let newId, currentId = this.challengeId
+		let tiltClass = ''
+		switch (which) {
+			default:
+			case 'next':
+				tiltClass = 'tilt-to-right'
+				newId = Math.min(parseInt(this.challengeId, 10) + 1, 10).toString()
+				break
+			case 'previous':
+				tiltClass = 'tilt-to-left'
+				newId = Math.max(parseInt(this.challengeId, 10) - 1, 0).toString()
+				break
+		}
+
+		if (newId !== currentId) {
+			let el = <HTMLElement> ev.currentTarget
+			let header = el.parentElement
+
+			header.classList.add(tiltClass)
+
+			setTimeout(() => {
+				header.classList.remove(tiltClass)
+			}, 500)
+
+			this.router.navigate(['challenges', newId])
+		}
+	}
+
 	loadChallenge(forceRefresh = false) {
 		if (this.isReady === false) {
 			return
 		}
+
+		this.clearHints()
+		this.segmentedAnimationIndex = undefined
 
 		this.challenge = this.storage.getChallenge(this.challengeId)
 

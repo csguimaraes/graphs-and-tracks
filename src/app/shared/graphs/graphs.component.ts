@@ -230,7 +230,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		return this.velocityDomain
 	}
 
-
 	clearDisposable() {
 		if (this.doubleTapRecognizer) {
 			this.doubleTapRecognizer.destroy()

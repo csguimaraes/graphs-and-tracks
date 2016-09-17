@@ -1,3 +1,5 @@
+@import '~app/app.theme.scss';
+
 [flex] {
   display: flex !important;
 }
@@ -38,12 +40,8 @@
 }
 
 .todo {
+  pointer-events: none !important;
   opacity: .5;
-  cursor: not-allowed !important;
-
-  & * {
-    pointer-events: none !important;
-  }
 }
 
 .card-button {
@@ -92,5 +90,127 @@
 }
 
 .pulsing {
-  animation: pulse 1s linear infinite;
+  @if $effects-enabled {
+    animation: pulse 1s linear infinite;
+  } @else {
+    animation: pulse 2s steps(2) infinite;
+  }
+}
+
+$header-height: 32px;
+$header-padding: 8px;
+$header-actions-height: 30px;
+$header-bg: #F0F0F0;
+$header-full-height: $header-height + ($header-padding * 2);
+
+.card-content-with-header {
+  margin-top: $header-full-height;
+  height: calc(100% - #{$header-full-height});
+}
+
+.card-content-with-header-and-actions {
+  margin-top: $header-full-height + $header-actions-height;
+  height: calc(100% - #{$header-full-height + $header-actions-height});
+}
+
+.card-header {
+  margin: 8px 0;
+  height: $header-height;
+  display: flex;
+  white-space: nowrap;
+  width: 100%;
+  position: absolute;
+
+  & > span {
+    background: $header-bg;
+    line-height: $header-height;
+    flex: 1 0 0px;
+    position: relative;
+    color: #666;
+    text-align: center;
+
+    padding: 0 5px;
+    will-change: margin;
+    transition: margin 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275),
+    line-height 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275),
+    color 300ms linear,
+    background 300ms linear;
+
+    &:first-child, &:last-child {
+      flex: 0 1 $header-height;
+      padding: 0;
+      md-icon {
+        width: $header-height;
+        line-height: $header-height;
+      }
+    }
+
+    &.card-header-selector {
+      cursor: pointer;
+      md-icon {
+        cursor: pointer;
+      }
+    }
+
+    &.active {
+      margin: -4px 10px;
+      flex-shrink: 1;
+      line-height: $header-height + $header-padding;
+    }
+  }
+}
+
+.card-header-actions {
+  background: $header-bg;
+  height: $header-actions-height;
+  width: auto;
+  top: $header-height + ($header-padding * 2);
+  display: inline-block;
+  position: absolute;
+  font-size: 14px;
+  line-height: 14px;
+
+  &.card-header-actions-right {
+    right: 0;
+    border-radius: 4px 0 0 4px;
+  }
+
+  &.card-header-actions-left {
+    left: 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  &.card-header-actions-full {
+    width: 100%;
+  }
+
+
+  span {
+    color: #666;
+    display: inline-block;
+    line-height: $header-actions-height;
+    vertical-align: text-bottom;
+
+    &.action {
+      height: 100%;
+      color: #999;
+      padding: 0 8px;
+      cursor: pointer;
+
+      &:hover {
+        background: darken($header-bg, 10);
+      }
+
+      md-icon {
+        cursor: pointer;
+        vertical-align: middle;
+        margin-bottom: 3px;
+        width: auto;
+      }
+
+      md-icon[small] {
+        margin-bottom: -4px;
+      }
+    }
+  }
 }
