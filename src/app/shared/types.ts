@@ -1,6 +1,6 @@
 import { Motion } from './motion.model'
 
-export type DataType = 's' | 'v' | 'a' | 'p'
+export type DataType = 's' | 'v' | 'a' | 'p' | 'b'
 
 export enum CHALLENGE_TYPE {
 	EXAMPLE,
@@ -20,8 +20,9 @@ export enum UI_CONTROL {
 	POSITION_GRAPH,
 	VELOCITY_GRAPH,
 	ACCELERATION_GRAPH,
-	POST_ANY,
-	POST_FIRST,
+	TRACK_POST_ANY,
+	TRACK_POST_FIRST,
+	TRACK_RAMP,
 	POSITION_SCALE,
 	VELOCITY_SCALE,
 	ROLL_BUTTON,

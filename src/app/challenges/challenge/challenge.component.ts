@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 
 import * as lodash from 'lodash'
 
-import { Challenge, Attempt, MotionSetup, DataType, MotionData, HintMessage, AttemptError, CHALLENGE_TYPE } from '../../shared/types'
+import { Challenge, Attempt, MotionSetup, MotionData, HintMessage, AttemptError, CHALLENGE_TYPE, UI_CONTROL, TutorialStep } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
 import { interpolate } from '../../shared/helpers'
 import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS } from '../../settings'
@@ -78,7 +78,9 @@ export class ChallengeComponent implements OnInit {
 	}
 
 	isTutorial: boolean = false
+	tutorialStep: TutorialStep
 	tutorialStepIndex: number
+	currentRequirements: UI_CONTROL[] = []
 
 	attempts: Attempt[] = []
 	commitedAttempts: number = 0
@@ -104,6 +106,12 @@ export class ChallengeComponent implements OnInit {
 	}
 
 	onRollBall(setup: MotionSetup) {
+		if (setup.breakDown) {
+			this.tutorialCheckRequirement(UI_CONTROL.ROLL_BUTTON_HOLD)
+		} else {
+			this.tutorialCheckRequirement(UI_CONTROL.ROLL_BUTTON)
+		}
+
 		this.performMotion(setup)
 	}
 
@@ -113,20 +121,28 @@ export class ChallengeComponent implements OnInit {
 		}
 	}
 
-	onGraphPanelChange(dataType: DataType) {
+	onGraphPanelChange(control: UI_CONTROL) {
 		this.segmentedAnimationIndex = undefined
 		this.trackPanel.updateBallPostion()
 		if (this.trackPanel.rolling) {
 			this.endAnimation()
 		}
+
+		this.tutorialCheckRequirement(control)
 	}
 
-	onTrackPanelChange(dataType: DataType) {
+	onTrackPanelChange(control: UI_CONTROL) {
 		this.segmentedAnimationIndex = undefined
 		this.storeSetup()
-		if (dataType === 's' || dataType === 'v') {
-			this.graphsPanel.refresh(false, true)
+
+		switch (control) {
+			case UI_CONTROL.POSITION_SCALE:
+			case UI_CONTROL.VELOCITY_SCALE:
+				this.graphsPanel.refresh(false, true)
+				break
 		}
+
+		this.tutorialCheckRequirement(control)
 	}
 
 	onHintToggle() {
@@ -233,7 +249,10 @@ export class ChallengeComponent implements OnInit {
 			}
 		}
 
-		this.clearHints()
+		if (!this.isTutorial) {
+			this.clearHints()
+		}
+
 		this.trackPanel.cancelBallReset()
 		this.animate(trialMotion.data, ANIMATION_DURATION, setup.breakDown)
 	}
@@ -336,43 +355,49 @@ export class ChallengeComponent implements OnInit {
 			this.segmentedAnimationIndex = undefined
 			this.graphsPanel.setTrialLineClip(1)
 
-			// Handle hint (if any) after attempt
-			// NOTE: segment motion doesn't produce hints ATM
-			this.hintDismissed = true
-			let bumpDelay = 500
-			setTimeout(() => {
-				if (this.latestError && this.hintsEnabled) {
-					this.graphsPanel.highlightError(this.latestError)
-					this.trackPanel.highlightError(this.latestError)
+			if (this.isTutorial === false) {
+				// Handle hint (if any) after attempt
+				// NOTE: segment motion doesn't produce hints ATM
+				this.hintDismissed = true
+				let bumpDelay = 500
+				setTimeout(() => {
+					if (this.latestError && this.hintsEnabled) {
+						this.graphsPanel.highlightError(this.latestError)
+						this.trackPanel.highlightError(this.latestError)
 
-					switch (this.latestError.type) {
-						case 's':
-							this.currentHint = HINT_MESSAGES['position']
-							break
-						case 'v':
-							this.currentHint = HINT_MESSAGES['velocity']
-							break
-						case 'a':
-							this.currentHint = HINT_MESSAGES['posts']
-							break
-						default:
-							this.currentHint = HINT_MESSAGES['intro']
-							break
+						switch (this.latestError.type) {
+							case 's':
+								this.currentHint = HINT_MESSAGES['position']
+								break
+							case 'v':
+								this.currentHint = HINT_MESSAGES['velocity']
+								break
+							case 'a':
+								this.currentHint = HINT_MESSAGES['posts']
+								break
+							default:
+								this.currentHint = HINT_MESSAGES['intro']
+								break
+						}
 					}
-				}
-			}, bumpDelay)
+				}, bumpDelay)
 
-			setTimeout(() => {
-				this.hintDismissed = false
-			}, bumpDelay + 50)
+				setTimeout(() => {
+					this.hintDismissed = false
+				}, bumpDelay + 50)
+			}
 		}
 	}
 
 	clearHints() {
 		this.currentHint = undefined
 		this.hintDismissed = true
-		this.graphsPanel.highlightError()
-		this.trackPanel.highlightError()
+		this.clearHighlights()
+	}
+
+	clearHighlights() {
+		this.graphsPanel.clearHighlights()
+		this.trackPanel.clearHighlights()
 	}
 
 	debug(type: string) {
@@ -400,7 +425,7 @@ export class ChallengeComponent implements OnInit {
 		let setupString = localStorage.getItem(SETUP_STORAGE_KEY)
 		if (setupString) {
 			let setup = <MotionSetup> JSON.parse(setupString)
-			this.trackPanel.restoreSetup(setup)
+			this.trackPanel.setup = setup
 		}
 	}
 
@@ -411,9 +436,84 @@ export class ChallengeComponent implements OnInit {
 		this.tutorialNextStep()
 	}
 
+	endTutorial() {
+		this.hintsEnabled = false
+		this.hintDismissed = true
+		this.currentRequirements = []
+		window.history.back()
+	}
+
+	isLastTutorialStep() {
+		return this.tutorialStepIndex === (TUTORIAL_STEPS.length - 1)
+	}
+
 	tutorialNextStep() {
 		this.tutorialStepIndex++
 		let currentStep = TUTORIAL_STEPS[this.tutorialStepIndex]
-		this.currentHint = currentStep
+
+		if (currentStep === undefined) {
+			return this.endTutorial()
+		}
+
+		this.tutorialStep = this.currentHint = currentStep
+
+		this.currentRequirements = []
+		let requirements: UI_CONTROL[] = currentStep.requires || []
+		for (let requirement of requirements) {
+			switch (requirement) {
+				case UI_CONTROL.VELOCITY_SCALE:
+				case UI_CONTROL.POSITION_SCALE:
+				case UI_CONTROL.TRACK_POST_ANY:
+				case UI_CONTROL.TRACK_POST_FIRST:
+				case UI_CONTROL.ROLL_BUTTON:
+				case UI_CONTROL.ROLL_BUTTON_HOLD:
+					this.currentRequirements.push(requirement)
+					this.trackPanel.highlightControl(requirement)
+					break
+				case UI_CONTROL.POSITION_GRAPH:
+				case UI_CONTROL.VELOCITY_GRAPH:
+				case UI_CONTROL.ACCELERATION_GRAPH:
+					this.currentRequirements.push(requirement)
+					this.graphsPanel.highlightControl(requirement)
+					break
+			}
+		}
+
+		if (this.currentRequirements.length) {
+			this.changeDetector.markForCheck()
+		}
+	}
+
+	tutorialCheckRequirement(control: UI_CONTROL) {
+		if (control === UI_CONTROL.TRACK_POST_FIRST && this.currentRequirements.indexOf(UI_CONTROL.TRACK_POST_ANY) !== -1) {
+			control = UI_CONTROL.TRACK_POST_ANY
+		}
+
+		if (this.currentRequirements.length) {
+			let requirementIndex = this.currentRequirements.indexOf(control)
+			if (requirementIndex !== -1) {
+				this.currentRequirements.splice(requirementIndex, 1)
+			}
+
+			if (this.currentRequirements.length === 0) {
+				this.clearHighlights()
+				this.tutorialCheckTriggers()
+			}
+		}
+	}
+
+	tutorialCheckTriggers() {
+		if (this.tutorialStep && this.tutorialStep.triggers) {
+			for (let trigger of this.tutorialStep.triggers) {
+				switch (trigger) {
+					case UI_CONTROL.POSITION_GRAPH:
+						this.graphsPanel.selectGraph('s', false)
+						break
+					case UI_CONTROL.ACCELERATION_GRAPH:
+						this.graphsPanel.selectGraph('a', false)
+						break
+				}
+			}
+		}
 	}
 }

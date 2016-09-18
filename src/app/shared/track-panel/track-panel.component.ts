@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core'
-import { MotionSetup, ChallengeMode, DataType, AttemptError } from '../types'
+import { MotionSetup, ChallengeMode, DataType, AttemptError, UI_CONTROL } from '../types'
 
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
@@ -23,7 +23,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	roll = new EventEmitter<MotionSetup>()
 
 	@Output()
-	change = new EventEmitter<DataType>()
+	change = new EventEmitter<UI_CONTROL>()
 
 	@Output()
 	abort = new EventEmitter()
@@ -115,8 +115,12 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
-	onTrackChange(type: DataType) {
-		this.change.emit('p')
+	onTrackChange(postIndex: number) {
+		if (postIndex === 0) {
+			this.change.emit(UI_CONTROL.TRACK_POST_FIRST)
+		} else {
+			this.change.emit(UI_CONTROL.TRACK_POST_ANY)
+		}
 	}
 
 	onAnimationEnded(pausing = false) {
@@ -149,6 +153,10 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		let setup = _.cloneDeep(this.setup)
 		setup.breakDown = single
 		this.roll.emit(setup)
+
+		if (this.requestingSelectionOf === 'b') {
+			this.requestingSelectionOf = undefined
+		}
 	}
 
 	velocitySetter = (val: number) => {
@@ -156,7 +164,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.setup.velocity = val
 
 		if (changed) {
-			this.change.emit('v')
+			this.change.emit(UI_CONTROL.VELOCITY_SCALE)
 			// Just make sure that the ball position is up to date
 			this.updateBallPostion(this.setup.position)
 		}
@@ -172,7 +180,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (changed) {
 			this.setup.position = val
 			this.updateBallPostion(val)
-			this.change.emit('s')
+			this.change.emit(UI_CONTROL.POSITION_SCALE)
 		} else if (!this.rollingSingle) {
 			this.updateBallPostion()
 		}
@@ -182,27 +190,59 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
-	highlightError(error?: AttemptError) {
-		if (error) {
-			if (error.type === 'a') {
-				this.track.highlightRamp(error.position)
-			} else {
-				this.requestingSelectionOf = error.type
-			}
-		} else {
-			this.track.highlightRamp()
-			this.requestingSelectionOf = undefined
-		}
+	clearHighlights() {
+		this.track.highlightRamp()
+		this.track.highlightPost()
+		this.requestingSelectionOf = undefined
+	}
 
+	highlightError(error: AttemptError) {
+		switch (error.type) {
+			case 's':
+				this.highlightControl(UI_CONTROL.POSITION_SCALE)
+				break
+			case 'v':
+				this.highlightControl(UI_CONTROL.VELOCITY_SCALE)
+				break
+			case 'a':
+				this.highlightControl(UI_CONTROL.TRACK_RAMP, error.position)
+				break
+		}
+	}
+
+	highlightControl(control: UI_CONTROL, at?: number) {
+		switch (control) {
+			case UI_CONTROL.ROLL_BUTTON:
+			case UI_CONTROL.ROLL_BUTTON_HOLD:
+				this.requestingSelectionOf = 'b'
+				break
+
+			case UI_CONTROL.POSITION_SCALE:
+				this.requestingSelectionOf = 's'
+				break
+
+			case UI_CONTROL.VELOCITY_SCALE:
+				this.requestingSelectionOf = 'v'
+				break
+
+			case UI_CONTROL.TRACK_POST_ANY:
+				this.track.highlightPost(-1)
+				break
+
+			case UI_CONTROL.TRACK_POST_FIRST:
+				this.track.highlightPost(0)
+				break
+
+			case UI_CONTROL.TRACK_RAMP:
+				if (at) {
+					this.track.highlightRamp(at)
+				}
+				break
+		}
 	}
 
 	updateBallPostion(position?: number) {
 		this.track.updateBallPostion(position)
-	}
-
-	toggleZoom() {
-		this.zoomActive = !(this.zoomActive)
-		this.track.refresh()
 	}
 
 	cancelBallReset() {
@@ -210,9 +250,5 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			clearInterval(this.ballResetTimout)
 			this.ballResetTimout = undefined
 		}
-	}
-
-	restoreSetup(setup: MotionSetup) {
-		this.setup = setup
 	}
 }

@@ -8,7 +8,7 @@ import {
 import * as Hammer from 'hammerjs'
 import { Tween } from 'tween.js'
 
-import { MotionData, ChallengeMode, DataType, AttemptError } from '../types'
+import { MotionData, ChallengeMode, DataType, AttemptError, UI_CONTROL } from '../types'
 import { Motion } from '../motion.model'
 
 declare let d3
@@ -43,7 +43,7 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 	trialClip: SVGRectElement
 
 	@Output()
-	change: EventEmitter<DataType> = new EventEmitter<DataType>()
+	change = new EventEmitter<UI_CONTROL>()
 
 	activeUrl
 	initialized = false
@@ -86,26 +86,69 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes['goal']) {
+			this.velocityDomain = undefined
 			this.goalData = this.goal.data
 			this.safeRefresh(true, true)
 		}
 	}
 
-	highlightError(error?: AttemptError) {
-		if (error) {
-			if (error.type !== this.activeGraph) {
-				this.requestingSelectionOf = error.type
+	clearHighlights() {
+		this.requestingSelectionOf = undefined
+	}
+
+	highlightError(error: AttemptError) {
+		if (error.type !== this.activeGraph) {
+			switch (error.type) {
+				case 's':
+					this.highlightControl(UI_CONTROL.POSITION_GRAPH)
+					break
+				case 'v':
+					this.highlightControl(UI_CONTROL.VELOCITY_GRAPH)
+					break
+				case 'a':
+					this.highlightControl(UI_CONTROL.ACCELERATION_GRAPH)
+					break
 			}
-		} else {
-			this.requestingSelectionOf = undefined
 		}
 	}
 
-	selectGraph(type: DataType) {
+	highlightControl(control: UI_CONTROL) {
+		switch (control) {
+			case UI_CONTROL.POSITION_GRAPH:
+				this.requestingSelectionOf = 's'
+				break
+
+			case UI_CONTROL.VELOCITY_GRAPH:
+				this.requestingSelectionOf = 'v'
+				break
+
+			case UI_CONTROL.ACCELERATION_GRAPH:
+				this.requestingSelectionOf = 'a'
+				break
+		}
+
+		this.changeDetector.markForCheck()
+	}
+
+	selectGraph(type: DataType, refresh = true) {
 		if (type !== this.activeGraph) {
 			this.activeGraph = type
-			this.refresh(true, true)
-			this.change.emit(type)
+
+			if (refresh) {
+				this.refresh(true, true)
+			}
+
+			switch (type) {
+				case 's':
+					this.change.emit(UI_CONTROL.POSITION_GRAPH)
+					break
+				case 'v':
+					this.change.emit(UI_CONTROL.VELOCITY_GRAPH)
+					break
+				case 'a':
+					this.change.emit(UI_CONTROL.ACCELERATION_GRAPH)
+					break
+			}
 		}
 
 		if (type === this.requestingSelectionOf) {

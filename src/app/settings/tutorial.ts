@@ -12,11 +12,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Motion graphs',
 		message: `
-			The position, velocity and acceleration graphs represent the motion of a ball. <br>
-			Try to recreate the motion by setting the initial conditions and adjusting the tracks. <br>
+			The position, velocity and acceleration graphs represent the motion of a ball.
+			Try to recreate the motion by setting the initial conditions and adjusting the tracks. <br><br>
 			When you roll the ball, your graphs (solid lines) should match the challenge graphs (dashed lines). <br>
-			<br>
-			Use the button <b class="b">ROLL BALL</b> to watch how the ball moves in this current setup...  
+			Use the button <b class="b">ROLL BALL</b> to watch how the ball moves in this current setup...
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON],
 		triggers: [UI_CONTROL.POSITION_GRAPH]
@@ -60,7 +59,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'We know where it come from, now where it goes?',
 		message: `
-			Select the on the <b class="v">INITIAL VELOCITY</b> scale to set a starting velocity.
+			Select the <b class="v">INITIAL VELOCITY</b> scale to set the ball starting velocity.
 			Negative values correspond to motion to the left, positive values to the right.
 		`,
 		requires: [UI_CONTROL.VELOCITY_SCALE]
@@ -71,7 +70,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			Drag the top of a <b>POST</b> to raise or lower its <b>height</b>,
 			or simply tap above or below a post head to gradually change the height value of that post.
 		`,
-		requires: [UI_CONTROL.POST_ANY]
+		requires: [UI_CONTROL.TRACK_POST_ANY]
 	},
 	{
 		title: 'Test your new setup',
@@ -88,7 +87,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			This time, pay attention on how the the ball accelaration changes over time as we adjust post heights and therefore the
 			inclination of the ramp on which the ball is rolling on.
 		`,
-		requires: [UI_CONTROL.POST_FIRST, UI_CONTROL.ROLL_BUTTON]
+		requires: [UI_CONTROL.TRACK_POST_FIRST, UI_CONTROL.ROLL_BUTTON]
 	},
 	{
 		title: 'Let\'s go by parts',
@@ -99,22 +98,3 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		requires: [UI_CONTROL.ROLL_BUTTON_HOLD]
 	},
 ]
-/*
-
-
-
-	Now click on the INITIAL VELOCITY scale to set a starting velocity.
-	Negative values correspond to motion to the left, positive values to the right.
-
-
-	Click and drag the top of a post to raise or lower it, or simply click above or below to adjust its height.
-
-	Try adjusting the left-most post one more time.
-
-	Click ROLL BALL to see the graph for your trial motion.
-
-	You may view the animation in short segments by pressing and holding down the ROLL BALL button.
-
-	The position of the ball, x is measured from left to right. Ramp inclination have been exaggerated for clarity.
-		                                                                                                       Next
-*/

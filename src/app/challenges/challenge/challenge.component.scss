@@ -72,6 +72,7 @@ $color-a: lighten(steelblue, 10);
   color: salmon;
   font-size: 18px;
   line-height: 18px;
+  padding: 16px;
 
   md-icon {
     transform-origin: 50% 50%;
@@ -93,20 +94,25 @@ $color-a: lighten(steelblue, 10);
   visibility: hidden;
   transform: scale(0.6);
   will-change: transform;
+  width: 100%;
 
   position: absolute;
   bottom: 0;
   transform-origin: center bottom;
 
   &.tutorial {
-    background: skyblue;
+    margin-top: 0;
+    transform: scale(1);
+    visibility: visible;
+    top: 0;
+    background: #CEF;
     #hint-title {
       color: dodgerblue;
     }
 
     #hint-close {
       &:hover {
-        background: darken(skyblue, 20);
+        background: darken(#CEF, 20);
       }
     }
   }
@@ -173,5 +179,41 @@ $color-a: lighten(steelblue, 10);
     color: white;
     padding: 2px 4px;
     margin-right: 15px;
+  }
+}
+
+
+#tutorial-actions {
+  color: dodgerblue;
+  padding: 8px;
+  margin: 8px;
+  text-align: right;
+
+  & > *, & > * * {
+    padding: 8px;
+    cursor: pointer !important;
+  }
+
+  #tutorial-next {
+    background: dodgerblue;
+    color: #CEF;
+    font-weight: bold;
+    animation: 1s pulse linear infinite;
+
+    md-icon {
+      width: auto;
+      display: inline-block;
+      height: auto;
+      padding: 0;
+      vertical-align: middle;
+      margin: -5px;
+    }
+  }
+
+  .disabled {
+    animation: none !important;
+    background: #CCC !important;
+    color: #999 !important;
+    pointer-events: none;
   }
 }

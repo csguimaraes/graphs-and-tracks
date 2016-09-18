@@ -17,7 +17,9 @@
 				<span class="slider-info-label">INITIAL POSITION</span>
 				<span class="slider-info-value">{{setup.position}} <small>cm</small></span>
 			</span>
-			<span id="ball-roller" class="slider-info" (click)="rollBall()">
+			<span id="ball-roller" class="slider-info"
+					[class.pulsing-alt]="requestingSelectionOf === 'b'"
+					(click)="rollBall()">
 				ROLL BALL
 			</span>
 			<span id="velocity-slider-info" class="slider-info">

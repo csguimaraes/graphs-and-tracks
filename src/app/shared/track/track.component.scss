@@ -77,4 +77,13 @@ svg /deep/ {
     stroke-dasharray: 10 5;
     animation: dashing 1.5s linear infinite, pulse 1.5s linear infinite;
   }
+
+  path.post-highlight {
+    fill: #CFE;
+    stroke: dodgerblue;
+    stroke-width: 2px;
+    stroke-dasharray: 10 5;
+    animation: dashing 2s linear infinite, pulse 2s linear infinite;
+    pointer-events: none !important;
+  }
 }

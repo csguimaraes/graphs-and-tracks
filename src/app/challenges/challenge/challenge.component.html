@@ -56,9 +56,6 @@
 
 				<md-card-content class="card-content-with-header-and-actions" scroll-y>
 					<div id="attempts">
-						<span *ngIf="commitedAttempts === 0">
-							No attempts made yet...
-						</span>
 						<span *ngIf="commitedAttempts > 0">
 							<md-icon [class.one-bump]="attempts.length === commitedAttempts">not_interested</md-icon>
 							<b [class.one-bumpy]="attempts.length === commitedAttempts">
@@ -67,7 +64,7 @@
 						</span>
 					</div>
 
-					<div id="hint-card" [class.visible]="hintsEnabled && !hintDismissed" [class.tutorial]="isTutorial">
+					<div id="hint-card" [class.visible]="(hintsEnabled && !hintDismissed) || isTutorial" [class.tutorial]="isTutorial">
 						<md-icon *ngIf="!isTutorial" id="hint-close" (click)="clearHints()">close</md-icon>
 						<b id="hint-title">
 							<md-icon *ngIf="!isTutorial">lightbulb_outline</md-icon>
@@ -76,8 +73,14 @@
 						</b>
 						<p [innerHTML]="hintMessage"></p>
 						<div id="tutorial-actions" *ngIf="isTutorial">
-							<span (click)="window.location.back()">End Tutorial</span>
-							<span (click)="window.location.back()">End Tutorial</span>
+							<span id="tutorial-end"
+									(click)="endTutorial()">End Tutorial</span>
+							<span id="tutorial-next"
+									[class.disabled]="currentRequirements.length"
+									(click)="tutorialNextStep()">
+								{{ isLastTutorialStep() ? 'Finish' : 'Next' }}
+								<md-icon>chevron_right</md-icon>
+							</span>
 						</div>
 					</div>
 				</md-card-content>

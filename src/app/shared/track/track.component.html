@@ -73,5 +73,10 @@
 				*ngIf="wrongRamp !== undefined"
 				[attr.d]="wrongRampOutline"
 		></path>
+
+		<path class="post-highlight"
+				*ngFor="let highlight of postHighlights"
+				[attr.d]="highlight"
+		></path>
 	</g>
 </svg>

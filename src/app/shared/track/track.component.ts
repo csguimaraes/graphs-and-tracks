@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, HostListener, AfterViewInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core'
 
-import { ChallengeMode, Ball, Margin, Point, Dimensions, DeadZone, DataType } from '../types'
+import { ChallengeMode, Ball, Margin, Point, Dimensions, DeadZone } from '../types'
 import { Angle, translate, getDistance } from '../helpers'
 
 declare let d3
@@ -22,7 +22,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	position: number
 
 	@Output()
-	change: EventEmitter<DataType> = new EventEmitter<DataType>()
+	change = new EventEmitter<number>()
 
 	// TODO: get from THEME settings
 	trackWidth = 10
@@ -58,6 +58,9 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	wrongRamp: number
 	wrongRampOutline: string
 
+	postHighlight: number
+	postHighlights: string[]
+
 	constructor(private changeDetector: ChangeDetectorRef, elementRef: ElementRef) {
 		this.host = elementRef.nativeElement
 	}
@@ -91,7 +94,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 
 		if (commit) {
 			this.postsSetup[postIndex] = value
-			this.refresh(true)
+			this.refresh(postIndex)
 		} else {
 			let posts = this.postsSetup.slice()
 			posts[postIndex] = value
@@ -116,13 +119,55 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	refresh(fireChange = false) {
+	highlightPost(atPosition?: number) {
+		this.postHighlights = []
+		this.postHighlight = atPosition
+		if (atPosition !== undefined) {
+
+			if (atPosition === -1) {
+				for (let idx = 0; idx < this.postsSetup.length; idx++) {
+					let highlight = this.generatePostHighlight(idx)
+					this.postHighlights.push(highlight)
+				}
+			} else {
+				let highlight = this.generatePostHighlight(atPosition)
+				this.postHighlights.push(highlight)
+			}
+		}
+	}
+
+	generatePostHighlight(postIndex: number) {
+		let width = this.trackWidth / 2
+		let head = this.getPostHead(postIndex)
+		let base = this.scaleY(-1)
+
+		let points = [
+			[head.x - width, head.y],
+			[head.x + width, head.y],
+			[head.x + width, base],
+			[head.x - width, base],
+		]
+
+		let path = ''
+		for (let point of points) {
+			path += `L${point[0]},${point[1]} `
+		}
+
+		path = 'M' + path.slice(1) + ' Z'
+		return path
+	}
+
+	refresh(fireChangeAt?: number) {
 		this.recalculate()
 		this.drawTrackLine(this.postsSetup)
 		this.updateBallPostion(this.position)
 
-		if (fireChange) {
-			this.change.emit('p')
+		if (fireChangeAt !== undefined) {
+			if (this.postHighlight !== undefined) {
+				this.highlightPost(this.postHighlight)
+			}
+
+			this.change.emit(fireChangeAt)
 		}
 	}
 
@@ -225,7 +270,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 			this.wrongRampOutline = undefined
 		}
 
-		this.refresh(true)
+		this.refresh(postIndex)
 	}
 
 	previewTrackChange(postIndex: number, value: number) {
