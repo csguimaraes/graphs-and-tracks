@@ -60,23 +60,6 @@ md-grid-list[card-fill] {
   }
 }
 
-md-grid-list.zoom {
-  md-grid-tile:not(.zoom) md-card {
-    display: none !important;
-  }
-
-  md-grid-tile.zoom md-card {
-    position: fixed;
-    z-index: 9999;
-    top: calc(64px + 10px);
-    left: 16px;
-    right: 16px;
-    width: auto;
-    bottom: 10px;
-    height: auto;
-  }
-}
-
 md-card top-actions {
   float: right;
   md-icon {
@@ -88,5 +71,5 @@ md-card top-actions {
 
 md-toolbar, md-toolbar-row {
   min-height: unset !important;
-  height: 36px !important;
+  height: 40px !important;
 }

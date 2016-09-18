@@ -1,20 +1,40 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Params, Router } from '@angular/router'
-
-import { Challenge, Attempt, MotionSetup, DataType, MotionData, Hint, AttemptError } from '../../shared/types'
+import { Component, OnInit, ViewChild, transition, style, animate, trigger, ChangeDetectorRef } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Challenge, Attempt, MotionSetup, DataType, MotionData, Hint, AttemptError, CHALLENGE_TYPE } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
 import { interpolate } from '../../shared/helpers'
 import { HINTS, ANIMATION_DURATION } from '../../shared/settings'
-import { StorageService } from '../../shared/storage.service'
+import { ChallengesService } from '../../shared/challenges.service'
 import { Motion } from '../../shared/motion.model'
-
 import { GraphsComponent } from '../../shared/graphs/graphs.component'
 import { TrackPanelComponent } from '../../shared/track-panel/track-panel.component'
+import { AuthService } from '../../shared/auth.service'
+
+const SWITCH_DURATION = 300
+type SwitchDirection = 'toLeft' | 'toRight' | 'none'
 
 @Component({
 	selector: 'gt-challenge',
 	templateUrl: './challenge.component.html',
-	styleUrls: ['./challenge.component.scss']
+	styleUrls: ['./challenge.component.scss'],
+	animations: [
+		trigger('challengeSwitch', [
+			transition('void => toRight', [ // Entering from right
+				style({ transform: 'translateX(-100%) scale(.2)', opacity: 0.0 }),
+				animate(`${SWITCH_DURATION}ms ease-out`, style({ transform: 'translateX(0%) scale(1)', opacity: 1.0 }))
+			]),
+			transition('void => toLeft', [ // Entering from left
+				style({ transform: 'translateX(100%) scale(.2)', opacity: 0.0 }),
+				animate(`${SWITCH_DURATION}ms ease-out`, style({ transform: 'translateX(0%) scale(1)', opacity: 1.0 }))
+			]),
+			transition('toRight => void', [ // Leaving from right
+				animate(`${SWITCH_DURATION}ms ease-in`, style({ transform: 'translateX(100%) scale(.6)', opacity: 0.0 }))
+			]),
+			transition('toLeft => void', [ // Leaving from left
+				animate(`${SWITCH_DURATION}ms ease-in`, style({ transform: 'translateX(-100%) scale(.6)', opacity: 0.0 }))
+			])
+		]
+	)]
 })
 export class ChallengeComponent implements OnInit {
 	@ViewChild(TrackPanelComponent)
@@ -25,13 +45,18 @@ export class ChallengeComponent implements OnInit {
 
 	challengeId: string
 	challenge: Challenge
+
+	collectionIndex: number
+	collectionIds: string[]
+	switchDirection: SwitchDirection = 'none'
+
 	goalMotion: Motion
 	isDemo: boolean = false
 	isReady: boolean = false
+	isLoadingNext: boolean = false
 
 	segmentedAnimationIndex: number
 
-	zoom: boolean = false
 	hintsEnabled: boolean = false
 	hintDismissed: boolean = false
 	currentHint: Hint
@@ -40,28 +65,24 @@ export class ChallengeComponent implements OnInit {
 	commitedAttempts: number = 0
 	latestError: AttemptError
 
-	constructor(route: ActivatedRoute, private router: Router, private storage: StorageService) {
-		route.params.subscribe(this.onRouteChange)
+	constructor(
+		private challenges: ChallengesService,
+		private router: Router,
+		private changeDetector: ChangeDetectorRef,
+		public  auth: AuthService,
+		route: ActivatedRoute
+	) {
 		this.challengeId = route.snapshot.params['id']
+		route.params.subscribe(p => this.loadChallengeById(p['id']))
 	}
 
 	ngOnInit() {
 		this.isReady = true
-		this.loadChallenge()
-	}
-
-	onRouteChange = (params: Params) => {
-		console.log('route change')
-		this.challengeId = params['id']
-		this.loadChallenge(true)
-	}
-
-	onGraphZoom() {
-		this.zoom = !(this.zoom)
+		this.loadChallengeById(this.challengeId)
 	}
 
 	onRollBall(setup: MotionSetup) {
-		this.executeMotion(setup)
+		this.performMotion(setup)
 	}
 
 	onGraphPanelChange(dataType: DataType) {
@@ -87,53 +108,62 @@ export class ChallengeComponent implements OnInit {
 		}
 	}
 
-	selectChallenge(which: string, ev: MouseEvent) {
-		let newId, currentId = this.challengeId
-		let tiltClass = ''
-		switch (which) {
-			default:
-			case 'next':
-				tiltClass = 'tilt-to-right'
-				newId = Math.min(parseInt(this.challengeId, 10) + 1, 10).toString()
-				break
-			case 'previous':
-				tiltClass = 'tilt-to-left'
-				newId = Math.max(parseInt(this.challengeId, 10) - 1, 0).toString()
-				break
+	navigateTo(direction: SwitchDirection) {
+		if (this.isLoadingNext === true) {
+			return false
 		}
 
-		if (newId !== currentId) {
-			let el = <HTMLElement> ev.currentTarget
-			let header = el.parentElement
+		if (this.auth.user.settings.effects) {
+			this.switchDirection = direction
+			this.changeDetector.detectChanges()
+		} else {
+			this.switchDirection = 'none'
+		}
 
-			header.classList.add(tiltClass)
-
-			setTimeout(() => {
-				header.classList.remove(tiltClass)
-			}, 500)
-
+		let newIndex = this.collectionIndex + (direction === 'toLeft' ? 1 : -1)
+		let newId = this.collectionIds[newIndex]
+		if (newId) {
 			this.router.navigate(['challenges', newId])
+
+			this.isLoadingNext = true
+			setTimeout(() => {
+				this.isLoadingNext = false
+			}, SWITCH_DURATION)
 		}
 	}
 
-	loadChallenge(forceRefresh = false) {
+	loadChallengeById(challengeId: string) {
 		if (this.isReady === false) {
 			return
 		}
 
+		let challenge = this.challenges.getById(challengeId)
+		if (challenge) {
+			this.loadChallenge(challenge)
+		} else {
+			// TODO: navigate 404
+		}
+	}
+
+	loadChallenge(challenge: Challenge) {
 		this.clearHints()
 		this.segmentedAnimationIndex = undefined
 
-		this.challenge = this.storage.getChallenge(this.challengeId)
+		if (this.collectionIds === undefined || this.challenge.type !== challenge.type) {
+			this.collectionIds = this.challenges.getIdsInCollection(challenge.type)
+		}
+
+		this.challenge = challenge
+		this.challengeId = challenge.id
+		this.collectionIndex = this.collectionIds.indexOf(challenge.id)
 
 		this.goalMotion = Motion.fromSetup(this.challenge.goal, this.challenge.mode)
-		this.graphsPanel.initialize(this.goalMotion.data, this.challenge.mode, forceRefresh)
 
 		this.isDemo =
-			this.challenge.type === 'tutorial' ||
-			this.challenge.type === 'playground'
+			this.challenge.type === CHALLENGE_TYPE.TUTORIAL ||
+			this.challenge.type === CHALLENGE_TYPE.EXPLORATION
 
-		if (this.challenge.type === 'tutorial') {
+		if (this.challenge.type === CHALLENGE_TYPE.TUTORIAL) {
 			this.startTutorial()
 		}
 	}
@@ -142,7 +172,7 @@ export class ChallengeComponent implements OnInit {
 		// TODO
 	}
 
-	executeMotion(setup: MotionSetup) {
+	performMotion(setup: MotionSetup) {
 		let trialMotion = Motion.fromSetup(setup)
 
 		let isContinuation = this.segmentedAnimationIndex !== undefined

@@ -3,6 +3,10 @@ import * as Types from './types'
 export const GRAVITY_ACCELERATION = 980.665 // cm/s²
 export const ANIMATION_DURATION = 5
 
+export const USER_SETTINGS_DEFAULTS: Types.UserSettings = {
+	effects: true
+}
+
 export const MODE_NORMAL: Types.ChallengeMode = {
 	simulation: {
 		duration: 25,
@@ -52,14 +56,14 @@ export const HINTS: { [name: string]: Types.Hint } = {
 		`
 	},
 	position: {
-		title: 'Where is the ball coming from?',
+		title: 'Is it starting from the right position?',
 		message: `
 			It seems that the ball is starting its motion from the wrong place...<br><br>
 			Checkout the <b class="s">position graph</b> and try to select the appropriate <b>initial position</b> for the motion. 
 		`
 	},
 	velocity: {
-		title: 'Wrong veyour speed!',
+		title: 'Wrong velocity speed!',
 		message: `
 			Starting with this velocity the ball will produce a different motion.<br><br>
 			Is it too fast? Too slow? Take a look on the <b class="v">velocity graph</b> to find out how much is the <b>initial velocity</b>.

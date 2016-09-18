@@ -5,10 +5,10 @@
 				Challenge List
 			</md-card-title>
 			<md-card-content id="challenge-list">
-				<div *ngFor="let challenge of challenges" [routerLink]="['/challenges', challenge.id]">
+				<div *ngFor="let example of examples" [routerLink]="['/challenges', example.id]">
 					<b md-line>
 						<md-icon>star_border</md-icon>
-						{{challenge.name}}
+						{{example.name}}
 					</b>
 					<p md-line class="incomplete">Incomplete (0 attempts)</p>
 				</div>

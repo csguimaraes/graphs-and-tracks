@@ -1,44 +1,36 @@
-h1 {
-  text-decoration: underline;
-}
-
-.logo {
-  text-decoration: none;
+a {
+  display: inline-block;
+  height: 100%;
+  line-height: 40px;
+  background: rgba(255,255,255,0.1);
   cursor: pointer;
-  color: white;
+  text-decoration: none;
+  color: white !important;
 
-  &:visited {
-    color: white;
+  margin: 0 8px;
+  padding: 0 16px;
+  &:first-of-type {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  &:last-of-type {
+    margin-right: 0;
+    padding-right: 0;
   }
 
   &:hover {
+    background: rgba(255,255,255,0.3);
     opacity: .9;
+  }
+
+  md-icon {
+    cursor: pointer;
   }
 }
 
-#app-menu {
-  margin-left: 20px;
-  height: 100%;
-
-  a {
-    display: inline-block;
-    height: 100%;
-    line-height: 36px;
-    margin: 0 10px;
-    padding: 0 15px;
-    background: rgba(255,255,255,0.1);
-    cursor: pointer;
-    text-decoration: none;
-    color: white !important;
-
-    &:hover {
-      background: rgba(255,255,255,0.3);
-    }
-
-    md-icon {
-      cursor: pointer;
-    }
-  }
+a.logo {
+  background: none;
 }
 
 md-icon {
@@ -46,6 +38,19 @@ md-icon {
   margin-top: -3px;
 }
 
-#menu-about {
-  padding: 0 20px;
+#menu-user-status {
+  padding: 0 8px;
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    object-fit: cover;
+    margin-right: 8px;
+    margin-top: 4px;
+    vertical-align: top;
+  }
+
+  line-height: 40px;
+  font-size: 16px;
+  font-weight: normal;
 }

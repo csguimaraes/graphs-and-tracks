@@ -1,9 +1,14 @@
-import { Component, OnInit, ElementRef, AfterViewInit, Output, EventEmitter, HostListener } from '@angular/core'
-import { Router } from '@angular/router'
+import {
+	Component, ElementRef,
+	OnInit, AfterViewInit, OnChanges, SimpleChanges,
+	Input, Output, EventEmitter, HostListener,
+	ChangeDetectionStrategy, ChangeDetectorRef, RenderComponentType
+} from '@angular/core'
 
 import * as Hammer from 'hammerjs'
 
 import { MotionData, ChallengeMode, DataType, AttemptError } from '../types'
+import { Motion } from '../motion.model'
 
 declare let d3
 
@@ -11,10 +16,11 @@ declare let d3
 	selector: 'gt-graphs',
 	templateUrl: './graphs.component.html',
 	styleUrls: ['./graphs.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GraphsComponent implements OnInit, AfterViewInit {
-	mode: ChallengeMode
-
+export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
+	@Input() mode: ChallengeMode
+	@Input() goal: Motion
 	goalData: MotionData[]
 	goalLinePath: string
 
@@ -28,26 +34,27 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	activeGraph: DataType
 	axisTitle: string
 	svg: any
-	trialClip: SVGRectElement
 	mainGroup: any
 	scaleX: any
 	scaleY: any
 
-	@Output('zoom')
-	zoomEvent = new EventEmitter()
-
-	zoomActive = false
-	velocityDomain: number[]
-
-	doubleTapRecognizer: HammerManager
+	lineToClip: number
+	trialClip: SVGRectElement
 
 	@Output()
 	change: EventEmitter<DataType> = new EventEmitter<DataType>()
 
 	activeUrl
+	initialized = false
+	zoomActive = false
+	velocityDomain: number[]
+	doubleTapRecognizer: HammerManager
 	requestingSelectionOf: DataType
 
-	constructor(private elementRef: ElementRef, router: Router) {
+	constructor(
+		private elementRef: ElementRef,
+		private changeDetector: ChangeDetectorRef
+	) {
 		this.trialsData = []
 	}
 
@@ -59,21 +66,21 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		this.activeGraph = 's'
 	}
 
-	ngAfterViewInit() {
-		// Draw graph for the first time only after view full initialization
-		// This way we make sure that the parent container has the correct dimensions
-		setTimeout(() => {
-			this.refresh()
-		}, 200)
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes['goal']) {
+			this.goalData = this.goal.data
+			this.refresh(false, true)
+		}
 	}
 
-	initialize(goalData: MotionData[], mode: ChallengeMode, refresh = false) {
-		this.goalData = goalData
-		this.mode = mode
+	ngAfterViewInit() {
+		this.initialized = true
 
-		if (refresh) {
-			this.refresh()
-		}
+		let recognizer = this.doubleTapRecognizer = new Hammer.Manager(<any> this.svg)
+		recognizer.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }))
+		recognizer.on('doubletap', ev => { this.toggleZoom() })
+
+		this.refresh()
 	}
 
 	highlightError(error?: AttemptError) {
@@ -108,14 +115,18 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 	}
 
 	refresh(animated = false, clearTrials = false) {
+		if (this.initialized === false) {
+			return
+		}
+
 		this.clearDisposable()
 		if (clearTrials) {
 			this.trialsData = []
+		} else {
 		}
 
-		if (animated) {
-			this.activeUrl = document.location.pathname
-		}
+
+		this.activeUrl = document.location.pathname
 
 		let svgRect = this.svg.getBoundingClientRect()
 		this.width = svgRect.width - this.margin.left - this.margin.right
@@ -198,11 +209,6 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 		}
 
 		this.trialLinePaths = trialLinePaths
-
-
-		let recognizer = this.doubleTapRecognizer = new Hammer.Manager(<any> this.svg)
-		recognizer.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }))
-		recognizer.on('doubletap', ev => { this.toggleZoom() })
 	}
 
 	private generateLinePath(data: MotionData[], type: DataType) {
@@ -236,16 +242,15 @@ export class GraphsComponent implements OnInit, AfterViewInit {
 			this.doubleTapRecognizer = null
 		}
 
-		this.mainGroup.selectAll('.axis').remove()
+		if (this.mainGroup) {
+			this.mainGroup.selectAll('.axis').remove()
+		}
 	}
 
 	toggleZoom() {
 		this.zoomActive = !(this.zoomActive)
-		this.zoomEvent.emit(this.zoomActive)
-
-		setTimeout(() => {
-			this.refresh()
-		}, 1)
+		this.changeDetector.detectChanges()
+		setTimeout(() => this.refresh(), 100)
 	}
 
 	@HostListener('document:keyup', ['$event'])

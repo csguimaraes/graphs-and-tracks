@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { StorageService } from '../../shared/storage.service'
-import { Challenge } from '../../shared/types'
+import { ChallengesService } from '../../shared/challenges.service'
+import { Challenge, CHALLENGE_TYPE } from '../../shared/types'
 
 @Component({
 	selector: 'gt-challenge-list',
@@ -8,12 +8,12 @@ import { Challenge } from '../../shared/types'
 	styleUrls: ['./challenge-list.component.scss']
 })
 export class ChallengeListComponent implements OnInit {
-	challenges: Challenge[]
+	examples: Challenge[]
 
-	constructor(private storage: StorageService) {}
+	constructor(private challenges: ChallengesService) {}
 
 
 	ngOnInit() {
-		this.challenges = this.storage.challenges
+		this.examples = this.challenges.getByType(CHALLENGE_TYPE.EXAMPLE)
 	}
 }

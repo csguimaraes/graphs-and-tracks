@@ -4,24 +4,27 @@
 		Graphs and Tracks
 	</a>
 
-	<div id="app-menu" class="filler">
-		<a [routerLink]="['challenges']">
-			<md-icon>star</md-icon>
-			Challenges
-		</a>
+	<a [routerLink]="['challenges']">
+		<md-icon>star</md-icon>
+		Challenges
+	</a>
 
-		<a [routerLink]="['playground']" class="todo">
-			<md-icon>broken_image</md-icon>
-			Playground
-		</a>
+	<a [routerLink]="['playground']" class="todo">
+		<md-icon>public</md-icon>
+		Community
+	</a>
 
-		<a [routerLink]="['settings']" class="todo">
-			<md-icon>settings</md-icon>
-			Settings
-		</a>
-	</div>
+	<a [routerLink]="['settings']" class="todo">
+		<md-icon>settings</md-icon>
+		Settings
+	</a>
 
-	<md-icon id="menu-about" class="todo" alt="About">info_outline</md-icon>
+	<div class="filler"></div>
+
+	<a id="menu-user-status">
+		<img [src]="auth.user.avatarUrl">
+		{{ auth.user.username }}
+	</a>
 </md-toolbar>
 
 <div id="main-container">

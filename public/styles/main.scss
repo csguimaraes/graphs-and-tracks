@@ -20,6 +20,7 @@ body, md-sidenav-layout {
 }
 
 #main-container {
-  padding: 10px 15px;
+  padding: 16px;
   height: calc(100% - 40px);
+  box-sizing: border-box;
 }

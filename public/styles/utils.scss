@@ -128,29 +128,35 @@ $header-full-height: $header-height + ($header-padding * 2);
     position: relative;
     color: #666;
     text-align: center;
-
     padding: 0 5px;
     will-change: margin;
-    transition: margin 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275),
-    line-height 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275),
-    color 300ms linear,
-    background 300ms linear;
+
+    @if $effects-enabled {
+      transition: margin 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275),
+      line-height 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275),
+      color 300ms linear,
+      background 300ms linear;
+    }
+
+    &, md-icon {
+      cursor: pointer;
+    }
 
     &:first-child, &:last-child {
       flex: 0 1 $header-height;
       padding: 0;
+      cursor: pointer;
       md-icon {
         width: $header-height;
         line-height: $header-height;
       }
-    }
 
-    &.card-header-selector {
-      cursor: pointer;
-      md-icon {
-        cursor: pointer;
+      &, md-icon {
+        cursor: default;
       }
     }
+
+
 
     &.active {
       margin: -4px 10px;
@@ -213,4 +219,15 @@ $header-full-height: $header-height + ($header-padding * 2);
       }
     }
   }
+}
+
+.fullscreen {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto !important;
+  height: auto !important;
 }

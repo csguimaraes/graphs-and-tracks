@@ -1,7 +1,14 @@
 import { Motion } from './motion.model'
 
 export type DataType = 's' | 'v' | 'a' | 'p'
-export type ChallengeType = 'example' | 'custom' | 'tutorial' | 'playground'
+
+export enum CHALLENGE_TYPE {
+	EXAMPLE,
+	TUTORIAL,
+	EXPLORATION,
+	COMMUNITY,
+	TEACHER
+}
 
 export interface ChallengeMode {
 	simulation: {
@@ -23,9 +30,8 @@ export interface Challenge {
 	name: string
 	custom: boolean
 	goal: MotionSetup,
-	// TODO mark as required
 	mode?: ChallengeMode
-	type: ChallengeType
+	type: CHALLENGE_TYPE
 }
 
 export interface ChallengeStats {
@@ -117,4 +123,15 @@ export interface DeadZone {
 export interface Hint {
 	title: string,
 	message: string
+}
+
+export interface User {
+	id: string
+	username: string
+	avatarUrl: string
+	settings: UserSettings
+}
+
+export interface UserSettings {
+	effects: boolean
 }
