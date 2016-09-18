@@ -17,10 +17,11 @@ export enum CHALLENGE_DIFFICULTY {
 }
 
 export enum UI_CONTROL {
-	GRAPH_POSITION,
-	GRAPH_VELOCITY,
-	GRAPH_ACCELERATION,
-	FIRST_POST,
+	POSITION_GRAPH,
+	VELOCITY_GRAPH,
+	ACCELERATION_GRAPH,
+	POST_ANY,
+	POST_FIRST,
 	POSITION_SCALE,
 	VELOCITY_SCALE,
 	ROLL_BUTTON,
@@ -138,14 +139,15 @@ export interface DeadZone {
 }
 
 export interface HintMessage {
-	title: string,
-	message: string
+	title: string | Array<string>
+	message: string | Array<string>
 }
 
-export interface TutorialStep {
-	title: string,
-	message: string,
-	requires: UI_CONTROL[]
+export interface TutorialStep extends HintMessage {
+	title: string | Array<string>
+	message: string | Array<string>
+	requires?: UI_CONTROL[],
+	triggers?: UI_CONTROL[],
 }
 
 export interface User {

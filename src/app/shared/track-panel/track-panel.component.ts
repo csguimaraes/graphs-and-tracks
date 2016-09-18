@@ -4,7 +4,7 @@ import { MotionSetup, ChallengeMode, DataType, AttemptError } from '../types'
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
 
-import * as Settings from '../settings'
+import * as Settings from '../../settings'
 import { TrackComponent } from '../track/track.component'
 
 @Component({
@@ -72,13 +72,10 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.velocityScale.push(value)
 		}
 
-		// let midPos = Math.ceil(this.positionScale.length / 2) - 1
-		// let midVel = Math.ceil(this.velocityScale.length / 2) - 1
-		this.setup = {
-			position: 350, // this.positionScale[midPos],
-			velocity: 60, // this.velocityScale[midVel],
-			posts: [4, 2, 0, 0, 2, 4]
-			// new Array(this.mode.postsCount).fill(0)
+		this.setup = this.setup || {
+			position: 0,
+			velocity: 30,
+			posts: [0, 0, 0, 0, 0, 0]
 		}
 	}
 
@@ -100,7 +97,6 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		let tapHandler = this.tapHandler = new Hammer.Manager(<any> card)
 		tapHandler.add(new Hammer.Tap({ event: 'singletap', taps: 1 }))
 		tapHandler.on('singletap', ev => {
-			console.log('received track panel tap')
 			if (this.rolling) {
 				this.abort.emit()
 			}
@@ -214,5 +210,9 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			clearInterval(this.ballResetTimout)
 			this.ballResetTimout = undefined
 		}
+	}
+
+	restoreSetup(setup: MotionSetup) {
+		this.setup = setup
 	}
 }

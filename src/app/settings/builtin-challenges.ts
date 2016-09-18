@@ -1,4 +1,4 @@
-import { CHALLENGE_DIFFICULTY, CHALLENGE_TYPE, Challenge, ChallengeMode } from './types'
+import { CHALLENGE_DIFFICULTY, CHALLENGE_TYPE, Challenge, ChallengeMode } from '../shared/types'
 
 export const MODE_NORMAL: ChallengeMode = {
 	simulation: {

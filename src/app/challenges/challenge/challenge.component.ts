@@ -1,16 +1,19 @@
 import { Component, OnInit, ViewChild, transition, style, animate, trigger, ChangeDetectorRef } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+
+import * as lodash from 'lodash'
+
 import { Challenge, Attempt, MotionSetup, DataType, MotionData, HintMessage, AttemptError, CHALLENGE_TYPE } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
 import { interpolate } from '../../shared/helpers'
-import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS } from '../../shared/settings'
+import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS } from '../../settings'
 import { ChallengesService } from '../../shared/challenges.service'
 import { Motion } from '../../shared/motion.model'
 import { GraphsPanelComponent } from '../../shared/graphs-panel/graphs-panel.component'
 import { TrackPanelComponent } from '../../shared/track-panel/track-panel.component'
 import { AuthService } from '../../shared/auth.service'
 
-
+const SETUP_STORAGE_KEY = 'latest-track-setup'
 const SWITCH_DURATION = 300
 type SwitchDirection = 'toLeft' | 'toRight' | 'none'
 
@@ -49,11 +52,10 @@ export class ChallengeComponent implements OnInit {
 
 	collectionIndex: number
 	collectionIds: string[]
-	switchDirection: SwitchDirection = 'none'
+	switchDirection: SwitchDirection = 'toRight'
 
 	goalMotion: Motion
 	isDemo: boolean = false
-	isTutorial: boolean = false
 	isReady: boolean = false
 	isLoadingNext: boolean = false
 
@@ -61,7 +63,22 @@ export class ChallengeComponent implements OnInit {
 
 	hintsEnabled: boolean = false
 	hintDismissed: boolean = false
-	currentHint: HintMessage
+
+	hintTitle: string
+	hintMessage: string
+
+	set currentHint(hint: HintMessage) {
+		if (hint) {
+			this.hintTitle = (hint.title instanceof Array) ? lodash.sample(hint.title) : hint.title
+			this.hintMessage = (hint.message instanceof Array) ? lodash.sample(hint.message) : hint.message
+		} else {
+			this.hintTitle = undefined
+			this.hintMessage = undefined
+		}
+	}
+
+	isTutorial: boolean = false
+	tutorialStepIndex: number
 
 	attempts: Attempt[] = []
 	commitedAttempts: number = 0
@@ -83,6 +100,7 @@ export class ChallengeComponent implements OnInit {
 	ngOnInit() {
 		this.isReady = true
 		this.loadChallengeById(this.challengeId)
+		this.restoreSetup()
 	}
 
 	onRollBall(setup: MotionSetup) {
@@ -98,10 +116,14 @@ export class ChallengeComponent implements OnInit {
 	onGraphPanelChange(dataType: DataType) {
 		this.segmentedAnimationIndex = undefined
 		this.trackPanel.updateBallPostion()
+		if (this.trackPanel.rolling) {
+			this.endAnimation()
+		}
 	}
 
 	onTrackPanelChange(dataType: DataType) {
 		this.segmentedAnimationIndex = undefined
+		this.storeSetup()
 		if (dataType === 's' || dataType === 'v') {
 			this.graphsPanel.refresh(false, true)
 		}
@@ -183,12 +205,6 @@ export class ChallengeComponent implements OnInit {
 		if (this.challenge.type === CHALLENGE_TYPE.TUTORIAL) {
 			this.startTutorial()
 		}
-	}
-
-	startTutorial() {
-		this.hintsEnabled = true
-		this.hintDismissed = false
-		this.currentHint = TUTORIAL_STEPS[0]
 	}
 
 	performMotion(setup: MotionSetup) {
@@ -374,5 +390,30 @@ export class ChallengeComponent implements OnInit {
 				printDataTable(attempt.motion.data, `attempt #${trialIndex}`)
 			}
 		}
+	}
+
+	storeSetup() {
+		localStorage.setItem(SETUP_STORAGE_KEY, JSON.stringify(this.trackPanel.setup))
+	}
+
+	restoreSetup() {
+		let setupString = localStorage.getItem(SETUP_STORAGE_KEY)
+		if (setupString) {
+			let setup = <MotionSetup> JSON.parse(setupString)
+			this.trackPanel.restoreSetup(setup)
+		}
+	}
+
+	startTutorial() {
+		this.hintsEnabled = true
+		this.hintDismissed = false
+		this.tutorialStepIndex = -1
+		this.tutorialNextStep()
+	}
+
+	tutorialNextStep() {
+		this.tutorialStepIndex++
+		let currentStep = TUTORIAL_STEPS[this.tutorialStepIndex]
+		this.currentHint = currentStep
 	}
 }

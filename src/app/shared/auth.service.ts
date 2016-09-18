@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 
 import { User } from './types'
-import * as Settings from './settings'
+import * as Settings from '../settings'
 
 @Injectable()
 export class AuthService {

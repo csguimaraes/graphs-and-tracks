@@ -11,7 +11,7 @@ To know when the demo was last updated see the latest commit at the [gh-pages](h
 
 ## Motion Calculation
 Most of the motion calculations take place in the [Motion Class](src/app/shared/motion.model.ts).
-Some other parameters used in calculations can also be found under the [app settings](src/app/shared/settings.ts).
+Some other parameters used in calculations can also be found under the [app settings](src/app/shared/index.ts).
 
 ## Build and run the beta version
 - Download and install [Node v6+](https://nodejs.org/en/download/current/)

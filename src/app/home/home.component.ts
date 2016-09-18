@@ -2,7 +2,7 @@ import { Component, ViewChild, HostListener } from '@angular/core'
 import { Router } from '@angular/router'
 
 import * as Types from '../shared/types'
-import * as Settings from '../shared/settings'
+import * as Settings from '../settings'
 
 import { TrackComponent } from '../shared/track/track.component'
 
