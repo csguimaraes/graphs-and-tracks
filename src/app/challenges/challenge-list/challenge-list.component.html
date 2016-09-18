@@ -1,17 +1,48 @@
-<md-grid-list card-fill id="challenge-list-grid" cols="1" gutterSize="8px" rowHeight="fit">
+<md-grid-list card-fill id="challenge-list-grid" cols="5" gutterSize="8px" rowHeight="fit">
+	<md-grid-tile colspan="2">
+		<md-card scroll-y>
+			<md-card-title>
+				Challenge Samples
+			</md-card-title>
+			<md-card-content>
+				<div id="create-challenge" class="list-action" [routerLink]="'/challenges/tutorial'">
+					<md-icon>local_activity</md-icon>
+					<br>
+					<span>FOLLOW THE TUTORIAL</span>
+				</div>
+				<div class="list-container">
+					<gt-challenge-list-item *ngFor="let example of examples" [challenge]="example"></gt-challenge-list-item>
+				</div>
+			</md-card-content>
+		</md-card>
+	</md-grid-tile>
+	<md-grid-tile colspan="2">
+		<md-card scroll-y>
+			<md-card-title>
+				Community Challenges
+			</md-card-title>
+			<md-card-content>
+				<div id="browse-community" class="list-action" [routerLink]="'/editor'">
+					<md-icon>format_paint</md-icon>
+					<br>
+					<span>CREATE A CHALLENGE</span>
+				</div>
+				<div class="list-container"></div>
+			</md-card-content>
+		</md-card>
+	</md-grid-tile>
 	<md-grid-tile>
 		<md-card scroll-y>
 			<md-card-title>
-				Challenge List
+				Teacher Challenges
 			</md-card-title>
-			<md-card-content id="challenge-list">
-				<div *ngFor="let example of examples" [routerLink]="['/challenges', example.id]">
-					<b md-line>
-						<md-icon>star_border</md-icon>
-						{{example.name}}
-					</b>
-					<p md-line class="incomplete">Incomplete (0 attempts)</p>
+			<md-card-content>
+				<div id="browse-teacher" class="list-action">
+					<md-icon>school</md-icon>
+					<br>
+					<span>IMPORT EXCERSICES</span>
 				</div>
+				<div class="list-container"></div>
 			</md-card-content>
 		</md-card>
 	</md-grid-tile>

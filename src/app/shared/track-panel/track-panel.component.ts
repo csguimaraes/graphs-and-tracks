@@ -20,15 +20,22 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	mode: ChallengeMode
 
 	@Output('roll')
-	rollBallEvent: EventEmitter<MotionSetup>
+	roll = new EventEmitter<MotionSetup>()
 
 	@Output()
-	change: EventEmitter<DataType> = new EventEmitter<DataType>()
+	change = new EventEmitter<DataType>()
+
+	@Output()
+	abort = new EventEmitter()
 
 	setup: MotionSetup
+	colors = Settings.THEME.colors
 
 	rollButton: HTMLElement
 	longPressHandler: HammerManager
+
+	zoomActive: boolean
+	tapHandler: HammerManager
 
 	positionScale: number[]
 	velocityScale: number[]
@@ -37,14 +44,11 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	rolling = false
 	rollingSingle = false
 	ignoreNext = false
-	colors: any
 	ballResetTimout: any
 
 	requestingSelectionOf: DataType
 
 	constructor(private element: ElementRef) {
-		this.rollBallEvent = new EventEmitter<MotionSetup>()
-		this.colors = Settings.THEME.colors
 	}
 
 	ngOnInit() {
@@ -86,19 +90,33 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		// Initialize long press recognizer on the roll button
 		this.rollButton = this.element.nativeElement.querySelector('#ball-roller')
+		let pressHandler = this.longPressHandler = new Hammer.Manager(this.rollButton)
+		pressHandler.add(new Hammer.Press({ time: 1000 }))
+		pressHandler.on('press', () => this.rollBall(true))
 
-		this.longPressHandler = new Hammer.Manager(this.rollButton, {
-			recognizers: [[Hammer.Press, { time: 1000 }]]
-		})
 
-		this.longPressHandler.on('press', () => {
-			this.rollBall(true)
+		// Initialize tap recognizer in the whole track panel
+		let card = this.element.nativeElement.querySelector('md-card')
+		let tapHandler = this.tapHandler = new Hammer.Manager(<any> card)
+		tapHandler.add(new Hammer.Tap({ event: 'singletap', taps: 1 }))
+		tapHandler.on('singletap', ev => {
+			console.log('received track panel tap')
+			if (this.rolling) {
+				this.abort.emit()
+			}
 		})
 	}
 
 	ngOnDestroy() {
-		this.longPressHandler.destroy()
-		this.longPressHandler = null
+		if (this.longPressHandler) {
+			this.longPressHandler.destroy()
+			this.longPressHandler = null
+		}
+
+		if (this.tapHandler) {
+			this.tapHandler.destroy()
+			this.tapHandler = null
+		}
 	}
 
 	onTrackChange(type: DataType) {
@@ -134,7 +152,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		let setup = _.cloneDeep(this.setup)
 		setup.breakDown = single
-		this.rollBallEvent.emit(setup)
+		this.roll.emit(setup)
 	}
 
 	velocitySetter = (val: number) => {
@@ -184,6 +202,11 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	updateBallPostion(position?: number) {
 		this.track.updateBallPostion(position)
+	}
+
+	toggleZoom() {
+		this.zoomActive = !(this.zoomActive)
+		this.track.refresh()
 	}
 
 	cancelBallReset() {

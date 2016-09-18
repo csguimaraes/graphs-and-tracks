@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild, transition, style, animate, trigger, ChangeDetectorRef } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Challenge, Attempt, MotionSetup, DataType, MotionData, Hint, AttemptError, CHALLENGE_TYPE } from '../../shared/types'
+import { Challenge, Attempt, MotionSetup, DataType, MotionData, HintMessage, AttemptError, CHALLENGE_TYPE } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
 import { interpolate } from '../../shared/helpers'
-import { HINTS, ANIMATION_DURATION } from '../../shared/settings'
+import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS } from '../../shared/settings'
 import { ChallengesService } from '../../shared/challenges.service'
 import { Motion } from '../../shared/motion.model'
-import { GraphsComponent } from '../../shared/graphs/graphs.component'
+import { GraphsPanelComponent } from '../../shared/graphs-panel/graphs-panel.component'
 import { TrackPanelComponent } from '../../shared/track-panel/track-panel.component'
 import { AuthService } from '../../shared/auth.service'
+
 
 const SWITCH_DURATION = 300
 type SwitchDirection = 'toLeft' | 'toRight' | 'none'
@@ -40,8 +41,8 @@ export class ChallengeComponent implements OnInit {
 	@ViewChild(TrackPanelComponent)
 	trackPanel: TrackPanelComponent
 
-	@ViewChild(GraphsComponent)
-	graphsPanel: GraphsComponent
+	@ViewChild(GraphsPanelComponent)
+	graphsPanel: GraphsPanelComponent
 
 	challengeId: string
 	challenge: Challenge
@@ -52,6 +53,7 @@ export class ChallengeComponent implements OnInit {
 
 	goalMotion: Motion
 	isDemo: boolean = false
+	isTutorial: boolean = false
 	isReady: boolean = false
 	isLoadingNext: boolean = false
 
@@ -59,11 +61,13 @@ export class ChallengeComponent implements OnInit {
 
 	hintsEnabled: boolean = false
 	hintDismissed: boolean = false
-	currentHint: Hint
+	currentHint: HintMessage
 
 	attempts: Attempt[] = []
 	commitedAttempts: number = 0
 	latestError: AttemptError
+
+	types = CHALLENGE_TYPE
 
 	constructor(
 		private challenges: ChallengesService,
@@ -85,6 +89,12 @@ export class ChallengeComponent implements OnInit {
 		this.performMotion(setup)
 	}
 
+	onAbort() {
+		if (this.trackPanel) {
+			this.trackPanel.rolling = false
+		}
+	}
+
 	onGraphPanelChange(dataType: DataType) {
 		this.segmentedAnimationIndex = undefined
 		this.trackPanel.updateBallPostion()
@@ -102,7 +112,7 @@ export class ChallengeComponent implements OnInit {
 
 		if (this.hintsEnabled) {
 			this.hintDismissed = false
-			this.currentHint = HINTS['intro']
+			this.currentHint = HINT_MESSAGES['intro']
 		} else {
 			this.clearHints()
 		}
@@ -137,8 +147,13 @@ export class ChallengeComponent implements OnInit {
 			return
 		}
 
+		if (challengeId === 'tutorial' || challengeId === 'exploration') {
+			this.switchDirection = 'toRight'
+		}
+
 		let challenge = this.challenges.getById(challengeId)
 		if (challenge) {
+			this.onAbort()
 			this.loadChallenge(challenge)
 		} else {
 			// TODO: navigate 404
@@ -163,13 +178,17 @@ export class ChallengeComponent implements OnInit {
 			this.challenge.type === CHALLENGE_TYPE.TUTORIAL ||
 			this.challenge.type === CHALLENGE_TYPE.EXPLORATION
 
+		this.isTutorial = this.challenge.type === CHALLENGE_TYPE.TUTORIAL
+
 		if (this.challenge.type === CHALLENGE_TYPE.TUTORIAL) {
 			this.startTutorial()
 		}
 	}
 
 	startTutorial() {
-		// TODO
+		this.hintsEnabled = true
+		this.hintDismissed = false
+		this.currentHint = TUTORIAL_STEPS[0]
 	}
 
 	performMotion(setup: MotionSetup) {
@@ -295,13 +314,14 @@ export class ChallengeComponent implements OnInit {
 		this.commitedAttempts = this.attempts.length
 		this.trackPanel.onAnimationEnded(justPause)
 
+
 		if (justPause === false) {
+			// Restore some values
 			this.segmentedAnimationIndex = undefined
 			this.graphsPanel.setTrialLineClip(1)
-		}
 
-		// TODO: how to deal with hints and partial motions ?
-		if (justPause === false) {
+			// Handle hint (if any) after attempt
+			// NOTE: segment motion doesn't produce hints ATM
 			this.hintDismissed = true
 			let bumpDelay = 500
 			setTimeout(() => {
@@ -311,16 +331,16 @@ export class ChallengeComponent implements OnInit {
 
 					switch (this.latestError.type) {
 						case 's':
-							this.currentHint = HINTS['position']
+							this.currentHint = HINT_MESSAGES['position']
 							break
 						case 'v':
-							this.currentHint = HINTS['velocity']
+							this.currentHint = HINT_MESSAGES['velocity']
 							break
 						case 'a':
-							this.currentHint = HINTS['posts']
+							this.currentHint = HINT_MESSAGES['posts']
 							break
 						default:
-							this.currentHint = HINTS['intro']
+							this.currentHint = HINT_MESSAGES['intro']
 							break
 					}
 				}

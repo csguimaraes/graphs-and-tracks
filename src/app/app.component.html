@@ -21,10 +21,17 @@
 
 	<div class="filler"></div>
 
-	<a id="menu-user-status">
+	<a id="menu-user-status" <!--md-icon-button [md-menu-trigger-for]="menu"-->>
 		<img [src]="auth.user.avatarUrl">
 		{{ auth.user.username }}
+		<md-icon>arrow_drop_down</md-icon>
 	</a>
+	<!--<md-menu id="user-menu" #menu="mdMenu" x-position="after">
+		<button md-menu-item> Refresh </button>
+		<button md-menu-item> Settings </button>
+		<button md-menu-item> Help </button>
+		<button md-menu-item disabled> Sign Out </button>
+	</md-menu>-->
 </md-toolbar>
 
 <div id="main-container">

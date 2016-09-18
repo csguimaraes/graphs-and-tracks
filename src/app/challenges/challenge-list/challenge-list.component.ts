@@ -12,7 +12,6 @@ export class ChallengeListComponent implements OnInit {
 
 	constructor(private challenges: ChallengesService) {}
 
-
 	ngOnInit() {
 		this.examples = this.challenges.getByType(CHALLENGE_TYPE.EXAMPLE)
 	}

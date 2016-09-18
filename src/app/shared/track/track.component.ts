@@ -1,5 +1,4 @@
-import { Component, OnInit, ElementRef, HostListener, AfterViewInit, Input, Output, EventEmitter } from '@angular/core'
-import { Router } from '@angular/router'
+import { Component, OnInit, ElementRef, HostListener, AfterViewInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core'
 
 import { ChallengeMode, Ball, Margin, Point, Dimensions, DeadZone, DataType } from '../types'
 import { Angle, translate, getDistance } from '../helpers'
@@ -59,7 +58,7 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	wrongRamp: number
 	wrongRampOutline: string
 
-	constructor(elementRef: ElementRef, public router: Router) {
+	constructor(private changeDetector: ChangeDetectorRef, elementRef: ElementRef) {
 		this.host = elementRef.nativeElement
 	}
 
@@ -73,9 +72,10 @@ export class TrackComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		setTimeout(() => {
-			this.refresh()
-		}, 50)
+		// Queue a change detection
+		this.changeDetector.markForCheck()
+		// Queue a refresh
+		setTimeout(() => { this.refresh() }, 1)
 	}
 
 	@HostListener('window:resize')

@@ -1,40 +1,12 @@
 import * as Types from './types'
 
-export const GRAVITY_ACCELERATION = 980.665 // cm/s²
-export const ANIMATION_DURATION = 5
+export * from './builtin-challenges'
 
+export const GRAVITY_ACCELERATION = 980.665 // cm/s²
+export const ANIMATION_DURATION = 10
 export const USER_SETTINGS_DEFAULTS: Types.UserSettings = {
 	effects: true
 }
-
-export const MODE_NORMAL: Types.ChallengeMode = {
-	simulation: {
-		duration: 25,
-		precision: 25
-	},
-	domain: {
-		position: { min: 0, max: 500, step: 50 },
-		velocity: { min: -60, max: 60, step: 10 },
-		posts: { min: 0, max: 10, step: 1 }
-	},
-	postsCount: 6
-}
-
-// List of motion setups for built-in challenges
-export const DEFAULT_CHALLENGES: Types.MotionSetup[] = [
-	{ position: 50, velocity: -30, posts: [5, 4, 3, 2, 1, 0] },
-	{ position: 400, velocity: 30, posts: [0, 0, 0, 2, 4, 6] },
-	{ position: 350, velocity: 60, posts: [4, 2, 0, 0, 2, 4] },
-	{ position: 50, velocity: -30, posts: [4, 2, 1, 0, 2, 4] },
-	{ position: 100, velocity: -50, posts: [3, 0, 1, 1, 1, 1] },
-	{ position: 450, velocity: 10, posts: [2, 2, 1, 0, 2, 4] },
-	{ position: 450, velocity: -30, posts: [5, 0, 2, 2, 0, 6] },
-	{ position: 50, velocity: 60, posts: [1, 2, 0, 3, 0, 9] },
-	{ position: 250, velocity: -10, posts: [0, 8, 0, 0, 6, 0] },
-	{ position: 100, velocity: -60, posts: [0, 10, 4, 0, 0, 0] }
-]
-
-export const TUTORIAL_CHALLENGE: Types.MotionSetup = { position: 50, velocity: -30, posts: [4, 2, 0, 0, 0, 0] }
 
 export const THEME = {
 	colors: {
@@ -44,7 +16,7 @@ export const THEME = {
 	}
 }
 
-export const HINTS: { [name: string]: Types.Hint } = {
+export const HINT_MESSAGES: { [name: string]: Types.HintMessage } = {
 	intro: {
 		title: 'Hints enabled!',
 		message: `
@@ -56,7 +28,7 @@ export const HINTS: { [name: string]: Types.Hint } = {
 		`
 	},
 	position: {
-		title: 'Is it starting from the right position?',
+		title: 'This is the right position?',
 		message: `
 			It seems that the ball is starting its motion from the wrong place...<br><br>
 			Checkout the <b class="s">position graph</b> and try to select the appropriate <b>initial position</b> for the motion. 
@@ -79,10 +51,10 @@ export const HINTS: { [name: string]: Types.Hint } = {
 	}
 }
 
-export const TOUR = [
+export const TUTORIAL_STEPS = [
 	{
 		title: 'How to solve a challenge?',
-		hint: `
+		message: `
 			Your mission is to make the ball reproduce the very same moviment described in the graphs.<br>
 			To do so you need to adjust the track below and roll the ball until you figure out
 			the correct values to achieve the challenge goal.

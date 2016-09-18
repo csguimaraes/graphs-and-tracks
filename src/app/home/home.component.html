@@ -4,7 +4,7 @@
 			Graphs and Tracks
 		</md-card-title>
 		<md-card-content>
-		<b>by</b> <a target="_blank" href="mailto:david.daiku.trowbridge@gmail.com">David Trowbridge</a>
+		<b>by</b> <a [routerLink]="'/about'">David Trowbridge</a>
 			<p>
 				Learn about graphs of position, velocity and acceleration.
 				<br>
@@ -14,7 +14,7 @@
 			<br>
 
 			<md-list>
-				<md-list-item [routerLink]="['challenges']">
+				<md-list-item [routerLink]="'/challenges'">
 					<md-icon md-list-avatar>star</md-icon>
 					<h3 md-line>Challenge List</h3>
 					<p md-line>

@@ -170,11 +170,13 @@ $header-full-height: $header-height + ($header-padding * 2);
   background: $header-bg;
   height: $header-actions-height;
   width: auto;
+  max-width: 45%;
   top: $header-height + ($header-padding * 2);
-  display: inline-block;
+  display: flex;
   position: absolute;
   font-size: 14px;
   line-height: 14px;
+  white-space: nowrap;
 
   &.card-header-actions-right {
     right: 0;
@@ -190,12 +192,14 @@ $header-full-height: $header-height + ($header-padding * 2);
     width: 100%;
   }
 
-
   span {
+    flex: 0 1 auto;
+    text-overflow: ellipsis;
     color: #666;
     display: inline-block;
     line-height: $header-actions-height;
     vertical-align: text-bottom;
+    overflow: hidden;
 
     &.action {
       height: 100%;

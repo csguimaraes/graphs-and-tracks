@@ -70,3 +70,21 @@ export function translate(point: Point, angleRad: number, distance: number): Poi
 		y: point.y + (distance * Math.sin(angleRad))
 	}
 }
+
+export function getMultiple(value: number, multiple: number, round: 'up' | 'down' | 'near' = 'near'): number {
+	let result, ratio = value / multiple
+
+	switch (round) {
+		case 'up':
+			result = Math.ceil(ratio)
+			break
+		case 'down':
+			result = Math.floor(ratio)
+			break
+		case 'near':
+			result = Math.round(ratio)
+			break
+	}
+
+	return  result * multiple
+}

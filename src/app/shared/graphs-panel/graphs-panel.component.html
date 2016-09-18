@@ -50,12 +50,15 @@
 					</clipPath>
 				</defs>
 				<g id="main-group" [attr.transform]="'translate(' + margin.left +','+ margin.top +')'">
-					<path class="line goal" [attr.d]="goalLinePath"></path>
-					<template ngFor let-trial [ngForOf]="trialLinePaths" let-idx="index">
-						<path class="line trial" [attr.d]="trial"
-								[attr.clip-path]="(idx === trialLinePaths.length - 1) ? 'url(' + activeUrl + '#trial-line-clip)' : ''"
-						></path>
-					</template>
+					<path class="line goal"
+							[attr.d]="goalLinePath"
+							[attr.clip-path]="(lineToClip === -1) ? 'url(' + activeUrl + '#trial-line-clip)' : ''"
+					></path>
+					<path class="line trial" *ngFor="let trialPathData of trialLinePaths; let idx = index"
+							[attr.d]="trialPathData"
+							[attr.clip-path]="(lineToClip === idx) ? 'url(' + activeUrl + '#trial-line-clip)' : ''"
+					></path>
+
 
 					<text class="axis-title" transform="rotate(-90)" dy=".71em" style="text-anchor: middle;"
 							[attr.y]="(margin.left * -1) + 3"

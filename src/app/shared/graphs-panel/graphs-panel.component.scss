@@ -28,12 +28,14 @@ $ball-margin: 20px;
 
 #graph-legend {
   span {
+    font-size: 11px !important;
+    padding: 0 4px;
     &.graph-legend {
       height: calc(100% - 10px);
       border-bottom-width: 2px;
       border-bottom-style: solid;
-      min-width: 100px;
-      margin: 0 8px;
+      // min-width: 100px;
+      margin: 0 4px;
       vertical-align: top;
       padding-bottom: 3px;
 
@@ -59,7 +61,13 @@ $ball-margin: 20px;
   pointer-events: bounding-box;
 
   &:not(.s) /deep/ .axis-x {
-    stroke-dasharray: 10 5;
+    stroke-dasharray: 5 10;
+    path { opacity: .6; }
+
+    .tick {
+      line { display: none; }
+      text { opacity: .8; }
+    }
   }
 
   &.s /deep/ .line { stroke: $color-s; }
@@ -74,10 +82,10 @@ $ball-margin: 20px;
     }
 
     .line.goal {
-      stroke-dasharray: 3 12;
+      stroke-dasharray: 10 20;
 
       @if $effects-enabled {
-        animation: dashing .5s linear infinite;
+        animation: dashing 1s linear infinite;
       }
     }
 
@@ -96,6 +104,6 @@ $ball-margin: 20px;
 }
 
 @keyframes dashing {
-  0%   { stroke-dashoffset: 15; }
+  0%   { stroke-dashoffset: 30; }
   100% { stroke-dashoffset: 0; }
 }

@@ -6,7 +6,8 @@
 					<span *ngIf="isDemo"></span>
 					<span *ngIf="!isDemo"
 							class="challenge-selector" (click)="navigateTo('toRight')"
-							[class.disabled]="collectionIndex === 0">
+							[class.disabled]="collectionIndex === 0"
+					>
 						<md-icon>chevron_left</md-icon>
 					</span>
 
@@ -23,7 +24,6 @@
 								{{ name }}
 							</div>
 						</template>
-
 					</span>
 
 					<span *ngIf="isDemo"></span>
@@ -35,8 +35,11 @@
 					</span>
 				</div>
 
+				<div id="challenge-info" *ngIf="!isDemo" class="card-header-actions card-header-actions-left">
+					<span><b>Challenge</b></span>
+				</div>
 				<div id="challenge-help" *ngIf="!isDemo" class="card-header-actions card-header-actions-right">
-					<span id="hints-button"
+					<span id="hints-button" class="action"
 							[class.active]="hintsEnabled"
 							(click)="onHintToggle()"
 							title="{{ hintsEnabled ? 'Disable' : 'Enable' }} hint messages"
@@ -45,8 +48,8 @@
 						HINTS
 					</span>
 
-					<span id="help-button" [routerLink]="['../', 'tutorial']">
-							<md-icon small>school</md-icon>
+					<span id="help-button" class="action" [routerLink]="['../', 'tutorial']">
+							<md-icon small>local_activity</md-icon>
 							TUTORIAL
 					</span>
 				</div>
@@ -64,11 +67,11 @@
 						</span>
 					</div>
 
-					<div id="hint-card" [class.visible]="hintsEnabled && !hintDismissed">
+					<div id="hint-card" [class.visible]="hintsEnabled && !hintDismissed" [class.tutorial]="isTutorial">
 						<md-icon id="hint-close" (click)="clearHints()">close</md-icon>
 						<b id="hint-title">
-							<md-icon *ngIf="!isDemo">lightbulb_outline</md-icon>
-							<md-icon *ngIf="!isDemo">school</md-icon>
+							<md-icon *ngIf="!isTutorial">lightbulb_outline</md-icon>
+							<md-icon *ngIf="isTutorial">local_activity</md-icon>
 							<span [innerHTML]="currentHint && currentHint.title"></span>
 						</b>
 						<p [innerHTML]="currentHint && currentHint.message"></p>
@@ -79,15 +82,16 @@
 	</md-grid-tile>
 
 	<md-grid-tile colspan="3" rowspan="4">
-		<gt-graphs
+		<gt-graphs-panel
 				[mode]="challenge.mode" [goal]="goalMotion"
 				(change)="onGraphPanelChange($event)"
-		></gt-graphs>
+		></gt-graphs-panel>
 	</md-grid-tile>
 
 	<md-grid-tile colspan="4" rowspan="3">
 		<gt-track-panel
 				[mode]="goalMotion.mode"
-				(roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"></gt-track-panel>
+				(abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"
+		></gt-track-panel>
 	</md-grid-tile>
 </md-grid-list>

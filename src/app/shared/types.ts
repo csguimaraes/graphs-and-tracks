@@ -10,6 +10,23 @@ export enum CHALLENGE_TYPE {
 	TEACHER
 }
 
+export enum CHALLENGE_DIFFICULTY {
+	EASY,
+	INTERMEDIATE,
+	HARD
+}
+
+export enum UI_CONTROL {
+	GRAPH_POSITION,
+	GRAPH_VELOCITY,
+	GRAPH_ACCELERATION,
+	FIRST_POST,
+	POSITION_SCALE,
+	VELOCITY_SCALE,
+	ROLL_BUTTON,
+	ROLL_BUTTON_HOLD
+}
+
 export interface ChallengeMode {
 	simulation: {
 		duration: number
@@ -28,10 +45,10 @@ export interface ChallengeMode {
 export interface Challenge {
 	id: string
 	name: string
-	custom: boolean
-	goal: MotionSetup,
-	mode?: ChallengeMode
+	goal: MotionSetup
+	difficulty: CHALLENGE_DIFFICULTY
 	type: CHALLENGE_TYPE
+	mode?: ChallengeMode
 }
 
 export interface ChallengeStats {
@@ -120,9 +137,15 @@ export interface DeadZone {
 	end: number
 }
 
-export interface Hint {
+export interface HintMessage {
 	title: string,
 	message: string
+}
+
+export interface TutorialStep {
+	title: string,
+	message: string,
+	requires: UI_CONTROL[]
 }
 
 export interface User {

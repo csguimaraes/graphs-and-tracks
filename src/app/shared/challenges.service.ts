@@ -72,36 +72,12 @@ export class ChallengesService {
 	}
 
 	private loadBuiltinChallenges() {
-		let id = 0
-		this.examples = []
-		for (let trackSetup of Settings.DEFAULT_CHALLENGES) {
-			id++
-			this.examples.push({
-				id: id.toString(),
-				name: `Challenge #${id}`,
-				custom: false,
-				mode: Settings.MODE_NORMAL,
-				goal: trackSetup,
-				type: CHALLENGE_TYPE.EXAMPLE
-			})
-		}
+		this.examples = [
+			...Settings.EASY_CHALLENGES,
+			...Settings.INTERMEDIATE_CHALLENGES,
+			...Settings.HARD_CHALLENGES,
+		]
 
-		this.tutorial = {
-			id: 'tutorial',
-			name: 'Challenge Tutorial',
-			custom: false,
-			mode: Settings.MODE_NORMAL,
-			goal: Settings.TUTORIAL_CHALLENGE,
-			type: CHALLENGE_TYPE.TUTORIAL
-		}
-
-		this.exploration = {
-			id: 'exploration',
-			name: 'Free Exploration',
-			custom: false,
-			mode: Settings.MODE_NORMAL,
-			goal: Settings.TUTORIAL_CHALLENGE,
-			type: CHALLENGE_TYPE.EXPLORATION
-		}
+		this.tutorial = Settings.TUTORIAL_CHALLENGE
 	}
 }

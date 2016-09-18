@@ -6,6 +6,7 @@ import { MdToolbarModule } from '@angular2-material/toolbar'
 import { MdCardModule } from '@angular2-material/card'
 import { MdGridListModule } from '@angular2-material/grid-list'
 import { MdListModule } from '@angular2-material/list'
+import { MdMenuModule } from '@angular2-material/menu'
 
 import { AppComponent } from './app.component'
 import { APP_ROUTING, APP_ROUTING_PROVIDERS } from './app.routing'
@@ -19,10 +20,13 @@ import { HomeComponent } from './home/home.component'
 import { ChallengeComponent } from './challenges/challenge/challenge.component'
 import { ChallengeListComponent } from './challenges/challenge-list/challenge-list.component'
 import { TrackPanelComponent } from './shared/track-panel/track-panel.component'
-import { GraphsComponent } from './shared/graphs/graphs.component'
+import { GraphsPanelComponent } from './shared/graphs-panel/graphs-panel.component'
 import { ScaleComponent } from './shared/scale/scale.component'
 import { TrackComponent } from './shared/track/track.component'
 import { SliderDirective } from './shared/slider.directive'
+import { AboutComponent } from './about/about.component'
+import { ChallengeListItemComponent } from './challenges/challenge-list/challenge-list-item/challenge-list-item.component'
+import { EditorComponent } from './editor/editor.component'
 
 @NgModule({
 	imports: [
@@ -34,21 +38,28 @@ import { SliderDirective } from './shared/slider.directive'
 		MdCardModule.forRoot(),
 		MdGridListModule.forRoot(),
 		MdListModule.forRoot(),
+		MdMenuModule.forRoot(),
 
 		APP_ROUTING
 	],
 	declarations: [
 		AppComponent,
 		HomeComponent,
+		AboutComponent,
 
 		ChallengeListComponent,
+		ChallengeListItemComponent,
+
+		TrackComponent,
+
 		ChallengeComponent,
 		TrackPanelComponent,
-		GraphsComponent,
+		GraphsPanelComponent,
+
+		EditorComponent,
 
 		SliderDirective,
 		ScaleComponent,
-		TrackComponent,
 
 		DumpPipe
 	],

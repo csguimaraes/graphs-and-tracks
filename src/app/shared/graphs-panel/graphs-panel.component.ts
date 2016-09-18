@@ -2,10 +2,11 @@ import {
 	Component, ElementRef,
 	OnInit, AfterViewInit, OnChanges, SimpleChanges,
 	Input, Output, EventEmitter, HostListener,
-	ChangeDetectionStrategy, ChangeDetectorRef, RenderComponentType
+	ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy
 } from '@angular/core'
 
 import * as Hammer from 'hammerjs'
+import { Tween } from 'tween.js'
 
 import { MotionData, ChallengeMode, DataType, AttemptError } from '../types'
 import { Motion } from '../motion.model'
@@ -13,12 +14,12 @@ import { Motion } from '../motion.model'
 declare let d3
 
 @Component({
-	selector: 'gt-graphs',
-	templateUrl: './graphs.component.html',
-	styleUrls: ['./graphs.component.scss'],
+	selector: 'gt-graphs-panel',
+	templateUrl: './graphs-panel.component.html',
+	styleUrls: ['./graphs-panel.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
+export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 	@Input() mode: ChallengeMode
 	@Input() goal: Motion
 	goalData: MotionData[]
@@ -66,13 +67,6 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 		this.activeGraph = 's'
 	}
 
-	ngOnChanges(changes: SimpleChanges) {
-		if (changes['goal']) {
-			this.goalData = this.goal.data
-			this.refresh(false, true)
-		}
-	}
-
 	ngAfterViewInit() {
 		this.initialized = true
 
@@ -80,7 +74,21 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 		recognizer.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }))
 		recognizer.on('doubletap', ev => { this.toggleZoom() })
 
-		this.refresh()
+		this.safeRefresh()
+	}
+
+	ngOnDestroy() {
+		if (this.doubleTapRecognizer) {
+			this.doubleTapRecognizer.destroy()
+			this.doubleTapRecognizer = null
+		}
+	}
+
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes['goal']) {
+			this.goalData = this.goal.data
+			this.safeRefresh(true, true)
+		}
 	}
 
 	highlightError(error?: AttemptError) {
@@ -96,7 +104,7 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 	selectGraph(type: DataType) {
 		if (type !== this.activeGraph) {
 			this.activeGraph = type
-			this.refresh(false, true)
+			this.refresh(true, true)
 			this.change.emit(type)
 		}
 
@@ -114,15 +122,30 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 		this.refresh(true)
 	}
 
+	safeRefresh(animated = false, clearTrials = false) {
+		// Queue a change detection
+		this.changeDetector.markForCheck()
+		// Queue a refresh
+		setTimeout(() => this.refresh(animated, clearTrials), 1)
+	}
+
 	refresh(animated = false, clearTrials = false) {
 		if (this.initialized === false) {
 			return
 		}
 
-		this.clearDisposable()
 		if (clearTrials) {
 			this.trialsData = []
+		}
+
+		if (animated) {
+			if (this.trialsData.length) {
+				this.lineToClip = this.trialsData.length - 1
+			} else {
+				this.lineToClip = -1
+			}
 		} else {
+			this.lineToClip = undefined
 		}
 
 
@@ -156,11 +179,7 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 				break
 
 			case 'v':
-				// Velocity graph domain is min and max values from all datasets (challenge and trials)
-				let domainY = this.getVelocityDomain()
-				let domainYMax = Math.max(Math.abs(domainY[0]), Math.abs(domainY[1]))
-				scaleY.domain([domainYMax * -1, domainYMax])
-
+				scaleY.domain(this.getVelocityDomain())
 				ticks = this.height > 200 ? 10 : 5
 				this.axisTitle = 'Velocity (cm/s)'
 				break
@@ -184,6 +203,10 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 			.axisBottom(scaleX)
 			.tickValues([5, 10, 15, 20, 25])
 			.tickFormat(x => x + 's')
+
+		if (this.mainGroup) {
+			this.mainGroup.selectAll('.axis').remove()
+		}
 
 		this.mainGroup.append('g')
 			.attr('class', 'axis axis-x')
@@ -209,6 +232,32 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 		}
 
 		this.trialLinePaths = trialLinePaths
+
+		if (this.lineToClip === -1) {
+			// If clip animation is set to goal
+			let animating = true
+
+			let tween = new Tween(0).to(1, 600)
+				.onUpdate(clipRatio => this.setTrialLineClip(clipRatio))
+				.onComplete(() => {
+					animating = false
+					this.lineToClip = undefined
+					this.changeDetector.markForCheck()
+					setTimeout(() => this.setTrialLineClip(0), 1)
+				})
+				.start()
+
+			let animate = (time) => {
+				if (animating) {
+					requestAnimationFrame(animate)
+					tween.update(time)
+				}
+			}
+
+			animate(0)
+		}
+
+		this.changeDetector.markForCheck()
 	}
 
 	private generateLinePath(data: MotionData[], type: DataType) {
@@ -226,31 +275,29 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 	}
 
 	getVelocityDomain() {
+		let tickMultiple = 10
 		if (this.velocityDomain === undefined) {
-			let dataSets = [this.goalData, ...this.trialsData]
-			let min = d3.min(dataSets, (dataSet: MotionData[]) =>  d3.min(dataSet, (d: MotionData) => d.v))
-			let max = d3.max(dataSets, (dataSet: MotionData[]) =>  d3.max(dataSet, (d: MotionData) => d.v))
-			this.velocityDomain = [min, max]
+			// Velocity graph domain is min and max values from all datasets (challenge and trials)
+			let datasets = [this.goalData, ...this.trialsData]
+			let min = Infinity, max = -Infinity
+			for (let dataset of datasets) {
+				min = Math.min(min, d3.min(dataset, (d: MotionData) => d.v))
+				max = Math.max(max, d3.max(dataset, (d: MotionData) => d.v))
+			}
+
+			let maxAbs = Math.max(Math.abs(min), Math.abs(max))
+			let maxMultiple = Math.ceil(maxAbs / tickMultiple) * tickMultiple
+
+			this.velocityDomain = [maxMultiple * -1, maxMultiple]
 		}
 
 		return this.velocityDomain
 	}
 
-	clearDisposable() {
-		if (this.doubleTapRecognizer) {
-			this.doubleTapRecognizer.destroy()
-			this.doubleTapRecognizer = null
-		}
-
-		if (this.mainGroup) {
-			this.mainGroup.selectAll('.axis').remove()
-		}
-	}
-
 	toggleZoom() {
 		this.zoomActive = !(this.zoomActive)
 		this.changeDetector.detectChanges()
-		setTimeout(() => this.refresh(), 100)
+		this.safeRefresh()
 	}
 
 	@HostListener('document:keyup', ['$event'])
@@ -263,7 +310,6 @@ export class GraphsComponent implements OnInit, AfterViewInit, OnChanges {
 
 	@HostListener('window:resize')
 	onResize(ev: any) {
-		this.clearDisposable()
 		this.refresh()
 	}
 

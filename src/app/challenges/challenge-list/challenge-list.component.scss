@@ -1,5 +1,10 @@
 $list-highlight: #F0F0F0;
 
+md-card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 md-grid-list {
   height: 100%;
 
@@ -10,43 +15,45 @@ md-grid-list {
   }
 }
 
-#challenge-list {
+.list-action {
+  padding: 16px;
+  box-sizing: border-box;
+  background: #F0F0F0;
+
+  border-radius: 16px;
+  text-align: center;
+
+  &, & > * {
+    cursor: pointer;
+  }
+
+  color: #999;
+  border: 3px dashed #CCC;
+  &:hover {
+    border-color: #AAA;
+    color: #666;
+  }
+
+  md-icon {
+    display: block;
+    font-size: 48px;
+    width: auto;
+    height: auto;
+  }
+
+  span {
+    font-weight: bold;
+  }
+}
+
+
+.list-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  margin: 0 -8px;
 
-  div {
-    min-width: 200px;
-    padding: 15px 5px 0 20px;
-    background: #F0F0F0;
-    cursor: pointer !important;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    border-radius: 3px;
-
-    &:hover {
-      background: #CACACA;
-    }
-
-    b {
-      line-height: 24px;
-      display: inline-block;
-      md-icon {
-        vertical-align: middle;
-        margin-top: -5px;
-      }
-    }
-
-    p[md-line] {
-      color: #999;
-
-      &.incomplete {
-        color:lightcoral;
-      }
-
-      &.complete {
-        color:lightgreen;
-      }
-    }
+  gt-challenge-list-item {
+    flex: 1 1 auto;
   }
 }

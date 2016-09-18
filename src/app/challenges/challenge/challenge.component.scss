@@ -89,12 +89,27 @@ $color-a: lighten(steelblue, 10);
 
 #hint-card {
   margin-top: 20px;
-
   background: papayawhip;
   visibility: hidden;
   transform: scale(0.6);
-  transform-origin: 100% 0%;
   will-change: transform;
+
+  position: absolute;
+  bottom: 0;
+  transform-origin: center bottom;
+
+  &.tutorial {
+    background: skyblue;
+    #hint-title {
+      color: dodgerblue;
+    }
+
+    #hint-close {
+      &:hover {
+        background: darken(skyblue, 20);
+      }
+    }
+  }
 
   &.visible {
     transform: scale(1);

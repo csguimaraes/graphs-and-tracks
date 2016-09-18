@@ -73,3 +73,13 @@ md-toolbar, md-toolbar-row {
   min-height: unset !important;
   height: 40px !important;
 }
+
+.md-overlay-container {
+  background: rgba(255,0,0,.3) !important;
+  position: fixed !important;
+  z-index: 99999 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}

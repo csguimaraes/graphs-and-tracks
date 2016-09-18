@@ -1,0 +1,36 @@
+#item-container {
+  position: relative;
+  padding: 16px;
+  margin: 8px;
+  border-radius: 3px;
+  background: #F0F0F0;
+
+  &, & * {
+    cursor: pointer !important;
+  }
+
+  &:hover {
+    background: #CACACA;
+  }
+
+  b {
+    line-height: 24px;
+    display: inline-block;
+    md-icon {
+      vertical-align: middle;
+      margin-top: -5px;
+    }
+  }
+
+  span {
+    color: #999;
+
+    &.incomplete {
+      color:lightcoral;
+    }
+
+    &.complete {
+      color:lightgreen;
+    }
+  }
+}
