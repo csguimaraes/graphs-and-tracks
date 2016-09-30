@@ -78,7 +78,9 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		// Queue a change detection
 		this.changeDetector.markForCheck()
 		// Queue a refresh
-		setTimeout(() => { this.refresh() }, 1)
+		setTimeout(() => {
+			this.refresh()
+		}, 1)
 	}
 
 	@HostListener('window:resize')
@@ -331,6 +333,8 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		for (let idx = 0; idx < this.postsSetup.length; idx++) {
 			this.posts.push(this.calculatePost(idx))
 		}
+
+		this.changeDetector.markForCheck()
 
 		this.updateDeadZones()
 	}

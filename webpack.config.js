@@ -13,7 +13,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
  */
 var ENV = process.env.npm_lifecycle_event
 var isProd = ENV === 'build'
-var baseUrl = isProd ? '/gt/' : '/'
+var baseUrl = '/'
 module.exports = function makeWebpackConfig() {
 	/**
 	 * Config

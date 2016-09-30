@@ -4,65 +4,74 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Welcome to Graphs & Tracks!',
 		message: `
-			Your mission is to make the ball reproduce the very same moviment described in the graphs.<br><br>
-			To do so you need to adjust the track below and roll the ball until you figure out
-			the correct values to achieve the challenge goal.
+			Your mission is to discover the true motion of a rolling ball by using the
+			information provided in graphs of position, velocity and acceleration.
 		`
 	},
 	{
 		title: 'Motion graphs',
 		message: `
-			The position, velocity and acceleration graphs represent the motion of a ball.
-			Try to recreate the motion by setting the initial conditions and adjusting the tracks. <br><br>
-			When you roll the ball, your graphs (solid lines) should match the challenge graphs (dashed lines). <br>
-			Use the button <b class="b">ROLL BALL</b> to watch how the ball moves in this current setup...
+			Try to recreate the motion by setting the initial conditions and adjusting the tracks. When you roll the ball,
+			your graphs <span>(solid lines)</span> should match the challenge graphs <span>(dashed lines)</span>.
+			<br> <br>
+			Click on <b class="b">ROLL BALL</b>.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON],
-		triggers: [UI_CONTROL.POSITION_GRAPH]
+		triggers: [UI_CONTROL.POSITION_GRAPH, UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
 		title: 'Position graph',
 		message: `
-			On the <b class="s">POSITION</b> graph, note that the graph for the actual motion (solid curve)
+			On the <b class="s">POSITION</b> graph, note that the graph for the actual motion <span>(solid curve)</span>
 			does NOT match the given graph (dashed). <br>
 			Your task is to match the graphs.<br>
 			<br>
 			Now select the <b class="v">VELOCITY</b> graph.
 		`,
-		requires: [UI_CONTROL.VELOCITY_GRAPH]
+		requires: [UI_CONTROL.VELOCITY_GRAPH],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
 		title: 'Velocity graph',
 		message: `
-			Here is the velocity graph for this first example of motion.<br>
-			<br>
+			Here is the velocity graph for this first example of motion.
+			<br> <br>
 			Let's see the <b class="a">ACCELERATION</b> graph now.
 		`,
-		requires: [UI_CONTROL.ACCELERATION_GRAPH]
+		requires: [UI_CONTROL.ACCELERATION_GRAPH],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
 		title: 'Three graphs, any motion',
 		message: `
-			You may use each of these three graphs to meet each challenge. <br>
-			Now please return to the position vs. time graph by selecting the <b class="s">POSITION</b> again.
+			Use information contained in these three graphs to discover the motion of the ball which is one-dimensional <span>(along a straight line)</span>.
+			<br> <br>
+			Now return to the position vs. time graph by clicking on <b class="s">POSITION</b>.
 		`,
-		requires: [UI_CONTROL.POSITION_GRAPH]
+		requires: [UI_CONTROL.POSITION_GRAPH],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
 		title: 'Finding the right place',
 		message: `
-			Down below you can see the scale for selecting <b class="s">INITIAL POSITION</b>,
-			you can drag the scale or select a value directly to set the starting point for the ball motion.
+			Note the scale of <b class="s">INITIAL POSITION</b> directly below the tracks.
+			<br> <br>
+			You can set the starting position of the ball by clicking on new position values
+			or by dragging the scale pointers. Drag the pointers rather than the ball itself.
 		`,
 		requires: [UI_CONTROL.POSITION_SCALE]
 	},
 	{
-		title: 'We know where it come from, now where it goes?',
+		title: 'Setting the initial speed and direction',
 		message: `
-			Select the <b class="v">INITIAL VELOCITY</b> scale to set the ball starting velocity.
-			Negative values correspond to motion to the left, positive values to the right.
+			The ball in the challenge motion may already be moving at time t=0.
+			<br> <br>
+			Its initial velocity may be positive <span>(to the right)</span> or negative <span>(to the left)</span>, or zero <span>(at rest)</span>.
+			<br> <br>
+			Use the <b class="v">INITIAL VELOCITY</b> scale to set the ball’s starting velocity.
 		`,
-		requires: [UI_CONTROL.VELOCITY_SCALE]
+		requires: [UI_CONTROL.VELOCITY_SCALE],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
 		title: 'Change the Track setup',
@@ -75,26 +84,30 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Test your new setup',
 		message: `
-			Go on and select the <b class="b">ROLL BALL</b> button to see the <b class="a">ACCELERATION</b> graph that your currrent setup generates.
+			Select the <b class="a">ACCELERATION</b> graph.
+			<br> <br>
+			Then click <b class="b">ROLL BALL</b> to see how the acceleration of the ball changes.
+			<br> <br>
+			Acceleration graphs will help you for find out how steep to make your ramps.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON],
 		triggers: [UI_CONTROL.ACCELERATION_GRAPH]
 	},
 	{
-		title: 'Inclination and Acceleration',
+		title: 'One step at a time',
 		message: `
-			Try adjusting the <b>left-most post</b> and select <b class="b">ROLL BALL</b> once more.<br>
-			This time, pay attention on how the the ball accelaration changes over time as we adjust post heights and therefore the
-			inclination of the ramp on which the ball is rolling on.
-		`,
-		requires: [UI_CONTROL.TRACK_POST_FIRST, UI_CONTROL.ROLL_BUTTON]
-	},
-	{
-		title: 'Let\'s go by parts',
-		message: `
-			It may be easier to understand what is wrong in your current setup by watching the ball rolling on each ramp segment,
-			one at a time. To do that simply select and <b>hold</b> the <b class="b">ROLL BALL</b> button.
+			The problem can be simplified by focusing on short segments.
+			<br> <br>
+			To see the motion for only one sloping section at a time, click and <b>hold down</b> the <b class="b">ROLL BALL</b> button.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON_HOLD]
+	},
+	{
+		title: 'Tutorial complete',
+		message: `
+			That's it, now you're ready to start. You can go to the <a [routerLink]="['/challenges']">challenges list</a> and
+			pick your first one.
+		`,
+		requires: []
 	},
 ]

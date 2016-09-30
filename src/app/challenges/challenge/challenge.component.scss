@@ -89,7 +89,6 @@ $color-a: lighten(steelblue, 10);
 }
 
 #hint-card {
-  margin-top: 20px;
   background: papayawhip;
   visibility: hidden;
   transform: scale(0.6);
@@ -99,6 +98,9 @@ $color-a: lighten(steelblue, 10);
   position: absolute;
   bottom: 0;
   transform-origin: center bottom;
+
+  padding: 16px;
+  box-sizing: border-box;
 
   &.tutorial {
     margin-top: 0;
@@ -144,8 +146,6 @@ $color-a: lighten(steelblue, 10);
   #hint-title {
     display: inline-block;
     line-height: 24px;
-    margin: 5px;
-    padding: 4px 0;
     color: darkorange;
 
     md-icon {
@@ -159,8 +159,12 @@ $color-a: lighten(steelblue, 10);
 
   p {
     color: #333;
-    padding: 0 10px 10px 10px;
-    margin: 0;
+    font-size: 16px;
+
+    /deep/ span {
+      white-space: nowrap;
+    }
+
     /deep/ {
       b.s { color: $color-s; }
       b.v { color: $color-v; }
@@ -184,10 +188,16 @@ $color-a: lighten(steelblue, 10);
 
 
 #tutorial-actions {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   color: dodgerblue;
-  padding: 8px;
-  margin: 8px;
   text-align: right;
+  box-sizing: border-box;
+  height: auto;
+  left: 0;
+  padding: 16px;
+  background: rgba(255,255,255,.3);
 
   & > *, & > * * {
     padding: 8px;
@@ -198,6 +208,7 @@ $color-a: lighten(steelblue, 10);
     background: dodgerblue;
     color: #CEF;
     font-weight: bold;
+    border-radius: 3px;
     animation: 1s pulse linear infinite;
 
     md-icon {

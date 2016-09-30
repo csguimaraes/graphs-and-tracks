@@ -2,36 +2,42 @@ import { HintMessage } from '../shared/types'
 
 export const HINT_MESSAGES: { [name: string]: HintMessage } = {
 	intro: {
-		title: 'Hints enabled!',
+		// NOTE: titles and messages can be arrays, they will be randomly selected
+		title: ['Hints enabled'],
 		message: `
-			Leave hints enabled and after each unsuccessful attempt we will try to point out something wrong in your current setup.
-			<br><br>
-			If you want to learn how to resolve a challenge check out the <b>tutorial</b> available in button above.
-			<br><br>
-			<b>Good luck!</b>
+			With hints enabled, we will provide guidance on how to improve your current setup.
+			<br> <br>
+			For instructions on how to use the program, select the <b>tutorial</b> icon above.
 		`
 	},
 	position: {
-		title: 'This is the right position?',
+		title: 'Starting position',
 		message: `
-			It seems that the ball is starting its motion from the wrong place...<br><br>
-			Checkout the <b class="s">position graph</b> and try to select the appropriate <b class="s">initial position</b> for the motion. 
+			Your ball starts at the wrong place.
+			<br> <br>
+			Examine the <b class="s">position graph</b> and read off the <b class="s">initial position</b> <span>(at time t=0)</span>.
 		`
 	},
 	velocity: {
-		title: 'Wrong velocity speed!',
+		title: 'Initial velocity',
 		message: `
-			Starting with this velocity the ball will produce a different motion.<br><br>
-			Is it too fast? Too slow?
-			Take a look on the <b class="v">velocity graph</b> to find out how much is the <b class="v">initial velocity</b>.
+			Take a careful look at the <b class="v">velocity graph</b>.
+			<br> <br>
+			If the velocity at time t=0 is positive, this means the ball is initially rolling to the right;
+			<br>
+			if it’s negative the ball is rolling to the left.
 		`
 	},
 	posts: {
-		title: ['Almost there!', 'Mismatch on  acceleration values...'],
+		title: 'Accelerations on ramps',
 		message: `
-			Double check the inclination of each ramp as they determine the acceleration of the ball on that ramp.<br><br>
-			Analyze the <b class="a">acceleration graph</b> carefully and try to figure out how to get
-			the correct acceleration on each ramp by adjusting the <b class="a">post heights</b> and therefore the ramp's inclination.
+			The highlighted ramp has the wrong inclination.
+			<br><br>
+			Take a careful look at the <b class="a">acceleration graph</b> to see whether the acceleration
+			on this ramp should be <b>positive</b> <span>(sloping downward to the right)</span>,
+			<b>negative</b> <span>(sloping upward to the right)</span> or zero (level).
+			<br> <br>
+			Holding down the <b class="b">ROLL BALL</b> button will show the motion one segment at a time.
 		`
 	}
 }

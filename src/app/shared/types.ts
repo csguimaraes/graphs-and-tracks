@@ -17,6 +17,7 @@ export enum CHALLENGE_DIFFICULTY {
 }
 
 export enum UI_CONTROL {
+	TUTORIAL_NEXT,
 	POSITION_GRAPH,
 	VELOCITY_GRAPH,
 	ACCELERATION_GRAPH,
@@ -148,7 +149,7 @@ export interface TutorialStep extends HintMessage {
 	title: string | Array<string>
 	message: string | Array<string>
 	requires?: UI_CONTROL[],
-	triggers?: UI_CONTROL[],
+	triggers?: UI_CONTROL[]
 }
 
 export interface User {
@@ -160,4 +161,5 @@ export interface User {
 
 export interface UserSettings {
 	effects: boolean
+	animationDuration: number
 }

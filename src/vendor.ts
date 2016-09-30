@@ -9,6 +9,9 @@ import '@angular/router'
 // RxJS
 import 'rxjs'
 
+// HammerJs
+import 'hammerjs'
+
 // Material 2
 import '@angular2-material/core'
 import '@angular2-material/button'

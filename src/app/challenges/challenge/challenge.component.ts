@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, transition, style, animate, trigger, ChangeDetectorRef } from '@angular/core'
+import { Component, OnInit, ViewChild, trigger, ChangeDetectorRef } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import * as lodash from 'lodash'
@@ -6,39 +6,22 @@ import * as lodash from 'lodash'
 import { Challenge, Attempt, MotionSetup, MotionData, HintMessage, AttemptError, CHALLENGE_TYPE, UI_CONTROL, TutorialStep } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
 import { interpolate } from '../../shared/helpers'
-import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS } from '../../settings'
+import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS, INITIAL_SETUP, TUTORIAL_CHALLENGE_SETUP } from '../../settings'
 import { ChallengesService } from '../../shared/challenges.service'
 import { Motion } from '../../shared/motion.model'
 import { GraphsPanelComponent } from '../../shared/graphs-panel/graphs-panel.component'
 import { TrackPanelComponent } from '../../shared/track-panel/track-panel.component'
+import { SWITCH_DURATION, SWITCH_ANIMATION } from '../../shared/animations'
 import { AuthService } from '../../shared/auth.service'
 
 const SETUP_STORAGE_KEY = 'latest-track-setup'
-const SWITCH_DURATION = 300
 type SwitchDirection = 'toLeft' | 'toRight' | 'none'
 
 @Component({
 	selector: 'gt-challenge',
 	templateUrl: './challenge.component.html',
 	styleUrls: ['./challenge.component.scss'],
-	animations: [
-		trigger('challengeSwitch', [
-			transition('void => toRight', [ // Entering from right
-				style({ transform: 'translateX(-100%) scale(.2)', opacity: 0.0 }),
-				animate(`${SWITCH_DURATION}ms ease-out`, style({ transform: 'translateX(0%) scale(1)', opacity: 1.0 }))
-			]),
-			transition('void => toLeft', [ // Entering from left
-				style({ transform: 'translateX(100%) scale(.2)', opacity: 0.0 }),
-				animate(`${SWITCH_DURATION}ms ease-out`, style({ transform: 'translateX(0%) scale(1)', opacity: 1.0 }))
-			]),
-			transition('toRight => void', [ // Leaving from right
-				animate(`${SWITCH_DURATION}ms ease-in`, style({ transform: 'translateX(100%) scale(.6)', opacity: 0.0 }))
-			]),
-			transition('toLeft => void', [ // Leaving from left
-				animate(`${SWITCH_DURATION}ms ease-in`, style({ transform: 'translateX(-100%) scale(.6)', opacity: 0.0 }))
-			])
-		]
-	)]
+	animations: [ trigger('challengeSwitch', SWITCH_ANIMATION)]
 })
 export class ChallengeComponent implements OnInit {
 	@ViewChild(TrackPanelComponent)
@@ -55,17 +38,28 @@ export class ChallengeComponent implements OnInit {
 	switchDirection: SwitchDirection = 'toRight'
 
 	goalMotion: Motion
-	isDemo: boolean = false
-	isReady: boolean = false
-	isLoadingNext: boolean = false
+	isDemo = false
+	isReady = false
+	isLoadingNext = false
 
 	segmentedAnimationIndex: number
 
-	hintsEnabled: boolean = false
-	hintDismissed: boolean = false
+	hintsEnabled = false
+	hintDismissed = false
 
 	hintTitle: string
 	hintMessage: string
+
+	isTutorial = false
+	tutorialStep: TutorialStep
+	tutorialStepIndex: number
+	tutorialRequires: UI_CONTROL[] = []
+
+	attempts: Attempt[] = []
+	commitedAttempts: number = 0
+	latestError: AttemptError
+
+	types = CHALLENGE_TYPE
 
 	set currentHint(hint: HintMessage) {
 		if (hint) {
@@ -76,17 +70,6 @@ export class ChallengeComponent implements OnInit {
 			this.hintMessage = undefined
 		}
 	}
-
-	isTutorial: boolean = false
-	tutorialStep: TutorialStep
-	tutorialStepIndex: number
-	currentRequirements: UI_CONTROL[] = []
-
-	attempts: Attempt[] = []
-	commitedAttempts: number = 0
-	latestError: AttemptError
-
-	types = CHALLENGE_TYPE
 
 	constructor(
 		private challenges: ChallengesService,
@@ -102,17 +85,22 @@ export class ChallengeComponent implements OnInit {
 	ngOnInit() {
 		this.isReady = true
 		this.loadChallengeById(this.challengeId)
-		this.restoreSetup()
+		this.loadTrackSetup()
 	}
 
 	onRollBall(setup: MotionSetup) {
-		if (setup.breakDown) {
-			this.tutorialCheckRequirement(UI_CONTROL.ROLL_BUTTON_HOLD)
-		} else {
-			this.tutorialCheckRequirement(UI_CONTROL.ROLL_BUTTON)
-		}
+		let allowRoll = this.tutorialRequires.indexOf(UI_CONTROL.ROLL_BUTTON_HOLD) === -1
+		let allowRollHold = this.tutorialRequires.indexOf(UI_CONTROL.ROLL_BUTTON) === -1
 
-		this.performMotion(setup)
+		if (setup.breakDown && allowRollHold) {
+			this.tutorialCheckRequirement(UI_CONTROL.ROLL_BUTTON_HOLD)
+			this.performMotion(setup)
+		} else if (allowRoll) {
+			this.tutorialCheckRequirement(UI_CONTROL.ROLL_BUTTON)
+			this.performMotion(setup)
+		} else {
+			console.warn('This shouldn\'t happen')
+		}
 	}
 
 	onAbort() {
@@ -217,8 +205,7 @@ export class ChallengeComponent implements OnInit {
 			this.challenge.type === CHALLENGE_TYPE.EXPLORATION
 
 		this.isTutorial = this.challenge.type === CHALLENGE_TYPE.TUTORIAL
-
-		if (this.challenge.type === CHALLENGE_TYPE.TUTORIAL) {
+		if (this.isTutorial) {
 			this.startTutorial()
 		}
 	}
@@ -349,7 +336,6 @@ export class ChallengeComponent implements OnInit {
 		this.commitedAttempts = this.attempts.length
 		this.trackPanel.onAnimationEnded(justPause)
 
-
 		if (justPause === false) {
 			// Restore some values
 			this.segmentedAnimationIndex = undefined
@@ -400,51 +386,49 @@ export class ChallengeComponent implements OnInit {
 		this.trackPanel.clearHighlights()
 	}
 
-	debug(type: string) {
-		let trialIndex = ''
-		if (this.attempts.length) {
-			let promptText = `Enter trial index (from 1 to ${this.attempts.length}) or leave empty for goal:`
-			trialIndex = prompt('Which trial motion you want to debug?\n\n' + promptText)
-		}
-
-		if (trialIndex !== undefined) {
-			if (trialIndex === '') {
-				printDataTable(this.goalMotion.data, 'goal')
-			} else {
-				let attempt = this.attempts[+trialIndex - 1]
-				printDataTable(attempt.motion.data, `attempt #${trialIndex}`)
-			}
-		}
-	}
-
 	storeSetup() {
 		localStorage.setItem(SETUP_STORAGE_KEY, JSON.stringify(this.trackPanel.setup))
 	}
 
-	restoreSetup() {
-		let setupString = localStorage.getItem(SETUP_STORAGE_KEY)
-		if (setupString) {
-			let setup = <MotionSetup> JSON.parse(setupString)
-			this.trackPanel.setup = setup
+	loadTrackSetup() {
+		if (this.isTutorial) {
+			this.trackPanel.setup = TUTORIAL_CHALLENGE_SETUP
+		} else {
+			let cachedSetup = localStorage.getItem(SETUP_STORAGE_KEY)
+			if (cachedSetup) {
+				this.trackPanel.setup = <MotionSetup> JSON.parse(cachedSetup)
+			} else {
+				this.trackPanel.setup = INITIAL_SETUP
+			}
 		}
+
+		this.trackPanel.refreshTrackSetup()
 	}
 
 	startTutorial() {
 		this.hintsEnabled = true
 		this.hintDismissed = false
 		this.tutorialStepIndex = -1
+		this.graphsPanel.autoClearTrials = false
+		this.loadTrackSetup()
 		this.tutorialNextStep()
 	}
 
 	endTutorial() {
 		this.hintsEnabled = false
 		this.hintDismissed = true
-		this.currentRequirements = []
-		window.history.back()
+		this.tutorialRequires = []
+		this.graphsPanel.autoClearTrials = true
+
+		if (window.history.length > 1) {
+			window.history.back()
+		} else {
+			this.router.navigate(['challenges'])
+		}
 	}
 
-	isLastTutorialStep() {
-		return this.tutorialStepIndex === (TUTORIAL_STEPS.length - 1)
+	tutorialHasNext() {
+		return this.tutorialStepIndex < (TUTORIAL_STEPS.length - 1)
 	}
 
 	tutorialNextStep() {
@@ -457,7 +441,7 @@ export class ChallengeComponent implements OnInit {
 
 		this.tutorialStep = this.currentHint = currentStep
 
-		this.currentRequirements = []
+		this.tutorialRequires = []
 		let requirements: UI_CONTROL[] = currentStep.requires || []
 		for (let requirement of requirements) {
 			switch (requirement) {
@@ -467,35 +451,35 @@ export class ChallengeComponent implements OnInit {
 				case UI_CONTROL.TRACK_POST_FIRST:
 				case UI_CONTROL.ROLL_BUTTON:
 				case UI_CONTROL.ROLL_BUTTON_HOLD:
-					this.currentRequirements.push(requirement)
+					this.tutorialRequires.push(requirement)
 					this.trackPanel.highlightControl(requirement)
 					break
 				case UI_CONTROL.POSITION_GRAPH:
 				case UI_CONTROL.VELOCITY_GRAPH:
 				case UI_CONTROL.ACCELERATION_GRAPH:
-					this.currentRequirements.push(requirement)
+					this.tutorialRequires.push(requirement)
 					this.graphsPanel.highlightControl(requirement)
 					break
 			}
 		}
 
-		if (this.currentRequirements.length) {
+		if (this.tutorialRequires.length) {
 			this.changeDetector.markForCheck()
 		}
 	}
 
 	tutorialCheckRequirement(control: UI_CONTROL) {
-		if (control === UI_CONTROL.TRACK_POST_FIRST && this.currentRequirements.indexOf(UI_CONTROL.TRACK_POST_ANY) !== -1) {
+		if (control === UI_CONTROL.TRACK_POST_FIRST && this.tutorialRequires.indexOf(UI_CONTROL.TRACK_POST_ANY) !== -1) {
 			control = UI_CONTROL.TRACK_POST_ANY
 		}
 
-		if (this.currentRequirements.length) {
-			let requirementIndex = this.currentRequirements.indexOf(control)
+		if (this.tutorialRequires.length) {
+			let requirementIndex = this.tutorialRequires.indexOf(control)
 			if (requirementIndex !== -1) {
-				this.currentRequirements.splice(requirementIndex, 1)
+				this.tutorialRequires.splice(requirementIndex, 1)
 			}
 
-			if (this.currentRequirements.length === 0) {
+			if (this.tutorialRequires.length === 0) {
 				this.clearHighlights()
 				this.tutorialCheckTriggers()
 			}
@@ -512,7 +496,27 @@ export class ChallengeComponent implements OnInit {
 					case UI_CONTROL.ACCELERATION_GRAPH:
 						this.graphsPanel.selectGraph('a', false)
 						break
+					case UI_CONTROL.TUTORIAL_NEXT:
+						this.tutorialNextStep()
+						break
 				}
+			}
+		}
+	}
+
+	debug(type: string) {
+		let trialIndex = ''
+		if (this.attempts.length) {
+			let promptText = `Enter trial index (from 1 to ${this.attempts.length}) or leave empty for goal:`
+			trialIndex = prompt('Which trial motion you want to debug?\n\n' + promptText)
+		}
+
+		if (trialIndex !== undefined) {
+			if (trialIndex === '') {
+				printDataTable(this.goalMotion.data, 'goal')
+			} else {
+				let attempt = this.attempts[+trialIndex - 1]
+				printDataTable(attempt.motion.data, `attempt #${trialIndex}`)
 			}
 		}
 	}

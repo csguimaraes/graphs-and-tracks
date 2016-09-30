@@ -1,4 +1,4 @@
-import { CHALLENGE_DIFFICULTY, CHALLENGE_TYPE, Challenge, ChallengeMode } from '../shared/types'
+import {CHALLENGE_DIFFICULTY, CHALLENGE_TYPE, Challenge, ChallengeMode, MotionSetup} from '../shared/types'
 
 export const MODE_NORMAL: ChallengeMode = {
 	simulation: {
@@ -11,6 +11,18 @@ export const MODE_NORMAL: ChallengeMode = {
 		posts: { min: 0, max: 10, step: 1 }
 	},
 	postsCount: 6
+}
+
+export const INITIAL_SETUP: MotionSetup = {
+	position: 0,
+	velocity: 30,
+	posts: [0, 0, 0, 0, 0, 0]
+}
+
+export const TUTORIAL_CHALLENGE_SETUP: MotionSetup = {
+	position: 50,
+	velocity: 30,
+	posts: [5, 5, 5, 5, 5, 5]
 }
 
 export const TUTORIAL_CHALLENGE: Challenge = {

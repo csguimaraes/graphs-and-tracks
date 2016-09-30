@@ -4,8 +4,8 @@ import { MotionSetup, ChallengeMode, DataType, AttemptError, UI_CONTROL } from '
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
 
-import * as Settings from '../../settings'
 import { TrackComponent } from '../track/track.component'
+import { INITIAL_SETUP, THEME } from '../../settings'
 
 @Component({
 	selector: 'gt-track-panel',
@@ -29,7 +29,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	abort = new EventEmitter()
 
 	setup: MotionSetup
-	colors = Settings.THEME.colors
+	colors = THEME.colors
 
 	rollButton: HTMLElement
 	longPressHandler: HammerManager
@@ -41,6 +41,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	velocityScale: number[]
 	postsScale: number[]
 
+	initialized = false
 	rolling = false
 	rollingSingle = false
 	ignoreNext = false
@@ -72,15 +73,12 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.velocityScale.push(value)
 		}
 
-		this.setup = this.setup || {
-			position: 0,
-			velocity: 30,
-			posts: [0, 0, 0, 0, 0, 0]
-		}
+		this.setup = this.setup || INITIAL_SETUP
 	}
 
 	ngAfterViewInit() {
 		setTimeout(() => {
+			this.initialized = true
 			this.track.refresh()
 		}, 500)
 
@@ -96,7 +94,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		let card = this.element.nativeElement.querySelector('md-card')
 		let tapHandler = this.tapHandler = new Hammer.Manager(<any> card)
 		tapHandler.add(new Hammer.Tap({ event: 'singletap', taps: 1 }))
-		tapHandler.on('singletap', ev => {
+		tapHandler.on('singletap', () => {
 			if (this.rolling) {
 				this.abort.emit()
 			}
@@ -134,6 +132,12 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 				this.updateBallPostion()
 				this.cancelBallReset()
 			}, 3000)
+		}
+	}
+
+	refreshTrackSetup() {
+		if (this.initialized) {
+			this.track.refresh()
 		}
 	}
 

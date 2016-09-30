@@ -51,6 +51,7 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 	velocityDomain: number[]
 	doubleTapRecognizer: HammerManager
 	requestingSelectionOf: DataType
+	autoClearTrials = true
 
 	constructor(
 		private elementRef: ElementRef,
@@ -135,7 +136,7 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 			this.activeGraph = type
 
 			if (refresh) {
-				this.refresh(true, true)
+				this.refresh(true, this.autoClearTrials)
 			}
 
 			switch (type) {
@@ -191,7 +192,6 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 			this.lineToClip = undefined
 		}
 
-
 		this.activeUrl = document.location.pathname
 
 		let svgRect = this.svg.getBoundingClientRect()
@@ -244,7 +244,7 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 		// Add the X Axis
 		let axisX = d3
 			.axisBottom(scaleX)
-			.tickValues([5, 10, 15, 20, 25])
+			.tickValues([5, 10, 15, 20, 25]) // FIXME: should be based on duration
 			.tickFormat(x => x + 's')
 
 		if (this.mainGroup) {
@@ -255,6 +255,16 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 			.attr('class', 'axis axis-x')
 			.attr('transform', 'translate(0,' + scaleY(0) + ')')
 			.call(axisX)
+
+		// Add X Axis title based on last tick position
+		let lastTick = <SVGGElement> this.mainGroup.select('.axis-x .tick:last-child').node(0)
+		let axisXTitle =  <SVGTextElement> lastTick.querySelector('text').cloneNode()
+		let axisXTitleY = parseFloat(axisXTitle.getAttribute('y')) * -1.3
+
+		axisXTitle.innerHTML = 'Time (s)'
+		axisXTitle.setAttribute('y', axisXTitleY.toString())
+		axisXTitle.setAttribute('text-anchor', 'end')
+		lastTick.appendChild(axisXTitle)
 
 		// Add the Y Axis
 		let axisY = d3
