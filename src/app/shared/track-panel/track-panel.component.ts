@@ -135,12 +135,6 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
-	refreshTrackSetup() {
-		if (this.initialized) {
-			this.track.refresh()
-		}
-	}
-
 	rollBall(single = false) {
 		if (single) {
 			// Hammerjs has a "ghost click" after a long press

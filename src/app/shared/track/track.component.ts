@@ -1,4 +1,7 @@
-import { Component, OnInit, ElementRef, HostListener, AfterViewInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core'
+import {
+	Component, OnInit, ElementRef, HostListener, AfterViewInit, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges,
+	SimpleChanges
+} from '@angular/core'
 
 import { ChallengeMode, Ball, Margin, Point, Dimensions, DeadZone } from '../types'
 import { Angle, translate, getDistance } from '../helpers'
@@ -10,7 +13,7 @@ declare let d3
 	templateUrl: './track.component.html',
 	styleUrls: ['./track.component.scss']
 })
-export class TrackComponent implements OnInit, AfterViewInit {
+export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 	@Input()
 	mode: ChallengeMode
 
@@ -72,6 +75,13 @@ export class TrackComponent implements OnInit, AfterViewInit {
 		this.svg = d3.select(this.host.querySelector('svg'))
 		this.trackGroup = this.svg.select('g')
 		this.ball.element = this.svg.select('circle').node()
+	}
+
+	ngOnChanges(changes: SimpleChanges) {
+		let postChange = changes['postsSetup']
+		if (postChange && !(postChange.isFirstChange())) {
+			this.refresh(-1)
+		}
 	}
 
 	ngAfterViewInit() {

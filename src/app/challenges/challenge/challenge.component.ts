@@ -391,18 +391,19 @@ export class ChallengeComponent implements OnInit {
 	}
 
 	loadTrackSetup() {
+		let nextSetup: MotionSetup
 		if (this.isTutorial) {
-			this.trackPanel.setup = TUTORIAL_CHALLENGE_SETUP
+			nextSetup = TUTORIAL_CHALLENGE_SETUP
 		} else {
 			let cachedSetup = localStorage.getItem(SETUP_STORAGE_KEY)
 			if (cachedSetup) {
-				this.trackPanel.setup = <MotionSetup> JSON.parse(cachedSetup)
+				nextSetup = <MotionSetup> JSON.parse(cachedSetup)
 			} else {
-				this.trackPanel.setup = INITIAL_SETUP
+				nextSetup = INITIAL_SETUP
 			}
 		}
 
-		this.trackPanel.refreshTrackSetup()
+		this.trackPanel.setup = lodash.cloneDeep(nextSetup)
 	}
 
 	startTutorial() {
