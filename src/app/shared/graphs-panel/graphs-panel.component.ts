@@ -354,7 +354,8 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 	}
 
 	getVelocityDomain() {
-		let tickMultiple = 10
+		return [-150, 150]
+		/*let tickMultiple = 10
 		if (this.velocityDomain === undefined) {
 			// Velocity graph domain is min and max values from all datasets (challenge and trials)
 			let datasets = [this.goalData, ...this.trialsData]
@@ -370,7 +371,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 			this.velocityDomain = [maxMultiple * -1, maxMultiple]
 		}
 
-		return this.velocityDomain
+		return this.velocityDomain*/
 	}
 
 	toggleZoom() {

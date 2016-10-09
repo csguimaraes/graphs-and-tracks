@@ -46,6 +46,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	rollingSingle = false
 	ignoreNext = false
 	ballResetTimout: any
+	disableRoll = false
 
 	requestingSelectionOf: DataType
 

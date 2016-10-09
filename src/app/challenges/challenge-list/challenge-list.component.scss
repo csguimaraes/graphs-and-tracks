@@ -73,13 +73,14 @@ md-grid-list {
   display: inline-block;
   width: auto;
   flex-grow: 0;
+  flex-basis: auto;
 
   span {
     display: inline-block;
   }
 
   md-icon {
-    display: block;
+    display: inline-block;
     font-size: 36px !important;
     float: left;
     width: auto;

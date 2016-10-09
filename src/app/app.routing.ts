@@ -5,10 +5,12 @@ import { ChallengeListComponent } from './challenges/challenge-list/challenge-li
 import { ChallengeComponent } from './challenges/challenge/challenge.component'
 import { AboutComponent } from './about/about.component'
 import { EditorComponent } from './editor/editor.component'
+import { ChallengeEditorComponent } from './challenges/challenge-editor/challenge-editor.component'
 
 const APP_ROUTES: Routes = [
 	{ path: '', component: HomeComponent },
 	{ path: 'challenges', component: ChallengeListComponent },
+	{ path: 'challenges/editor', component: ChallengeEditorComponent },
 	{ path: 'challenges/:id', component: ChallengeComponent },
 	{ path: 'editor', component: EditorComponent },
 	{ path: 'about', component: AboutComponent },

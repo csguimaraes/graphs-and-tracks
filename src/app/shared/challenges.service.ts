@@ -44,7 +44,7 @@ export class ChallengesService {
 				result = this.tutorial
 				break
 
-			case 'exploration':
+			case 'editor':
 				result = this.exploration
 				break
 
@@ -79,9 +79,11 @@ export class ChallengesService {
 		]
 
 		this.tutorial = Settings.TUTORIAL_CHALLENGE
+		this.exploration = Settings.EDITOR_SETUP
 
 		let all = [
 			this.tutorial,
+			this.exploration,
 			...this.examples
 		]
 
