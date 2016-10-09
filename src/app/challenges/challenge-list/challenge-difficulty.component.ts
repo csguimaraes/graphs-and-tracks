@@ -5,7 +5,7 @@ import { CHALLENGE_DIFFICULTY } from '../../shared/types'
 	selector: 'gt-challenge-difficulty',
 	styles: [`
 		:host {
-			text-align: center;
+			text-align: center !important;
 			opacity: .8;
 			display: inline-block;
 			line-height: 20px;

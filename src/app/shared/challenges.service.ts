@@ -79,5 +79,15 @@ export class ChallengesService {
 		]
 
 		this.tutorial = Settings.TUTORIAL_CHALLENGE
+
+		let all = [
+			this.tutorial,
+			...this.examples
+		]
+
+		for (let challenge of all) {
+			challenge.attempts = challenge.attempts || []
+			challenge.complete = challenge.complete !== undefined ? challenge.complete : false
+		}
 	}
 }

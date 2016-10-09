@@ -8,9 +8,29 @@ import { Challenge } from '../../../shared/types'
 })
 export class ChallengeListItemComponent implements OnInit {
 	@Input() challenge: Challenge
+	challengeStatus: string
 	constructor() {
 	}
 
 	ngOnInit() {
+		this.challengeStatus = this.getChallengeStatus()
+	}
+
+	getChallengeStatus() {
+		let message = ''
+		let count = this.challenge.attempts.length
+		let complete = this.challenge.complete
+
+		if (complete) {
+			message = 'Completed '
+			message += count === 1 ? 'on first attempt' : `after ${count} attempts`
+		} else {
+			message = count === 0 ? 'No attempts made yet' :
+				(count === 1 ? '1 attempt made' : `${count} attempts made`)
+			message += ' so far'
+		}
+
+		return message
 	}
 }
+

@@ -3,27 +3,27 @@
 	     [class.complete]="challenge.complete"
 	     [class.incomplete]="!(challenge.complete)"
 	>
-		<b>
-			<template [ngIf]="challenge.complete">
-				<md-icon small>check</md-icon>
-				{{ challenge.name }}
-			</template>
-			<template [ngIf]="!challenge.complete">
-				<md-icon small>not_interested</md-icon>
-				{{ challenge.name }}
-			</template>
-		</b>
-		
-		<br>
-		
-		<span *ngIf="!(challenge.attempts) || !(challenge.attempts.length)">
-			No attempts made yet
-		</span>
-		
-		<span *ngIf="challenge.attempts && challenge.attempts.length">
-			{{ challenge.attempts?.length }} attempts so far
-		</span>
+		<div id="stats">
+			<b>
+				<template [ngIf]="challenge.complete">
+					<md-icon small>check</md-icon>
+					{{ challenge.name }}
+				</template>
+				<template [ngIf]="!challenge.complete">
+					<md-icon small>not_interested</md-icon>
+					{{ challenge.name }}
+				</template>
+			</b>
+			
+			<br>
+			
+			<span>
+				{{ challengeStatus }}
+			</span>
+		</div>
 	</div>
 	
-	<gt-challenge-difficulty [level]="challenge.difficulty" [full]="true"></gt-challenge-difficulty>
+	<div id="difficulty">
+		<gt-challenge-difficulty [level]="challenge.difficulty" [full]="true"></gt-challenge-difficulty>
+	</div>
 </div>

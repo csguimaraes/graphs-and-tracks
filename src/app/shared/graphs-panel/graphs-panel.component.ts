@@ -272,7 +272,6 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		let axisX = d3
 			.axisBottom(scaleX)
 			.tickValues([5, 10, 15, 20, 25]) // FIXME: should be based on duration
-			.tickFormat(x => x + 's')
 
 		if (this.mainGroup) {
 			this.mainGroup.selectAll('.axis').remove()

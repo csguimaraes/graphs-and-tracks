@@ -142,13 +142,12 @@ export interface DeadZone {
 
 export interface Message {
 	title: string | Array<string>
-	message: string | Array<string>
+	content: string | Array<string>
 	icon?: string
+	type?: string
 }
 
 export interface TutorialStep extends Message {
-	title: string | Array<string>
-	message: string | Array<string>
 	requires?: UI_CONTROL[],
 	triggers?: UI_CONTROL[]
 }

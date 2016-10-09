@@ -3,8 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 
 import * as lodash from 'lodash'
 
-import { Challenge, Attempt, MotionSetup, MotionData, Message, TrialResult, CHALLENGE_TYPE, UI_CONTROL, TutorialStep } from '../../shared/types'
-import { printDataTable } from '../../shared/debug'
+import { Challenge, MotionSetup, MotionData, Message, TrialResult, CHALLENGE_TYPE, UI_CONTROL, TutorialStep } from '../../shared/types'
 import { interpolate } from '../../shared/helpers'
 import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS, INITIAL_SETUP, TUTORIAL_CHALLENGE_SETUP, KUDOS } from '../../settings'
 import { ChallengesService } from '../../shared/challenges.service'
@@ -49,41 +48,20 @@ export class ChallengeComponent implements OnInit {
 	hintsUsed = false
 	hintsEnabled = false
 	hintDismissed = false
+	canShowSolution = false
 
-	messageTitle: string
-	messageIcon: string
-	messageContent: string
+	message: Message
 
 	isTutorial = false
 	tutorialStep: TutorialStep
 	tutorialStepIndex: number
 	tutorialRequires: UI_CONTROL[] = []
 
-	attempts: Attempt[] = []
 	commitedAttempts: number = 0
+	commitedAttemptsMessage: string
 	lastTrialResult: TrialResult
 
 	types = CHALLENGE_TYPE
-
-	set currentMessage(message: Message) {
-		if (message) {
-			this.messageIcon = message.icon || this.messageIcon
-			this.messageTitle = (message.title instanceof Array) ? lodash.sample(message.title) : message.title
-			this.messageContent = (message.message instanceof Array) ? lodash.sample(message.message) : message.message
-		} else {
-			this.messageTitle = undefined
-			this.messageContent = undefined
-		}
-
-		let isSuccessMessage = this.lastTrialResult && this.lastTrialResult.error === undefined
-
-		if (this.isTutorial) {
-			this.messageIcon = 'school'
-		} else if (isSuccessMessage) {
-		} else {
-			this.messageIcon = 'lightbulb_outline'
-		}
-	}
 
 	constructor(
 		private challenges: ChallengesService,
@@ -152,7 +130,7 @@ export class ChallengeComponent implements OnInit {
 
 		if (this.hintsEnabled) {
 			this.hintDismissed = false
-			this.currentMessage = HINT_MESSAGES['intro']
+			this.setCurrentMessage(HINT_MESSAGES['intro'], 'hint')
 		} else {
 			this.clearHints()
 		}
@@ -217,7 +195,6 @@ export class ChallengeComponent implements OnInit {
 		this.collectionIndex = this.collectionIds.indexOf(challenge.id)
 
 		this.goalMotion = Motion.fromSetup(this.challenge.goal, this.challenge.mode)
-		// this.graphsPanel.animateGoalUpdate(this.goalMotion.data)
 
 		this.hintsUsed = false
 		this.isDemo =
@@ -228,6 +205,8 @@ export class ChallengeComponent implements OnInit {
 		if (this.isTutorial) {
 			this.startTutorial()
 		}
+
+		this.bumpChallengeStatus()
 	}
 
 	performMotion(setup: MotionSetup) {
@@ -246,16 +225,11 @@ export class ChallengeComponent implements OnInit {
 				this.lastTrialResult = undefined
 			} else {
 				this.lastTrialResult = this.goalMotion.evaluateTrial(trialMotion)
-
-				if (this.lastTrialResult.error) {
-					this.attempts.push({
-						accuracy: -1,
-						setup: setup,
-						motion: trialMotion
-					})
-				} else {
-					this.challenge.complete = true
-				}
+				this.challenge.attempts.push({
+					accuracy: -1,
+					setup: setup,
+					motion: trialMotion
+				})
 			}
 		}
 
@@ -356,7 +330,6 @@ export class ChallengeComponent implements OnInit {
 	}
 
 	endAnimation(justPause = false) {
-		this.commitedAttempts = this.attempts.length
 		this.trackPanel.onAnimationEnded(justPause)
 
 		if (justPause === false) {
@@ -385,21 +358,24 @@ export class ChallengeComponent implements OnInit {
 		if (error) {
 			if (this.hintsEnabled) {
 				this.hintsUsed = true
+				this.canShowSolution = true
+
 				this.graphsPanel.highlightError(error)
 				this.trackPanel.highlightResult(error)
 
 				switch (error.type) {
 					case 's':
-						this.currentMessage = HINT_MESSAGES['position']
+						this.setCurrentMessage(HINT_MESSAGES['position'], 'hint')
 						break
 					case 'v':
-						this.currentMessage = HINT_MESSAGES['velocity']
+						this.setCurrentMessage(HINT_MESSAGES['velocity'], 'hint')
 						break
 					case 'a':
-						this.currentMessage = HINT_MESSAGES['posts']
+						this.setCurrentMessage(HINT_MESSAGES['posts'], 'hint')
 						break
 					default:
-						this.currentMessage = HINT_MESSAGES['intro']
+						this.canShowSolution = false
+						this.setCurrentMessage(HINT_MESSAGES['intro'], 'hint')
 						break
 				}
 			}
@@ -407,7 +383,7 @@ export class ChallengeComponent implements OnInit {
 			let message = lodash.sample(KUDOS.intros)
 			let messageEnd: string
 			let icon = KUDOS.icons['normal']
-			if (this.challenge.attempts.length) {
+			if (this.challenge.attempts.length > 1) {
 				if (this.hintsUsed) {
 					messageEnd = KUDOS.h1n1
 				} else {
@@ -417,7 +393,6 @@ export class ChallengeComponent implements OnInit {
 
 				messageEnd = messageEnd.replace('%N%', this.challenge.attempts.length.toString())
 			} else {
-				icon = KUDOS.icons['good']
 				if (this.hintsUsed) {
 					messageEnd = KUDOS.h1n0
 				} else {
@@ -426,18 +401,27 @@ export class ChallengeComponent implements OnInit {
 				}
 			}
 
-			this.currentMessage = {
+			this.setCurrentMessage({
 				title: KUDOS.titles,
-				message: `${message}<br>${messageEnd}`,
-				icon: icon
-			}
+				content: `${message}<br><br>${messageEnd}`,
+				icon: icon,
+				type: 'success'
+			})
+
+			this.challenge.complete = true
 		}
+
+		this.updateCommitNumberOfAttempts(this.challenge.attempts.length)
 	}
 
 	clearHints() {
-		this.currentMessage = undefined
+		this.setCurrentMessage(undefined)
 		this.hintDismissed = true
 		this.clearHighlights()
+	}
+
+	showSolution() {
+		this.trackPanel.setup = lodash.cloneDeep(this.challenge.goal)
 	}
 
 	clearHighlights() {
@@ -469,7 +453,7 @@ export class ChallengeComponent implements OnInit {
 		this.hintsEnabled = true
 		this.hintDismissed = false
 		this.tutorialStepIndex = -1
-		this.graphsPanel.autoClearTrials = false
+		// this.graphsPanel.autoClearTrials = false
 		this.loadTrackSetup()
 		this.tutorialNextStep()
 	}
@@ -499,7 +483,8 @@ export class ChallengeComponent implements OnInit {
 			return this.endTutorial()
 		}
 
-		this.tutorialStep = this.currentMessage = currentStep
+		this.tutorialStep = currentStep
+		this.setCurrentMessage(this.tutorialStep, 'tutorial')
 
 		this.tutorialRequires = []
 		let requirements: UI_CONTROL[] = currentStep.requires || []
@@ -564,20 +549,57 @@ export class ChallengeComponent implements OnInit {
 		}
 	}
 
-	debug(type: string) {
-		let trialIndex = ''
-		if (this.attempts.length) {
-			let promptText = `Enter trial index (from 1 to ${this.attempts.length}) or leave empty for goal:`
-			trialIndex = prompt('Which trial motion you want to debug?\n\n' + promptText)
+	setCurrentMessage(message: Message, type?: string) {
+		if (message) {
+			type = type || message.type
+			switch (type) {
+				default:
+				case 'hint':
+					message.icon = message.icon || 'lightbulb_outline'
+					break
+				case 'tutorial':
+					message.icon = message.icon || 'school'
+					break
+				case 'success':
+					message.icon = message.icon || 'thumb_up'
+					break
+			}
+
+			message.type = type
+
+			if (message.title instanceof Array) {
+				message.title = lodash.sample(message.title)
+			}
+
+			if (message.content instanceof Array) {
+				message.content = lodash.sample(message.content)
+			}
+
+			this.message = message
+		} else {
+			this.message = undefined
+		}
+	}
+
+	updateCommitNumberOfAttempts(count: number) {
+		let message: string
+		let complete = this.challenge.complete
+
+		if (complete) {
+			message = count === 1 ? 'On first attempt' : `After ${count} attempts`
+		} else {
+			message = count === 0 ? 'No attempts made' :
+				(count === 1 ? '1 attempt made' : `${count} attempts made`)
 		}
 
-		if (trialIndex !== undefined) {
-			if (trialIndex === '') {
-				printDataTable(this.goalMotion.data, 'goal')
-			} else {
-				let attempt = this.attempts[+trialIndex - 1]
-				printDataTable(attempt.motion.data, `attempt #${trialIndex}`)
-			}
-		}
+		this.commitedAttempts = count
+		this.commitedAttemptsMessage = message
+	}
+
+	bumpChallengeStatus() {
+		this.commitedAttempts = -1
+		setTimeout(() => {
+			this.updateCommitNumberOfAttempts(this.challenge.attempts.length)
+		}, 100)
 	}
 }

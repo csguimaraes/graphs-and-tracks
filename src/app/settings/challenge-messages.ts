@@ -2,17 +2,15 @@ import { TutorialStep, Message, UI_CONTROL } from '../shared/types'
 
 export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
-		icon: 'school',
 		title: 'Welcome to Graphs & Tracks!',
-		message: `
+		content: `
 			Your mission is to discover the true motion of a rolling ball by using the
 			information provided in graphs of position, velocity and acceleration.
 		`
 	},
 	{
-		icon: 'school',
 		title: 'Motion graphs',
-		message: `
+		content: `
 			Try to recreate the motion by setting the initial conditions and adjusting the tracks. When you roll the ball,
 			your graphs <span>(solid lines)</span> should match the challenge graphs <span>(dashed lines)</span>.
 			<br> <br>
@@ -22,9 +20,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.POSITION_GRAPH, UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
-		icon: 'school',
 		title: 'Position graph',
-		message: `
+		content: `
 			On the <b class="s">POSITION</b> graph, note that the graph for the actual motion <span>(solid curve)</span>
 			does NOT match the given graph (dashed). <br>
 			Your task is to match the graphs.<br>
@@ -35,9 +32,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
-		icon: 'school',
 		title: 'Velocity graph',
-		message: `
+		content: `
 			Here is the velocity graph for this first example of motion.
 			<br> <br>
 			Let's see the <b class="a">ACCELERATION</b> graph now.
@@ -46,9 +42,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
-		icon: 'school',
 		title: 'Three graphs, any motion',
-		message: `
+		content: `
 			Use information contained in these three graphs to discover the motion of the ball which is one-dimensional <span>(along a straight line)</span>.
 			<br> <br>
 			Now return to the position vs. time graph by clicking on <b class="s">POSITION</b>.
@@ -57,9 +52,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
-		icon: 'school',
 		title: 'Finding the right place',
-		message: `
+		content: `
 			Note the scale of <b class="s">INITIAL POSITION</b> directly below the tracks.
 			<br> <br>
 			You can set the starting position of the ball by clicking on new position values
@@ -68,9 +62,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		requires: [UI_CONTROL.POSITION_SCALE]
 	},
 	{
-		icon: 'school',
 		title: 'Setting the initial speed and direction',
-		message: `
+		content: `
 			The ball in the challenge motion may already be moving at time t=0.
 			<br> <br>
 			Its initial velocity may be positive <span>(to the right)</span> or negative <span>(to the left)</span>, or zero <span>(at rest)</span>.
@@ -81,18 +74,16 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
-		icon: 'school',
 		title: 'Change the Track setup',
-		message: `
+		content: `
 			Drag the top of a <b>POST</b> to raise or lower its <b>height</b>,
 			or simply tap above or below a post head to gradually change the height value of that post.
 		`,
 		requires: [UI_CONTROL.TRACK_POST_ANY]
 	},
 	{
-		icon: 'school',
 		title: 'Test your new setup',
-		message: `
+		content: `
 			Select the <b class="a">ACCELERATION</b> graph.
 			<br> <br>
 			Then click <b class="b">ROLL BALL</b> to see how the acceleration of the ball changes.
@@ -103,9 +94,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.ACCELERATION_GRAPH]
 	},
 	{
-		icon: 'school',
 		title: 'One step at a time',
-		message: `
+		content: `
 			The problem can be simplified by focusing on short segments.
 			<br> <br>
 			To see the motion for only one sloping section at a time, click and <b>hold down</b> the <b class="b">ROLL BALL</b> button.
@@ -113,9 +103,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		requires: [UI_CONTROL.ROLL_BUTTON_HOLD]
 	},
 	{
-		icon: 'school',
 		title: 'Tutorial complete',
-		message: `
+		content: `
 			That's it, now you're ready to start. You can go to the <a [routerLink]="['/challenges']">challenges list</a> and
 			pick your first one.
 		`,
@@ -126,27 +115,24 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 export const HINT_MESSAGES: { [name: string]: Message } = {
 	intro: {
 		// NOTE: titles and messages can be arrays, they will be randomly selected
-		icon: 'lightbulb_outline',
 		title: ['Hints enabled'],
-		message: `
+		content: `
 			With hints enabled, we will provide guidance on how to improve your current setup.
 			<br> <br>
 			For instructions on how to use the program, select the <b>tutorial</b> icon above.
 		`
 	},
 	position: {
-		icon: 'lightbulb_outline',
 		title: 'Starting position',
-		message: `
+		content: `
 			Your ball starts at the wrong place.
 			<br> <br>
 			Examine the <b class="s">position graph</b> and read off the <b class="s">initial position</b> <span>(at time t=0)</span>.
 		`
 	},
 	velocity: {
-		icon: 'lightbulb_outline',
 		title: 'Initial velocity',
-		message: `
+		content: `
 			Take a careful look at the <b class="v">velocity graph</b>.
 			<br> <br>
 			If the velocity at time t=0 is positive, this means the ball is initially rolling to the right;
@@ -155,9 +141,8 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 		`
 	},
 	posts: {
-		icon: 'lightbulb_outline',
 		title: 'Accelerations on ramps',
-		message: `
+		content: `
 			The highlighted ramp has the wrong inclination.
 			<br><br>
 			Take a careful look at the <b class="a">acceleration graph</b> to see whether the acceleration

@@ -5,6 +5,7 @@ md-card-title {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 md-grid-list {
   height: 100%;
 
@@ -60,7 +61,7 @@ md-grid-list {
   margin: 0 -8px;
 
   & > * {
-    flex: 1 1 auto;
+    flex: 1 1 0;
   }
 }
 
