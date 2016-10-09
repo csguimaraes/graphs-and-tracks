@@ -52,12 +52,8 @@ export interface Challenge {
 	difficulty: CHALLENGE_DIFFICULTY
 	type: CHALLENGE_TYPE
 	mode?: ChallengeMode
-}
-
-export interface ChallengeStats {
-	challengeId: string
-	complete: boolean
-	attempts: Attempt[]
+	complete?: boolean
+	attempts?: Attempt[]
 }
 
 export interface Attempt {
@@ -66,8 +62,12 @@ export interface Attempt {
 	motion?: Motion
 }
 
-export interface AttemptError {
-	type: DataType,
+export interface TrialResult {
+	error?: TrialError
+}
+
+export interface TrialError {
+	type: DataType
 	position?: number
 }
 
@@ -140,12 +140,13 @@ export interface DeadZone {
 	end: number
 }
 
-export interface HintMessage {
+export interface Message {
 	title: string | Array<string>
 	message: string | Array<string>
+	icon?: string
 }
 
-export interface TutorialStep extends HintMessage {
+export interface TutorialStep extends Message {
 	title: string | Array<string>
 	message: string | Array<string>
 	requires?: UI_CONTROL[],

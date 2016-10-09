@@ -1,0 +1,21 @@
+@media screen and (max-width: 960px) {
+  .hidden-small {
+    display: none !important;
+  }
+
+  md-toolbar {
+    font-size: 14px !important;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+
+@media screen and (max-height: 720px) {
+  #message-box p {
+    font-size: 12px !important;
+  }
+}

@@ -27,6 +27,8 @@ import { SliderDirective } from './shared/slider.directive'
 import { AboutComponent } from './about/about.component'
 import { ChallengeListItemComponent } from './challenges/challenge-list/challenge-list-item/challenge-list-item.component'
 import { EditorComponent } from './editor/editor.component'
+import { SlimScrollComponent } from './shared/slim-scroll/slim-scroll.component'
+import { ChallengeDifficultyComponent } from './challenges/challenge-list/challenge-difficulty.component'
 
 @NgModule({
 	imports: [
@@ -49,6 +51,7 @@ import { EditorComponent } from './editor/editor.component'
 
 		ChallengeListComponent,
 		ChallengeListItemComponent,
+		ChallengeDifficultyComponent,
 
 		TrackComponent,
 
@@ -59,6 +62,7 @@ import { EditorComponent } from './editor/editor.component'
 		EditorComponent,
 
 		SliderDirective,
+		SlimScrollComponent,
 		ScaleComponent,
 
 		DumpPipe

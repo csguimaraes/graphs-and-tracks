@@ -3,9 +3,7 @@
 		<md-card id="info-card">
 			<div class="content-wrapper">
 				<div class="card-header">
-					<span *ngIf="isDemo"></span>
-					<span *ngIf="!isDemo"
-					      class="challenge-selector" (click)="navigateTo('toRight')"
+					<span class="challenge-selector" (click)="navigateTo('toRight')"
 					      [class.disabled]="collectionIndex === 0"
 					>
 						<md-icon>chevron_left</md-icon>
@@ -24,36 +22,61 @@
 							</div>
 						</template>
 					</span>
-
-					<span *ngIf="isDemo"></span>
-					<span *ngIf="!isDemo"
-					      class="challenge-selector" (click)="navigateTo('toLeft')"
-					      [class.disabled]="collectionIndex === (collectionIds.length - 1)"
+					<span
+							class="challenge-selector" (click)="navigateTo('toLeft')"
+							[class.disabled]="collectionIndex === (collectionIds.length - 1)"
 					>
 						<md-icon>chevron_right</md-icon>
 					</span>
 				</div>
-
-				<div id="challenge-info" *ngIf="!isDemo" class="card-header-actions card-header-actions-left">
-					<span><b>Challenge</b></span>
-				</div>
-				<div id="challenge-help" *ngIf="!isDemo" class="card-header-actions card-header-actions-right">
-					<span id="hints-button" class="action"
+				
+				<div id="challenge-help" class="card-header-actions card-header-actions-full">
+					<span id="button-hints" class="action"
 					      [class.active]="hintsEnabled"
 					      (click)="onHintToggle()"
 					      title="{{ hintsEnabled ? 'Disable' : 'Enable' }} hint messages"
 					>
 						<md-icon small>lightbulb_outline</md-icon>
-						HINTS
+						<span class="hidden-small">HINTS</span>
 					</span>
-
-					<span id="help-button" class="action" [routerLink]="['../', 'tutorial']">
+					
+					<span id="button-tutorial" class="action" title="Learn how to solve a challenge"
+					      [routerLink]="['../', 'tutorial']"
+					>
 							<md-icon small>school</md-icon>
-							TUTORIAL
+							<span class="hidden-small">TUTORIAL</span>
+					</span>
+					
+					<span id="button-details" class="action" title="View challenge details"
+					      [class.active]="detailsEnabled"
+					      (click)="onDetailsToggle()"
+					>
+						<md-icon small>assignment</md-icon>
+						<span class="hidden-small">INFO</span>
 					</span>
 				</div>
-
+				
 				<md-card-content class="card-content-with-header-and-actions" scroll-y>
+					<div id="challenge-details" *ngIf="detailsEnabled">
+						<div class="nowrap">
+							<span class="hidden-small">
+								created by
+							</span>
+							<br class="hidden-small">
+							<b>Graphs & Tracks</b>
+						</div>
+						<div class="nowrap hidden-small">
+							<span>
+								average attempts
+							</span>
+							<br>
+							<b>4.7 attempts</b>
+						</div>
+						<gt-challenge-difficulty
+								[level]="challenge.difficulty"
+								[full]="true" [passive]="true"
+						></gt-challenge-difficulty>
+					</div>
 					<div id="attempts">
 						<span *ngIf="commitedAttempts > 0">
 							<md-icon [class.one-bump]="attempts.length === commitedAttempts">not_interested</md-icon>
@@ -62,43 +85,59 @@
 							</b>
 						</span>
 					</div>
-
-					<div id="hint-card" [class.visible]="(hintsEnabled && !hintDismissed) || isTutorial" [class.tutorial]="isTutorial">
-						<md-icon *ngIf="!isTutorial" id="hint-close" (click)="clearHints()">close</md-icon>
-						<b id="hint-title">
-							<md-icon *ngIf="!isTutorial">lightbulb_outline</md-icon>
-							<md-icon *ngIf="isTutorial">school</md-icon>
-							<span [innerHTML]="hintTitle"></span>
+					
+					<div id="message-box"
+						[ngClass]="{
+							'visible': (hintsEnabled && !hintDismissed) || isTutorial,
+							'tutorial': isTutorial
+						}"
+					>
+						<md-icon *ngIf="!isTutorial" id="message-close" (click)="clearHints()">close</md-icon>
+						<b id="message-title">
+							<md-icon [innerHTML]="messageIcon"></md-icon>
+							<span [innerHTML]="messageTitle"></span>
 						</b>
-						<p [innerHTML]="hintMessage"></p>
-						<div id="tutorial-actions" *ngIf="isTutorial">
-							<span id="tutorial-end"
-							      (click)="endTutorial()">End Tutorial</span>
-							<span id="tutorial-next"
-							      *ngIf="tutorialHasNext()"
-							      [class.disabled]="tutorialRequires.length"
-							      (click)="tutorialNextStep()">
-								Next
-								<md-icon>chevron_right</md-icon>
-							</span>
+						<p [innerHTML]="messageContent"></p>
+						<div id="message-actions"
+						     [class.tutorial]="isTutorial"
+						     [class.hints]="!isTutorial"
+						>
+							<template [ngIf]="isTutorial">
+								<span class="link" (click)="endTutorial()">End Tutorial</span>
+								<span class="button"
+								      *ngIf="tutorialHasNext()"
+								      [class.disabled]="tutorialRequires.length"
+								      (click)="tutorialNextStep()">
+									Next
+									<md-icon>chevron_right</md-icon>
+								</span>
+							</template>
+							<template [ngIf]="!isTutorial">
+							<span class="link" (click)="clearHints()">
+									Show Solution
+								</span>
+								<span id="message-dismiss" class="button" (click)="clearHints()">
+									Dismiss
+								</span>
+							</template>
 						</div>
 					</div>
 				</md-card-content>
 			</div>
 		</md-card>
 	</md-grid-tile>
-
+	
 	<md-grid-tile colspan="3" rowspan="4">
 		<gt-graphs-panel
-						[mode]="challenge.mode" [goal]="goalMotion"
-						(change)="onGraphPanelChange($event)"
+				[mode]="challenge.mode" [goal]="goalMotion"
+				(change)="onGraphPanelChange($event)"
 		></gt-graphs-panel>
 	</md-grid-tile>
-
+	
 	<md-grid-tile colspan="4" rowspan="3">
 		<gt-track-panel
-						[mode]="goalMotion.mode"
-						(abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"
+				[mode]="goalMotion.mode"
+				(abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"
 		></gt-track-panel>
 	</md-grid-tile>
 </md-grid-list>

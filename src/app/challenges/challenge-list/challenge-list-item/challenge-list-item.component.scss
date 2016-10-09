@@ -21,16 +21,28 @@
       margin-top: -5px;
     }
   }
+}
 
-  span {
-    color: #999;
-
-    &.incomplete {
-      color:lightcoral;
-    }
-
-    &.complete {
-      color:lightgreen;
-    }
+.challenge-name {
+  display: inline-block;
+  white-space: nowrap;
+  padding-right: 8px;
+  md-icon {
+    width: auto;
+    vertical-align: sub !important;
   }
+
+  color:#999;
+
+  &.incomplete b {
+    color:lightcoral;
+  }
+
+  &.complete b {
+    color:lightgreen;
+  }
+}
+
+gt-challenge-difficulty {
+  float: right;
 }

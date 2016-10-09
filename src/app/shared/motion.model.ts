@@ -1,31 +1,31 @@
 import * as Settings from '../settings'
-import * as Types from './types'
+import { ChallengeMode, Ramp, Junction, MotionData, MotionSetup, TrialResult } from './types'
 
 export class Motion {
-	mode: Types.ChallengeMode
+	mode: ChallengeMode
 
 	initialPosition: number
 	initialVelocity: number
 
-	junctions: Types.Junction[]
-	ramps: Types.Ramp[]
+	junctions: Junction[]
+	ramps: Ramp[]
 
-	private _data: Types.MotionData[]
+	private _data: MotionData[]
 
 	get data() {
 		if (this._data === undefined) {
-			this.execute()
+			this.start()
 		}
 
 		return this._data.slice()
 	}
 
-	static fromSetup(setup: Types.MotionSetup, mode?: Types.ChallengeMode) {
+	static fromSetup(setup: MotionSetup, mode?: ChallengeMode) {
 		// TODO: move challenge mode into setup
 		return new this(setup.position, setup.velocity, setup.posts, mode)
 	}
 
-	constructor(position: number, velocity: number, posts: number[], mode?: Types.ChallengeMode) {
+	constructor(position: number, velocity: number, posts: number[], mode?: ChallengeMode) {
 		// For now only NORMAL mode is available
 		this.mode = mode || Settings.MODE_NORMAL
 
@@ -101,7 +101,7 @@ export class Motion {
 		}
 	}
 
-	execute() {
+	start() {
 		// Initialize data series with values for T=0
 		let s = this.initialPosition
 		let v = this.initialVelocity
@@ -217,13 +217,13 @@ export class Motion {
 		}
 	}
 
-	findTrialError(trial: Motion): Types.AttemptError {
-		let result
+	evaluateTrial(trial: Motion): TrialResult {
+		let result: TrialResult = { error: undefined }
 
 		if (trial.initialPosition !== this.initialPosition) {
-			result = { type: 's' }
+			result.error = { type: 's' }
 		} else if (trial.initialVelocity !== this.initialVelocity) {
-			result = { type: 'v' }
+			result.error = { type: 'v' }
 		} else {
 			for (let idx = 0; idx < this.data.length; idx++) {
 				let dataPoint = trial.data[idx]
@@ -236,7 +236,11 @@ export class Motion {
 
 				if (dataPoint.a !== this.data[idx].a) {
 					// Found different acceleration
-					result = { type: 'a', position: this.data[idx].s }
+					result.error = {
+						type: 'a',
+						position: this.data[idx].s
+					}
+
 					break
 				}
 			}

@@ -1,8 +1,7 @@
 import { UserSettings } from '../shared/types'
 
-export * from './hints'
-export * from './tutorial'
-export * from './builtin-challenges'
+export * from './challenge-messages'
+export * from './challenge-setups'
 
 export const GRAVITY_ACCELERATION = 980.665 // cm/s²
 export const ANIMATION_DURATION = 10

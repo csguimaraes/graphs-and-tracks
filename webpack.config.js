@@ -1,26 +1,26 @@
-var path = require('path')
-var webpack = require('webpack')
+let path = require('path')
+let webpack = require('webpack')
 
 // Webpack Plugins
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
+let CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let ExtractTextPlugin = require('extract-text-webpack-plugin')
+let CopyWebpackPlugin = require('copy-webpack-plugin')
 
 /**
  * Env
  * Get npm lifecycle event to identify the environment
  */
-var ENV = process.env.npm_lifecycle_event
-var isProd = ENV === 'build'
-var baseUrl = '/'
+let ENV = process.env.npm_lifecycle_event
+let isProd = ENV === 'build'
+let baseUrl = '/'
 module.exports = function makeWebpackConfig() {
 	/**
 	 * Config
 	 * Reference: http://webpack.github.io/docs/configuration.html
 	 * This is the object where all configuration gets set
 	 */
-	var config = {}
+	let config = {}
 
 	config.devtool = 'source-map'
 

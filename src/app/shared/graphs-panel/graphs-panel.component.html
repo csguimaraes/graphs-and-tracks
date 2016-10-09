@@ -50,7 +50,7 @@
 					</clipPath>
 				</defs>
 				<g id="main-group" [attr.transform]="'translate(' + margin.left +','+ margin.top +')'">
-					<path class="line goal"
+					<path #goalLine class="line goal"
 							[attr.d]="goalLinePath"
 							[attr.clip-path]="(lineToClip === -1) ? 'url(' + activeUrl + '#trial-line-clip)' : ''"
 					></path>

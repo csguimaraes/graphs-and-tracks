@@ -21,7 +21,7 @@
 .vcenter {
   position: relative;
   top: 50%;
-  transform: perspective(1px) translateY(-50%);
+  transform: translateY(-50%);
 }
 
 .hidden {
@@ -115,7 +115,7 @@
 $header-height: 32px;
 $header-padding: 8px;
 $header-actions-height: 30px;
-$header-bg: #F0F0F0;
+$header-bg: #EAEAEA;
 $header-full-height: $header-height + ($header-padding * 2);
 
 .card-content-with-header {
@@ -141,8 +141,10 @@ $header-full-height: $header-height + ($header-padding * 2);
     line-height: $header-height;
     flex: 1 0 0px;
     position: relative;
-    color: #666;
+    color: #009688;
+    letter-spacing: 1px;
     text-align: center;
+    font-weight: 500;
     padding: 0 5px;
     will-change: margin;
 
@@ -185,7 +187,6 @@ $header-full-height: $header-height + ($header-padding * 2);
   background: $header-bg;
   height: $header-actions-height;
   width: auto;
-  max-width: 45%;
   top: $header-height + ($header-padding * 2);
   display: flex;
   position: absolute;
@@ -205,9 +206,16 @@ $header-full-height: $header-height + ($header-padding * 2);
 
   &.card-header-actions-full {
     width: 100%;
+    padding: 0 8px;
+    box-sizing: border-box;
+
+    & > span {
+      flex: 1 1 auto !important;
+      text-align: center;
+    }
   }
 
-  span {
+  & > span {
     flex: 0 1 auto;
     text-overflow: ellipsis;
     color: #666;
@@ -216,18 +224,20 @@ $header-full-height: $header-height + ($header-padding * 2);
     vertical-align: text-bottom;
     overflow: hidden;
 
+    &.action, &.action * {
+      cursor: pointer !important;
+    }
+
     &.action {
       height: 100%;
       color: #999;
       padding: 0 8px;
-      cursor: pointer;
 
       &:hover {
         background: darken($header-bg, 10);
       }
 
       md-icon {
-        cursor: pointer;
         vertical-align: middle;
         margin-bottom: 3px;
         width: auto;
@@ -249,4 +259,14 @@ $header-full-height: $header-height + ($header-padding * 2);
   bottom: 0;
   width: auto !important;
   height: auto !important;
+}
+
+
+.nowrap {
+  white-space: nowrap;
+}
+
+md-card.with-scroller {
+  overflow: hidden;
+  padding: 0 !important;
 }

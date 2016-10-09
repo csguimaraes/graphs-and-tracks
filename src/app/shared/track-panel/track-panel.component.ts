@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core'
-import { MotionSetup, ChallengeMode, DataType, AttemptError, UI_CONTROL } from '../types'
+import { MotionSetup, ChallengeMode, DataType, UI_CONTROL, TrialError } from '../types'
 
 import * as _ from 'lodash'
 import * as Hammer from 'hammerjs'
@@ -194,7 +194,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.requestingSelectionOf = undefined
 	}
 
-	highlightError(error: AttemptError) {
+	highlightResult(error: TrialError) {
 		switch (error.type) {
 			case 's':
 				this.highlightControl(UI_CONTROL.POSITION_SCALE)

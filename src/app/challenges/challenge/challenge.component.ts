@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 
 import * as lodash from 'lodash'
 
-import { Challenge, Attempt, MotionSetup, MotionData, HintMessage, AttemptError, CHALLENGE_TYPE, UI_CONTROL, TutorialStep } from '../../shared/types'
+import { Challenge, Attempt, MotionSetup, MotionData, Message, TrialResult, CHALLENGE_TYPE, UI_CONTROL, TutorialStep } from '../../shared/types'
 import { printDataTable } from '../../shared/debug'
 import { interpolate } from '../../shared/helpers'
-import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS, INITIAL_SETUP, TUTORIAL_CHALLENGE_SETUP } from '../../settings'
+import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS, INITIAL_SETUP, TUTORIAL_CHALLENGE_SETUP, KUDOS } from '../../settings'
 import { ChallengesService } from '../../shared/challenges.service'
 import { Motion } from '../../shared/motion.model'
 import { GraphsPanelComponent } from '../../shared/graphs-panel/graphs-panel.component'
@@ -44,11 +44,15 @@ export class ChallengeComponent implements OnInit {
 
 	segmentedAnimationIndex: number
 
+	detailsEnabled = false
+
+	hintsUsed = false
 	hintsEnabled = false
 	hintDismissed = false
 
-	hintTitle: string
-	hintMessage: string
+	messageTitle: string
+	messageIcon: string
+	messageContent: string
 
 	isTutorial = false
 	tutorialStep: TutorialStep
@@ -57,17 +61,27 @@ export class ChallengeComponent implements OnInit {
 
 	attempts: Attempt[] = []
 	commitedAttempts: number = 0
-	latestError: AttemptError
+	lastTrialResult: TrialResult
 
 	types = CHALLENGE_TYPE
 
-	set currentHint(hint: HintMessage) {
-		if (hint) {
-			this.hintTitle = (hint.title instanceof Array) ? lodash.sample(hint.title) : hint.title
-			this.hintMessage = (hint.message instanceof Array) ? lodash.sample(hint.message) : hint.message
+	set currentMessage(message: Message) {
+		if (message) {
+			this.messageIcon = message.icon || this.messageIcon
+			this.messageTitle = (message.title instanceof Array) ? lodash.sample(message.title) : message.title
+			this.messageContent = (message.message instanceof Array) ? lodash.sample(message.message) : message.message
 		} else {
-			this.hintTitle = undefined
-			this.hintMessage = undefined
+			this.messageTitle = undefined
+			this.messageContent = undefined
+		}
+
+		let isSuccessMessage = this.lastTrialResult && this.lastTrialResult.error === undefined
+
+		if (this.isTutorial) {
+			this.messageIcon = 'school'
+		} else if (isSuccessMessage) {
+		} else {
+			this.messageIcon = 'lightbulb_outline'
 		}
 	}
 
@@ -138,10 +152,14 @@ export class ChallengeComponent implements OnInit {
 
 		if (this.hintsEnabled) {
 			this.hintDismissed = false
-			this.currentHint = HINT_MESSAGES['intro']
+			this.currentMessage = HINT_MESSAGES['intro']
 		} else {
 			this.clearHints()
 		}
+	}
+
+	onDetailsToggle() {
+		this.detailsEnabled = !(this.detailsEnabled)
 	}
 
 	navigateTo(direction: SwitchDirection) {
@@ -199,7 +217,9 @@ export class ChallengeComponent implements OnInit {
 		this.collectionIndex = this.collectionIds.indexOf(challenge.id)
 
 		this.goalMotion = Motion.fromSetup(this.challenge.goal, this.challenge.mode)
+		// this.graphsPanel.animateGoalUpdate(this.goalMotion.data)
 
+		this.hintsUsed = false
 		this.isDemo =
 			this.challenge.type === CHALLENGE_TYPE.TUTORIAL ||
 			this.challenge.type === CHALLENGE_TYPE.EXPLORATION
@@ -213,26 +233,29 @@ export class ChallengeComponent implements OnInit {
 	performMotion(setup: MotionSetup) {
 		let trialMotion = Motion.fromSetup(setup)
 
-		let isContinuation = this.segmentedAnimationIndex !== undefined
+		let isFreshStart = this.segmentedAnimationIndex === undefined
 
-		if (isContinuation) {
-			this.latestError = undefined
-		} else {
+		if (isFreshStart) {
 			this.graphsPanel.addTrialData(trialMotion.data)
 
 			if (setup.breakDown) {
-				// TODO: how to deal with hints and partial motions ?
-				this.hintsEnabled = false
 				this.segmentedAnimationIndex = 0
 			}
 
-			this.latestError = this.goalMotion.findTrialError(trialMotion)
-			if (this.latestError) {
-				this.attempts.push({
-					accuracy: -1,
-					setup: setup,
-					motion: trialMotion
-				})
+			if (this.challenge.complete) {
+				this.lastTrialResult = undefined
+			} else {
+				this.lastTrialResult = this.goalMotion.evaluateTrial(trialMotion)
+
+				if (this.lastTrialResult.error) {
+					this.attempts.push({
+						accuracy: -1,
+						setup: setup,
+						motion: trialMotion
+					})
+				} else {
+					this.challenge.complete = true
+				}
 			}
 		}
 
@@ -322,7 +345,7 @@ export class ChallengeComponent implements OnInit {
 			}
 
 			if (typeof position !== 'number') {
-				throw 'Last data point not found'
+				console.error('Last data point not found')
 			}
 
 			this.graphsPanel.setTrialLineClip(elapsedTime / duration)
@@ -341,31 +364,12 @@ export class ChallengeComponent implements OnInit {
 			this.segmentedAnimationIndex = undefined
 			this.graphsPanel.setTrialLineClip(1)
 
-			if (this.isTutorial === false) {
-				// Handle hint (if any) after attempt
-				// NOTE: segment motion doesn't produce hints ATM
+			if (this.lastTrialResult && this.isTutorial === false) {
 				this.hintDismissed = true
 				let bumpDelay = 500
-				setTimeout(() => {
-					if (this.latestError && this.hintsEnabled) {
-						this.graphsPanel.highlightError(this.latestError)
-						this.trackPanel.highlightError(this.latestError)
 
-						switch (this.latestError.type) {
-							case 's':
-								this.currentHint = HINT_MESSAGES['position']
-								break
-							case 'v':
-								this.currentHint = HINT_MESSAGES['velocity']
-								break
-							case 'a':
-								this.currentHint = HINT_MESSAGES['posts']
-								break
-							default:
-								this.currentHint = HINT_MESSAGES['intro']
-								break
-						}
-					}
+				setTimeout(() => {
+					this.showTrialResult(this.lastTrialResult)
 				}, bumpDelay)
 
 				setTimeout(() => {
@@ -375,8 +379,63 @@ export class ChallengeComponent implements OnInit {
 		}
 	}
 
+	showTrialResult(forResult: TrialResult) {
+		let error = forResult.error
+
+		if (error) {
+			if (this.hintsEnabled) {
+				this.hintsUsed = true
+				this.graphsPanel.highlightError(error)
+				this.trackPanel.highlightResult(error)
+
+				switch (error.type) {
+					case 's':
+						this.currentMessage = HINT_MESSAGES['position']
+						break
+					case 'v':
+						this.currentMessage = HINT_MESSAGES['velocity']
+						break
+					case 'a':
+						this.currentMessage = HINT_MESSAGES['posts']
+						break
+					default:
+						this.currentMessage = HINT_MESSAGES['intro']
+						break
+				}
+			}
+		} else {
+			let message = lodash.sample(KUDOS.intros)
+			let messageEnd: string
+			let icon = KUDOS.icons['normal']
+			if (this.challenge.attempts.length) {
+				if (this.hintsUsed) {
+					messageEnd = KUDOS.h1n1
+				} else {
+					icon = KUDOS.icons['good']
+					messageEnd = KUDOS.h0n1
+				}
+
+				messageEnd = messageEnd.replace('%N%', this.challenge.attempts.length.toString())
+			} else {
+				icon = KUDOS.icons['good']
+				if (this.hintsUsed) {
+					messageEnd = KUDOS.h1n0
+				} else {
+					icon = KUDOS.icons['awesome']
+					messageEnd = KUDOS.h0n0
+				}
+			}
+
+			this.currentMessage = {
+				title: KUDOS.titles,
+				message: `${message}<br>${messageEnd}`,
+				icon: icon
+			}
+		}
+	}
+
 	clearHints() {
-		this.currentHint = undefined
+		this.currentMessage = undefined
 		this.hintDismissed = true
 		this.clearHighlights()
 	}
@@ -440,7 +499,7 @@ export class ChallengeComponent implements OnInit {
 			return this.endTutorial()
 		}
 
-		this.tutorialStep = this.currentHint = currentStep
+		this.tutorialStep = this.currentMessage = currentStep
 
 		this.tutorialRequires = []
 		let requirements: UI_CONTROL[] = currentStep.requires || []

@@ -3,13 +3,12 @@ $color-v: lighten(forestgreen, 10);
 $color-a: lighten(steelblue, 10);
 
 .card-header {
-
   #title-container {
     background: transparent;
     position: relative;
 
     & > div {
-      background: #F0F0F0 !important;
+      background: #EAEAEA !important;
       position: absolute;
       transform-origin: 50% 50%;
       width: 100%;
@@ -45,7 +44,6 @@ $color-a: lighten(steelblue, 10);
 
 .card-header-actions {
   span {
-    margin: 0 5px;
     padding: 0 5px;
   }
 
@@ -56,16 +54,19 @@ $color-a: lighten(steelblue, 10);
   }
 }
 
-#hints-button {
-  margin-left: 15px !important;
+#button-details:hover, #button-details.active {
+  background: lighten(#009688, 50);
+  color: #009688;
 }
 
-#hints-button.active {
+#button-hints:hover, #button-hints.active {
   color: darkorange;
   background: papayawhip;
-  md-icon {
-    color: orange;
-  }
+}
+
+#button-tutorial:hover, #button-tutorial.active {
+  background: #CEF;
+  color: dodgerblue;
 }
 
 #attempts {
@@ -88,41 +89,47 @@ $color-a: lighten(steelblue, 10);
   }
 }
 
-#hint-card {
+#challenge-details {
+  background: lighten(#009688, 50);
+  color: #009688;
+  padding: 8px;
+  display: flex;
+
+  & > * {
+    flex: 1 1 auto;
+    line-height: 20px;
+  }
+
+  gt-challenge-difficulty {
+    flex: 0 1 auto;
+  }
+}
+
+#message-box {
   background: papayawhip;
   visibility: hidden;
-  transform: scale(0.6);
-  will-change: transform;
-  width: 100%;
-
   position: absolute;
+  width: 100%;
+  top: 0;
   bottom: 0;
-  transform-origin: center bottom;
-
   padding: 16px;
   box-sizing: border-box;
 
-  &.tutorial {
-    margin-top: 0;
-    transform: scale(1);
-    visibility: visible;
-    top: 0;
-    background: #CEF;
-    #hint-title {
-      color: dodgerblue;
-    }
+  transform: scale(0.6);
+  will-change: transform;
+  transform-origin: center bottom;
 
-    #hint-close {
-      &:hover {
-        background: darken(#CEF, 20);
-      }
+  &.tutorial {
+    background: #CEF;
+    #message-title {
+      color: dodgerblue;
     }
   }
 
   &.visible {
     transform: scale(1);
     visibility: visible;
-    transition: transform 150ms cubic-bezier(0.175, 0.885, 0.320, 1.275) 10ms;
+    transition: transform 150ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
   }
 
   &.visible.bump {
@@ -130,20 +137,20 @@ $color-a: lighten(steelblue, 10);
     transition: none;
   }
 
-  #hint-close {
+  #message-close {
     float: right;
-    margin: 5px;
+    margin-top: -4px;
     font-size: 14px;
     line-height: 24px;
     cursor: pointer;
     padding: 4px;
     text-align: center;
     &:hover {
-      background: darken(papayawhip, 20);
+      background: rgba(0, 0, 0, .2);
     }
   }
 
-  #hint-title {
+  #message-title {
     display: inline-block;
     line-height: 24px;
     color: darkorange;
@@ -187,28 +194,59 @@ $color-a: lighten(steelblue, 10);
 }
 
 
-#tutorial-actions {
+#message-actions {
   position: absolute;
   bottom: 0;
   width: 100%;
-  color: dodgerblue;
   text-align: right;
   box-sizing: border-box;
   height: auto;
   left: 0;
   padding: 16px;
-  background: rgba(255,255,255,.3);
 
-  & > *, & > * * {
+  .link {
     padding: 8px;
+    cursor: pointer !important;
+    margin-right: 8px;
+  }
+
+  .button {
+    padding: 8px;
+    font-weight: bold;
+    border-radius: 3px;
+  }
+
+  .button, .button * {
     cursor: pointer !important;
   }
 
-  #tutorial-next {
+  .link {
+    color: white;
+    margin-right: 8px;
+  }
+
+  .button {
+
+  }
+
+  .hint {
+    background: darkorange;
+    .button { background: papayawhip; color: darkorange; }
+  }
+
+  .tutorial {
+    background: dodgerblue;
+    .button { background: #CEF; color: dodgerblue; }
+  }
+
+  .success {
+    background: darkgreen;
+    .button { background: mediumseagreen; color: darkgreen; }
+  }
+
+  .tutorial .button {
     background: dodgerblue;
     color: #CEF;
-    font-weight: bold;
-    border-radius: 3px;
     animation: 1s pulse linear infinite;
 
     md-icon {

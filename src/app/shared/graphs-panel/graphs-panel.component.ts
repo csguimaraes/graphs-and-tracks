@@ -1,14 +1,14 @@
 import {
 	Component, ElementRef,
-	OnInit, AfterViewInit, OnChanges, SimpleChanges,
+	OnInit, AfterViewInit,
 	Input, Output, EventEmitter, HostListener,
-	ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy
+	ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewChild, SimpleChanges, OnChanges
 } from '@angular/core'
 
 import * as Hammer from 'hammerjs'
 import { Tween } from 'tween.js'
 
-import { MotionData, ChallengeMode, DataType, AttemptError, UI_CONTROL } from '../types'
+import { MotionData, ChallengeMode, DataType, UI_CONTROL, TrialError } from '../types'
 import { Motion } from '../motion.model'
 
 declare let d3
@@ -19,16 +19,18 @@ declare let d3
 	styleUrls: ['./graphs-panel.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 	@Input() mode: ChallengeMode
 	@Input() goal: Motion
+	@ViewChild('goalLine') goalLine: ElementRef
+
 	goalData: MotionData[]
 	goalLinePath: string
 
 	trialsData: MotionData[][]
 	trialLinePaths: string[]
 
-	margin = { top: 20, right: 20, bottom: 30, left: 50 }
+	margin = {top: 20, right: 20, bottom: 30, left: 50}
 	height: number = 0
 	width: number = 0
 
@@ -53,10 +55,7 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 	requestingSelectionOf: DataType
 	autoClearTrials = true
 
-	constructor(
-		private elementRef: ElementRef,
-		private changeDetector: ChangeDetectorRef
-	) {
+	constructor(private elementRef: ElementRef, private changeDetector: ChangeDetectorRef) {
 		this.trialsData = []
 	}
 
@@ -72,9 +71,12 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 		this.initialized = true
 
 		let recognizer = this.doubleTapRecognizer = new Hammer.Manager(<any> this.svg)
-		recognizer.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }))
-		recognizer.on('doubletap', ev => { this.toggleZoom() })
+		recognizer.add(new Hammer.Tap({event: 'doubletap', taps: 2}))
+		recognizer.on('doubletap', ev => {
+			this.toggleZoom()
+		})
 
+		this.goalData = this.goal.data
 		this.safeRefresh()
 	}
 
@@ -85,6 +87,30 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 		}
 	}
 
+
+	animateGoalUpdate(goalMotionData: MotionData[]) {
+		if (this.initialized !== true) {
+			return
+		}
+
+		// First just clear the graph still using the previous goal
+		this.velocityDomain = undefined
+
+		// Plot goal line
+		let newGoalLine = this.generateLinePath(goalMotionData, this.activeGraph)
+		let goalLine = d3.select(this.goalLine.nativeElement)
+		goalLine
+			.transition()
+			.duration(600)
+			.attr('d', newGoalLine)
+			.on('end', () => {
+				// Queue a change detection
+				this.goalData = goalMotionData
+				this.goalLinePath = newGoalLine
+				this.changeDetector.markForCheck()
+			})
+	}
+
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes['goal']) {
 			this.velocityDomain = undefined
@@ -93,11 +119,12 @@ export class GraphsPanelComponent implements OnInit, AfterViewInit, OnChanges, O
 		}
 	}
 
+
 	clearHighlights() {
 		this.requestingSelectionOf = undefined
 	}
 
-	highlightError(error: AttemptError) {
+	highlightError(error: TrialError) {
 		if (error.type !== this.activeGraph) {
 			switch (error.type) {
 				case 's':

@@ -34,7 +34,7 @@ export const TUTORIAL_CHALLENGE: Challenge = {
 	goal: { position: 50, velocity: -30, posts: [4, 2, 0, 0, 0, 0] }
 }
 
-export const EASY_CHALLENGES: Challenge[] = [
+export const CHALLENGES_EASY: Challenge[] = [
 	{
 		id: '1',
 		name: 'Challenge #1',
@@ -77,7 +77,7 @@ export const EASY_CHALLENGES: Challenge[] = [
 	}
 ]
 
-export const INTERMEDIATE_CHALLENGES: Challenge[] = [
+export const CHALLENGES_INTERMEDIATE: Challenge[] = [
 	{
 		id: '6',
 		name: 'Challenge #6',
@@ -120,7 +120,7 @@ export const INTERMEDIATE_CHALLENGES: Challenge[] = [
 	}
 ]
 
-export const HARD_CHALLENGES: Challenge[] = [
+export const CHALLENGES_HARD: Challenge[] = [
 	{
 		id: '11',
 		name: 'Challenge #11',

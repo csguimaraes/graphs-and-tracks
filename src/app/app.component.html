@@ -6,24 +6,32 @@
 
 	<a [routerLink]="['challenges']">
 		<md-icon>star</md-icon>
-		Challenges
+		<span class="hidden-mobile">
+			Challenges
+		</span>
 	</a>
 
 	<a [routerLink]="['playground']" class="todo">
 		<md-icon>public</md-icon>
-		Community
+		<span class="hidden-mobile">
+			Community
+		</span>
 	</a>
 
 	<a [routerLink]="['settings']" class="todo">
 		<md-icon>settings</md-icon>
-		Settings
+		<span class="hidden-mobile">
+			Settings
+		</span>
 	</a>
 
 	<div class="filler"></div>
 
 	<a id="menu-user-status"> <!--md-icon-button [md-menu-trigger-for]="menu"-->
 		<img [src]="auth.user.avatarUrl">
-		{{ auth.user.username }}
+		<span class="hidden-small">
+			{{ auth.user.username }}
+		</span>
 		<md-icon>arrow_drop_down</md-icon>
 	</a>
 	<!--md-menu id="user-menu" #menu="mdMenu" x-position="after">

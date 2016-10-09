@@ -15,37 +15,43 @@ md-grid-list {
   }
 }
 
-.list-action {
-  padding: 16px;
-  box-sizing: border-box;
-  background: #F0F0F0;
+.list-actions {
+  display: flex;
+  margin: 0 -16px;
 
-  border-radius: 16px;
-  text-align: center;
+  .list-action {
+    flex: 1 1 auto;
+    padding: 16px;
+    margin: 0 16px;
+    box-sizing: border-box;
+    background: #F0F0F0;
 
-  &, & > * {
-    cursor: pointer;
-  }
+    border-radius: 16px;
+    text-align: center;
 
-  color: #999;
-  border: 3px dashed #CCC;
-  &:hover {
-    border-color: #AAA;
-    color: #666;
-  }
+    &, & > * {
+      cursor: pointer;
+    }
 
-  md-icon {
-    display: block;
-    font-size: 48px;
-    width: auto;
-    height: auto;
-  }
+    color: #999;
+    border: 3px dashed #CCC;
+    &:hover {
+      border-color: #AAA;
+      color: #666;
+    }
 
-  span {
-    font-weight: bold;
+    md-icon {
+      display: block;
+      font-size: 48px;
+      width: auto;
+      height: auto;
+    }
+
+    span {
+      font-weight: bold;
+    }
   }
 }
-
 
 .list-container {
   display: flex;
@@ -53,7 +59,31 @@ md-grid-list {
   justify-content: flex-start;
   margin: 0 -8px;
 
-  gt-challenge-list-item {
+  & > * {
     flex: 1 1 auto;
+  }
+}
+
+#no-custom-challenges {
+  color: #BBB;
+  margin: 32px auto;
+  padding: 32px 0;
+  text-align: left;
+  display: inline-block;
+  width: auto;
+  flex-grow: 0;
+
+  span {
+    display: inline-block;
+  }
+
+  md-icon {
+    display: block;
+    font-size: 36px !important;
+    float: left;
+    width: auto;
+    height: auto;
+    margin-right: 16px;
+    margin-top: -2px;
   }
 }

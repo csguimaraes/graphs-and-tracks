@@ -73,9 +73,9 @@ export class ChallengesService {
 
 	private loadBuiltinChallenges() {
 		this.examples = [
-			...Settings.EASY_CHALLENGES,
-			...Settings.INTERMEDIATE_CHALLENGES,
-			...Settings.HARD_CHALLENGES,
+			...Settings.CHALLENGES_EASY,
+			...Settings.CHALLENGES_INTERMEDIATE,
+			...Settings.CHALLENGES_HARD,
 		]
 
 		this.tutorial = Settings.TUTORIAL_CHALLENGE
