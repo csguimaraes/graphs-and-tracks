@@ -2,10 +2,11 @@ let path = require('path')
 let webpack = require('webpack')
 
 // Webpack Plugins
-let CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
-let HtmlWebpackPlugin = require('html-webpack-plugin')
-let ExtractTextPlugin = require('extract-text-webpack-plugin')
-let CopyWebpackPlugin = require('copy-webpack-plugin')
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 
 /**
  * Env
@@ -62,8 +63,11 @@ module.exports = function makeWebpackConfig() {
 			// Support for .ts files.
 			{
 				test: /\.ts$/,
-				loaders: ['ts', 'angular2-template-loader'],
-				exclude: [/node_modules\/(?!(ng2-.+))/]
+				loaders: [
+					'@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
+					'awesome-typescript-loader',
+					'angular2-template-loader'
+				]
 			},
 
 			// Style loaders for components (will be embedded within the component code)
@@ -71,8 +75,8 @@ module.exports = function makeWebpackConfig() {
 			{ test: /\.scss$/, include: root('src', 'app'), loader: 'raw!postcss!sass' },
 
 			// Style loaders for the app (will generate a standalone css and be added in the index.html head)
-			{ test: /\.css$/, exclude: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') },
-			{ test: /\.scss$/, include: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass') },
+			{ test: /\.css$/, exclude: root('public'), loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: ['css', 'postcss', 'sass']}) },
+			{ test: /\.scss$/, include: root('public'), loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: ['css', 'postcss', 'sass']}) },
 
 
 
@@ -109,7 +113,7 @@ module.exports = function makeWebpackConfig() {
 		// Reference: https://webpack.github.io/docs/code-splitting.html
 		// Reference: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
 		new CommonsChunkPlugin({
-			name: ['vendor', 'polyfills']
+			name: ['app', 'vendor', 'polyfills']
 		}),
 
 		// Inject script and link tags into html files
@@ -125,7 +129,7 @@ module.exports = function makeWebpackConfig() {
 
 		// Extract css files
 		// Reference: https://github.com/webpack/extract-text-webpack-plugin
-		new ExtractTextPlugin('css/[name].[hash].css', { disable: !isProd })
+		new ExtractTextPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
 	]
 
 	config.htmlLoader = {
@@ -136,16 +140,16 @@ module.exports = function makeWebpackConfig() {
 	// Add build specific plugins
 	if (isProd) {
 		config.plugins.push(
-			// Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
 			// Only emit files when there are no errors
+			// Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
 			new webpack.NoErrorsPlugin(),
 
-			// Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
 			// Dedupe modules in the output
+			// Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
 			new webpack.optimize.DedupePlugin(),
 
-			// Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
 			// Minify all javascript, switch loaders to minimizing mode
+			// Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
 			new webpack.optimize.UglifyJsPlugin({mangle: { keep_fnames: true }}),
 
 			// Copy assets from the public folder
@@ -158,6 +162,11 @@ module.exports = function makeWebpackConfig() {
 				]
 			}])
 		)
+	} else {
+		config.plugins.push(
+			// Do type checking in a separate process, so webpack don't need to wait.
+			// Reference: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
+			new ForkCheckerPlugin())
 	}
 
 	/**

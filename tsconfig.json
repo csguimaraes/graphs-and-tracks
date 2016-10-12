@@ -1,16 +1,25 @@
 {
-	"compilerOptions": {
-		"target": "ES5",
-		"module": "commonjs",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"sourceMap": true,
-		"noEmitHelpers": true
-	},
-	"compileOnSave": false,
-	"buildOnSave": false,
-	"exclude": [
-		"old",
-		"node_modules"
-	]
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "noEmitHelpers": true,
+    "paths": {
+      "app": [
+        "src/app"
+      ]
+    }
+  },
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "exclude": [
+    "old",
+    "node_modules"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true,
+    "useWebpackText": true
+  }
 }

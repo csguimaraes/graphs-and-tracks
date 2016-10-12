@@ -1,9 +1,9 @@
 # Graphs and Tracks
 
-Rewrite of the original [Graphs and Tracks](https://github.com/davidtro/gt) educational app, using [Angular 2](https://angular.io/) and [Material Design](https://material.angular.io/).
+Rewrite of the original [Graphs and Tracks](https://github.com/davidtro/gt) educational app, using [Angular 2](https://angular.io/) and [D3.js](https://d3js.org/).
 
 ## Demo
-The current state of the app can be visualized at [snolflake.github.io/gt](https://snolflake.github.io/gt).
+The current state of the app can be visualized at [graphsandtracks.com](http://graphsandtracks.com).
 
 The demo will be updated to the latest version every few days.
 
