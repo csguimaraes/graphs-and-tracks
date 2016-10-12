@@ -1,0 +1,5 @@
+$breakpoint-height: 720px;
+$breakpoint-width: 720px;
+
+$small-width: "only screen and (max-width : #{$breakpoint-width})";
+$small-height: "only screen and (max-height : #{$breakpoint-height})";

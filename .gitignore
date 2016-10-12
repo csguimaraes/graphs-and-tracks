@@ -1,6 +1,6 @@
 node_modules
 dist
 typings
-old/
+src/app-old
 .idea
 *.log

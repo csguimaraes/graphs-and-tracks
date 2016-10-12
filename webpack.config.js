@@ -1,20 +1,21 @@
-let path = require('path')
-let webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
 
-// Webpack Plugins
+const DefinePlugin = webpack.DefinePlugin
+const ContextReplacementPlugin = webpack.ContextReplacementPlugin
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
+
+const DashboardPlugin = require('webpack-dashboard/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
+const AwesomeTypescriptLoader = require('awesome-typescript-loader')
 
-/**
- * Env
- * Get npm lifecycle event to identify the environment
- */
-let ENV = process.env.npm_lifecycle_event
-let isProd = ENV === 'build'
-let baseUrl = '/'
+const ENV = process.env.npm_lifecycle_event
+const IS_PROD = ENV === 'build'
+const HMR = hasProcessFlag('hot');
+const BASE_URL = '/'
+
 module.exports = function makeWebpackConfig() {
 	/**
 	 * Config
@@ -26,19 +27,19 @@ module.exports = function makeWebpackConfig() {
 	config.devtool = 'source-map'
 
 	// add debug messages
-	config.debug = !isProd
+	config.debug = !IS_PROD
 
 	config.entry = {
-		'polyfills': './src/polyfills.ts',
-		'vendor': './src/vendor.ts',
-		'app': './src/main.ts'
+		'polyfills': src('polyfills.ts'),
+		'vendor': src('vendor.ts'),
+		'app': src('main.ts')
 	}
 
 	config.output = {
 		path: root('dist'),
-		publicPath: baseUrl,
-		filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
-		chunkFilename: isProd ? '[id].[hash].chunk.js' : '[id].chunk.js'
+		publicPath: BASE_URL,
+		filename: IS_PROD ? 'js/[name].[hash].js' : 'js/[name].js',
+		chunkFilename: IS_PROD ? '[id].[hash].chunk.js' : '[id].chunk.js'
 	}
 
 	config.resolve = {
@@ -46,66 +47,60 @@ module.exports = function makeWebpackConfig() {
 		root: root(),
 		extensions: ['', '.ts', '.js', '.json', '.css', '.scss', '.html'],
 		alias: {
-			'app': 'src/app',
-			'common': 'src/common'
-		}
+			'app': src('app')
+		},
+		plugins: [
+			new AwesomeTypescriptLoader.TsConfigPathsPlugin()
+		]
 	}
 
-	/**
-	 * Loaders
-	 * Reference: http://webpack.github.io/docs/configuration.html#module-loaders
-	 * List: http://webpack.github.io/docs/list-of-loaders.html
-	 * This handles most of the magic responsible for converting modules
-	 */
 	config.module = {
-		preLoaders: [{ test: /\.ts$/, loader: 'tslint' }],
+		preLoaders: [
+			{
+				test: /\.ts$/,
+				loader: 'tslint'
+			}
+		],
+
 		loaders: [
-			// Support for .ts files.
 			{
 				test: /\.ts$/,
 				loaders: [
-					'@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
+					'@angularclass/hmr-loader?pretty=' + !IS_PROD + '&prod=' + IS_PROD,
 					'awesome-typescript-loader',
 					'angular2-template-loader'
 				]
 			},
 
+			// Style loaders for the app (will generate a standalone css and be added in the template <head>)
+			// { test: /\.scss$/, include: src('app', 'app.component.ts'), loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: ['css', 'postcss', 'sass']}) },
+
 			// Style loaders for components (will be embedded within the component code)
-			{ test: /\.css$/, include: root('src', 'app'), loader: 'raw!postcss' },
-			{ test: /\.scss$/, include: root('src', 'app'), loader: 'raw!postcss!sass' },
-
-			// Style loaders for the app (will generate a standalone css and be added in the index.html head)
-			{ test: /\.css$/, exclude: root('public'), loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: ['css', 'postcss', 'sass']}) },
-			{ test: /\.scss$/, include: root('public'), loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: ['css', 'postcss', 'sass']}) },
-
-
+			{ test: /\.scss$/, include: src('app'), loader: 'raw!postcss!sass' },
 
 			// Support for *.json files.
 			{ test: /\.json$/, loader: 'json' },
 
-			// copy those assets to output
-			{ test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/, loader: 'file?name=fonts/[name].[hash].[ext]?' },
-
 			// support for .html as raw text
-			// Todo: use a loader that add image hashes
 			{ test: /\.html$/, loader: 'raw' }
 		],
+
 		postLoaders: [],
+
 		noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/, /angular2-polyfills\.js/]
 	}
 
-	/**
-	 * Plugins
-	 * Reference: http://webpack.github.io/docs/configuration.html#plugins
-	 * List: http://webpack.github.io/docs/list-of-plugins.html
-	 */
 	config.plugins = [
 		// Define env variables to help with builds
 		// Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-		new webpack.DefinePlugin({
-			// Environment helpers
+		new DefinePlugin({
+			'IS_PROD': IS_PROD,
+			'ENV': JSON.stringify(ENV),
+			'HMR': HMR,
 			'process.env': {
-				ENV: JSON.stringify(ENV)
+				'ENV': JSON.stringify(ENV),
+				'NODE_ENV': JSON.stringify(ENV),
+				'HMR': HMR,
 			}
 		}),
 
@@ -119,17 +114,24 @@ module.exports = function makeWebpackConfig() {
 		// Inject script and link tags into html files
 		// Reference: https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
-			template: root('/public/main.ejs'),
-			favicon: root('/public/img/favicon.png'),
+			template: src('public', 'main.ejs'),
 			chunksSortMode: 'dependency',
 			minify: false,
-			// inject: 'head',
-			baseUrl: baseUrl
+			inject: 'head',
+			baseUrl: BASE_URL
 		}),
 
 		// Extract css files
 		// Reference: https://github.com/webpack/extract-text-webpack-plugin
-		new ExtractTextPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
+		// new ExtractTextPlugin({
+		// 	filename: 'css/[name].[hash].css',
+		// 	disable: !IS_PROD
+		// }),
+
+		new ContextReplacementPlugin(
+			/angular\/core\/(esm\/src|src)\/linker/,
+			src()
+		)
 	]
 
 	config.htmlLoader = {
@@ -138,7 +140,7 @@ module.exports = function makeWebpackConfig() {
 
 
 	// Add build specific plugins
-	if (isProd) {
+	if (IS_PROD) {
 		config.plugins.push(
 			// Only emit files when there are no errors
 			// Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
@@ -155,7 +157,7 @@ module.exports = function makeWebpackConfig() {
 			// Copy assets from the public folder
 			// Reference: https://github.com/kevlened/copy-webpack-plugin
 			new CopyWebpackPlugin([{
-				from: root('public'),
+				from: src('public'),
 				ignore: [
 					'*.scss',
 					'main.ejs'
@@ -166,7 +168,9 @@ module.exports = function makeWebpackConfig() {
 		config.plugins.push(
 			// Do type checking in a separate process, so webpack don't need to wait.
 			// Reference: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
-			new ForkCheckerPlugin())
+			new AwesomeTypescriptLoader.ForkCheckerPlugin(),
+			new DashboardPlugin()
+		)
 	}
 
 	/**
@@ -193,7 +197,7 @@ module.exports = function makeWebpackConfig() {
 	 * Reference: http://webpack.github.io/docs/webpack-dev-server.html
 	 */
 	config.devServer = {
-		contentBase: './public',
+		contentBase: src('public'),
 		historyApiFallback: true,
 		stats: 'minimal'
 	}
@@ -201,8 +205,20 @@ module.exports = function makeWebpackConfig() {
 	return config
 }()
 
-// Helper functions
-function root(args) {
-	args = Array.prototype.slice.call(arguments, 0)
-	return path.join.apply(path, [__dirname].concat(args))
+// HELPERS
+
+function root() {
+	return path.join(__dirname, ...arguments)
+}
+
+function src() {
+	return path.join(__dirname, 'src', ...arguments)
+}
+
+function hasProcessFlag(flag) {
+	return process.argv.join('').indexOf(flag) > -1;
+}
+
+function isWebpackDevServer() {
+	return process.argv[1] && !! (/webpack-dev-server/.exec(process.argv[1]));
 }

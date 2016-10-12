@@ -6,6 +6,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "noEmitHelpers": true,
+    "baseUrl": "./src",
     "paths": {
       "app": [
         "src/app"

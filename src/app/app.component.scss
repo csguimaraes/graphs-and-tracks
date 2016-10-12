@@ -1,56 +1,33 @@
-a {
-  display: inline-block;
+@import "styles/responsive";
+
+$toolbar-height: 64px;
+$toolbar-height-alt: 48px;
+
+md-sidenav-layout {
   height: 100%;
-  line-height: 40px;
-  background: rgba(255,255,255,0.1);
-  cursor: pointer;
-  text-decoration: none;
-  color: white !important;
+  width: 100%;
+}
 
-  margin: 0 8px;
-  padding: 0 16px;
-  &:first-of-type {
-    margin-left: 0;
-    padding-left: 0;
-  }
-
-  &:last-of-type {
-    margin-right: 0;
-    padding-right: 0;
-  }
-
-  &:hover {
-    background: rgba(255,255,255,0.3);
-    opacity: .9;
-  }
-
-  md-icon {
-    cursor: pointer;
+@media #{$small-height} {
+  md-toolbar {
+    min-height: $toolbar-height-alt !important;
+    md-toolbar-row {
+      height: $toolbar-height-alt !important;
+    }
   }
 }
 
-a.logo {
-  background: none;
-}
+#main-container {
+  position: absolute;
+  top: $toolbar-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-md-icon {
-  vertical-align: middle;
-  margin-top: -3px;
-}
+  overflow: hidden;
+  background-color: red;
 
-#menu-user-status {
-  padding: 0 8px;
-  img {
-    width: 32px;
-    height: 32px;
-    border-radius: 100%;
-    object-fit: cover;
-    margin-right: 8px;
-    margin-top: 4px;
-    vertical-align: top;
+  @media #{$small-height} {
+    top: $toolbar-height-alt;
   }
-
-  line-height: 40px;
-  font-size: 16px;
-  font-weight: normal;
 }

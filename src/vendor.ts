@@ -6,11 +6,11 @@ import '@angular/common'
 import '@angular/http'
 import '@angular/router'
 
+// Material 2
+import '@angular/material'
+
 // RxJS
 import 'rxjs'
 
 // HammerJs
 import 'hammerjs'
-
-// Material 2
-import '@angular/material'

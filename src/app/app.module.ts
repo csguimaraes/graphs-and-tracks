@@ -1,67 +1,70 @@
-import { NgModule } from '@angular/core'
+import { NgModule, ApplicationRef } from '@angular/core'
+import { RouterModule } from '@angular/router'
 import { BrowserModule } from '@angular/platform-browser'
 
-import { MaterialModule } from '@angular/material'
+import { createNewHosts, createInputTransfer, removeNgStyles } from '@angularclass/hmr'
 
 import { AppComponent } from './app.component'
-import { APP_ROUTING, APP_ROUTING_PROVIDERS } from './app.routing'
+import { AppState, StoreType } from './app.state'
 
-import { ChallengesService } from './shared/challenges.service'
-import { AuthService } from './shared/auth.service'
-
-import { DumpPipe } from './shared/dump.pipe'
-
-import { HomeComponent } from './home/home.component'
-import { ChallengeComponent } from './challenges/challenge/challenge.component'
-import { ChallengeEditorComponent } from './challenges/challenge-editor/challenge-editor.component'
-import { ChallengeListComponent } from './challenges/challenge-list/challenge-list.component'
-import { TrackPanelComponent } from './shared/track-panel/track-panel.component'
-import { GraphsPanelComponent } from './shared/graphs-panel/graphs-panel.component'
-import { ScaleComponent } from './shared/scale/scale.component'
-import { TrackComponent } from './shared/track/track.component'
-import { SliderDirective } from './shared/slider.directive'
-import { AboutComponent } from './about/about.component'
-import { ChallengeListItemComponent } from './challenges/challenge-list/challenge-list-item/challenge-list-item.component'
-import { EditorComponent } from './editor/editor.component'
-import { SlimScrollComponent } from './shared/slim-scroll/slim-scroll.component'
-import { ChallengeDifficultyComponent } from './challenges/challenge-list/challenge-difficulty.component'
+import { PagesModule, SharedModule } from 'app/modules'
 
 @NgModule({
-	imports: [
-		BrowserModule,
-		MaterialModule.forRoot(),
-		APP_ROUTING
-	],
 	declarations: [
 		AppComponent,
-		HomeComponent,
-		AboutComponent,
-
-		ChallengeListComponent,
-		ChallengeListItemComponent,
-		ChallengeDifficultyComponent,
-
-		TrackComponent,
-
-		ChallengeComponent,
-		ChallengeEditorComponent,
-		TrackPanelComponent,
-		GraphsPanelComponent,
-
-		EditorComponent,
-
-		SliderDirective,
-		SlimScrollComponent,
-		ScaleComponent,
-
-		DumpPipe
+	],
+	imports: [
+		BrowserModule,
+		RouterModule.forRoot([]),
+		SharedModule,
+		PagesModule,
 	],
 	providers: [
-		APP_ROUTING_PROVIDERS,
-		ChallengesService,
-		AuthService
+		AppState,
 	],
-	bootstrap: [ AppComponent ]
+	bootstrap: [
+		AppComponent,
+	],
 })
 export class AppModule {
+	constructor(public appRef: ApplicationRef, public appState: AppState) {}
+
+	hmrOnInit(store: StoreType) {
+		if (!store || !store.state) {
+			return
+		}
+
+		console.log('HMR store', JSON.stringify(store, null, 2))
+
+		// set state
+		this.appState._state = store.state
+		// set input values
+		if ('restoreInputValues' in store) {
+			let restoreInputValues = store.restoreInputValues
+			setTimeout(restoreInputValues)
+		}
+
+		this.appRef.tick()
+		delete store.state
+		delete store.restoreInputValues
+	}
+
+	hmrOnDestroy(store: StoreType) {
+		const cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement)
+		// save state
+		const state = this.appState._state
+		store.state = state
+		// recreate root elements
+		store.disposeOldHosts = createNewHosts(cmpLocation)
+		// save input values
+		store.restoreInputValues  = createInputTransfer()
+		// remove styles
+		removeNgStyles()
+	}
+
+	hmrAfterDestroy(store: StoreType) {
+		// display new elements
+		store.disposeOldHosts()
+		delete store.disposeOldHosts
+	}
 }

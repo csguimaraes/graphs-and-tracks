@@ -1,12 +1,14 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
+import { bootloader } from '@angularclass/hmr'
+
 import { AppModule } from './app/app.module'
+import { decorateModuleRef } from './app/app.environment'
 
-import '../public/styles/icons.scss'
-import '../public/styles/utils.scss'
-import '../public/styles/main.scss'
-import '../public/styles/responsive.scss'
-import '../public/styles/hacks.scss'
+export function main(): Promise<any> {
+	return platformBrowserDynamic()
+		.bootstrapModule(AppModule)
+		.then(decorateModuleRef)
+		.catch(err => console.error(err))
+}
 
-platformBrowserDynamic()
-	.bootstrapModule(AppModule)
-	.catch(err => console.error(err))
+bootloader(main)

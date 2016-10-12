@@ -1,13 +1,15 @@
-import { Component } from '@angular/core'
-
-import { AuthService } from './shared/auth.service'
+import { Component, ViewEncapsulation } from '@angular/core'
 
 @Component({
 	selector: 'gt-app',
+	styleUrls: [
+		'./styles/reset.scss',
+		'./styles/theme.scss',
+		'./styles/utils.scss',
+		'./app.component.scss'
+	],
 	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.scss']
+	encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
-	constructor(public auth: AuthService) {
-	}
 }
