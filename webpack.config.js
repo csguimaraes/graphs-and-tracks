@@ -1,13 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const DefinePlugin = webpack.DefinePlugin
-const ContextReplacementPlugin = webpack.ContextReplacementPlugin
-const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
-
 const DashboardPlugin = require('webpack-dashboard/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+// const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const AwesomeTypescriptLoader = require('awesome-typescript-loader')
 
@@ -44,7 +40,7 @@ module.exports = function makeWebpackConfig() {
 
 	config.resolve = {
 		cache: true,
-		root: root(),
+		root: src(),
 		extensions: ['', '.ts', '.js', '.json', '.css', '.scss', '.html'],
 		alias: {
 			'app': src('app')
@@ -93,7 +89,7 @@ module.exports = function makeWebpackConfig() {
 	config.plugins = [
 		// Define env variables to help with builds
 		// Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-		new DefinePlugin({
+		new webpack.DefinePlugin({
 			'IS_PROD': IS_PROD,
 			'ENV': JSON.stringify(ENV),
 			'HMR': HMR,
@@ -107,8 +103,8 @@ module.exports = function makeWebpackConfig() {
 		// Generate common chunks if necessary
 		// Reference: https://webpack.github.io/docs/code-splitting.html
 		// Reference: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-		new CommonsChunkPlugin({
-			name: ['app', 'vendor', 'polyfills']
+		new webpack.optimize.CommonsChunkPlugin({
+			names: ['app', 'vendor', 'polyfills']
 		}),
 
 		// Inject script and link tags into html files
@@ -128,7 +124,7 @@ module.exports = function makeWebpackConfig() {
 		// 	disable: !IS_PROD
 		// }),
 
-		new ContextReplacementPlugin(
+		new webpack.ContextReplacementPlugin(
 			/angular\/core\/(esm\/src|src)\/linker/,
 			src()
 		)

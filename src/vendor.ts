@@ -14,3 +14,6 @@ import 'rxjs'
 
 // HammerJs
 import 'hammerjs'
+
+// Parse5
+import 'parse5'

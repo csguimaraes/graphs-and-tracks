@@ -1,7 +1,6 @@
-import { NgModule }            from '@angular/core'
-import { CommonModule }        from '@angular/common'
-import { HttpModule }        from '@angular/http'
-import { MaterialModule } from '@angular/material'
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { HttpModule } from '@angular/http'
 
 import { IconComponent } from './icon.component'
 
@@ -9,8 +8,6 @@ import { IconComponent } from './icon.component'
 	imports: [
 		HttpModule,
 		CommonModule,
-
-		MaterialModule,
 	],
 	declarations: [
 		IconComponent,
@@ -21,8 +18,6 @@ import { IconComponent } from './icon.component'
 	exports: [
 		HttpModule,
 		CommonModule,
-
-		MaterialModule,
 
 		IconComponent,
 	],

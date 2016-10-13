@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnInit, AfterViewInit, ChangeDetectionStrategy } from '@angular/core'
+import { Component, ElementRef, OnInit, AfterViewInit, ChangeDetectionStrategy, Input } from '@angular/core'
 import { Http, Response } from '@angular/http'
 
 import { Subject } from 'rxjs'
 
-import * as parse5 from 'parse5'
+import { ASTNode, parseFragment } from 'parse5'
 
 @Component({
 	selector: 'gt-icon',
@@ -20,7 +20,7 @@ import * as parse5 from 'parse5'
 		[attr.width]="size" [attr.height]="size" viewBox="0 0 24 24"
 		[ngStyle]="{ 'fill': fillColor }"
 		>
-			<path *ngFor="let path of paths" [attr.d]="path"/>
+			<path *ngFor="let path of paths | async" [attr.d]="path"/>
 		</svg>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -29,7 +29,7 @@ export class IconComponent implements OnInit, AfterViewInit {
 	name: string
 	paths = new Subject<string[]>()
 
-	size: number = 20
+	@Input() size: number = 24
 
 	fillColor: string = 'black'
 
@@ -63,10 +63,14 @@ export class IconComponent implements OnInit, AfterViewInit {
 
 	loadIcon = (res: Response) => {
 		let fileContent = res.text()
-		let fragment = parse5.parseFragment(fileContent)
+		let fragment = parseFragment(fileContent)
 		let svg = fragment.childNodes.find(n => n.nodeName === 'svg')
 		let pathElements = svg.childNodes.filter(n => n.nodeName === 'path')
-		let paths = pathElements.map(p => p.attrs.find(a => a.name === 'd').value)
+
+		let paths = pathElements
+			.filter(this.pathsFilterNoFill)
+			.map(this.pathsMapToValue)
+
 		this.paths.next(paths)
 	}
 
@@ -75,5 +79,14 @@ export class IconComponent implements OnInit, AfterViewInit {
 			error.status ? `${error.status} - ${error.statusText}` : 'Server error'
 		console.error(errMsg)
 		return Promise.reject(errMsg)
+	}
+
+	pathsFilterNoFill = (pathNode: ASTNode) => {
+		let fill = pathNode.attrs.find(a => a.name === 'fill')
+		return !(fill && fill.value === 'none')
+	}
+
+	pathsMapToValue = (pathNode: ASTNode) => {
+		return pathNode.attrs.find(a => a.name === 'd').value
 	}
 }

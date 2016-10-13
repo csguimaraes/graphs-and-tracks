@@ -2,6 +2,8 @@ import { NgModule, ApplicationRef } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { BrowserModule } from '@angular/platform-browser'
 
+import { MaterialModule } from '@angular/material'
+
 import { createNewHosts, createInputTransfer, removeNgStyles } from '@angularclass/hmr'
 
 import { AppComponent } from './app.component'
@@ -16,6 +18,8 @@ import { PagesModule, SharedModule } from 'app/modules'
 	imports: [
 		BrowserModule,
 		RouterModule.forRoot([]),
+		MaterialModule.forRoot(),
+
 		SharedModule,
 		PagesModule,
 	],

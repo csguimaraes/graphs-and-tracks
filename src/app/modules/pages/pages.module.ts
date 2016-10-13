@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 import { values } from 'lodash'
 
 import * as Pages from './index'
-// import { SharedModule } from 'app/modules'
+import { SharedModule } from 'app/modules'
 
 const PAGES_COMPONENTS = <any[]> values(Pages)
 const PAGES_ROUTES: Routes = [
@@ -16,7 +16,7 @@ const PAGES_ROUTES: Routes = [
 @NgModule({
 	imports: [
 		RouterModule.forChild(PAGES_ROUTES),
-		// SharedModule
+		SharedModule
 	],
 	declarations: [
 		...PAGES_COMPONENTS

@@ -4,13 +4,13 @@
 	</md-sidenav>
 	
 	<md-toolbar color="primary">
-		<button (click)="mobileMenu.open()">BR?</button>
+		<button (click)="openSidenav()">BR?</button>
 		
 		<span>Graphs and Tracks</span>
 		
 		<span class="flex-fill"></span>
-		
-		<gt-icon>account-circle</gt-icon>
+		<div [innerHTML]="test"></div>
+		<gt-icon [size]="size">guest</gt-icon>
 	</md-toolbar>
 	
 	<div id="main-container">
