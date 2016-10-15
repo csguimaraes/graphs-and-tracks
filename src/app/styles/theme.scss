@@ -1,12 +1,13 @@
 @import '~@angular/material/core/theming/all-theme';
+
 // Plus imports for other components in your app.
 
 // Include the base styles for Angular Material core. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 @include md-core();
 
-$primary: md-palette($md-indigo);
-$accent:  md-palette($md-pink, A200, A100, A400);
+$primary: md-palette($md-teal);
+$accent:  md-palette($md-cyan);
 
 // The warn palette is optional (defaults to red).
 $warn:    md-palette($md-red);
@@ -18,3 +19,31 @@ $theme: md-light-theme($primary, $accent, $warn);
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($theme);
+
+
+$highlight: md-color($primary, darker);
+$contrast: md-color($primary, darker-contrast);
+
+
+// Material Design customizations
+md-dialog-container {
+  padding: 0 !important;
+  overflow: visible;
+
+  focus-trap > div > * > md-card {
+    padding: 0 !important;
+    md-card-content {
+      padding: 16px;
+    }
+  }
+
+  md-toolbar-row .flex-vcenter {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+md-card-title, md-card-content {
+  color: #333;
+}

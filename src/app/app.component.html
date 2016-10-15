@@ -1,15 +1,43 @@
 <md-sidenav-layout>
-	<md-sidenav #mobileMenu>
-		<h2>MENU</h2>
+	<md-sidenav #sidenav class="app-menu-links">
+		<div (click)="sidenav.close()" [routerLink]="'/'">
+			<gt-button icon="app-logo">{{title}}</gt-button>
+		</div>
+		<div *ngFor="let menuLink of menuLinks" class="sidenav-link">
+			<gt-button
+					[icon]="menuLink.icon" [routerLink]="menuLink.route"
+					[routerLinkActive]="'active'"
+					(click)="sidenav.close()"
+			>
+				{{ menuLink.name }}
+			</gt-button>
+		</div>
 	</md-sidenav>
 	
 	<md-toolbar color="primary">
-		<gt-icon>menu</gt-icon>
-		<span>Graphs and Tracks</span>
+		<div id="app-logo" class="flex-vcenter">
+			<gt-icon id="app-sidenav-button" class="show-sw" (click)="sidenav.open()">app-menu</gt-icon>
+			<span class="flex-vcenter" [routerLink]="'/'">
+				<gt-icon class="hide-sw">app-logo</gt-icon>
+				<span>{{title}}</span>
+			</span>
+		</div>
 		
-		<span class="flex-fill"></span>
-		<div [innerHTML]="test"></div>
-		<gt-icon [size]="size">guest</gt-icon>
+		<div id="app-nav-links" class="app-menu-links hide-sw">
+			<gt-button *ngFor="let menuLink of menuLinks"
+			           [icon]="menuLink.icon" [routerLink]="menuLink.route"
+			           [routerLinkActive]="'active'"
+			>
+				{{ menuLink.name }}
+			</gt-button>
+		</div>
+		
+		<div class="flex-fill"></div>
+		<gt-button icon="user-guest" icon-position="right"
+			(click)="openLogin()"
+		>
+			Sign In
+		</gt-button>
 	</md-toolbar>
 	
 	<div id="main-container">

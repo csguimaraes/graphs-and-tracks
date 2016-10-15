@@ -2,9 +2,7 @@ import { NgModule, ApplicationRef } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { BrowserModule } from '@angular/platform-browser'
 
-import { MaterialModule } from '@angular/material'
-
-import { createNewHosts, createInputTransfer, removeNgStyles } from '@angularclass/hmr'
+import { createNewHosts, createInputTransfer } from '@angularclass/hmr'
 
 import { AppComponent } from './app.component'
 import { AppState, StoreType } from './app.state'
@@ -18,8 +16,6 @@ import { PagesModule, SharedModule } from 'app/modules'
 	imports: [
 		BrowserModule,
 		RouterModule.forRoot([]),
-		MaterialModule.forRoot(),
-
 		SharedModule,
 		PagesModule,
 	],
@@ -40,9 +36,7 @@ export class AppModule {
 
 		console.log('HMR store', JSON.stringify(store, null, 2))
 
-		// set state
 		this.appState._state = store.state
-		// set input values
 		if ('restoreInputValues' in store) {
 			let restoreInputValues = store.restoreInputValues
 			setTimeout(restoreInputValues)
@@ -55,20 +49,21 @@ export class AppModule {
 
 	hmrOnDestroy(store: StoreType) {
 		const cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement)
-		// save state
 		const state = this.appState._state
 		store.state = state
-		// recreate root elements
 		store.disposeOldHosts = createNewHosts(cmpLocation)
-		// save input values
 		store.restoreInputValues  = createInputTransfer()
-		// remove styles
-		removeNgStyles()
+		this.removeStyles()
 	}
 
 	hmrAfterDestroy(store: StoreType) {
-		// display new elements
 		store.disposeOldHosts()
 		delete store.disposeOldHosts
+	}
+
+	removeStyles() {
+		let styles = Array.prototype.slice.call(document.head.querySelectorAll('style'), 0)
+		// styles = styles.filter((style) => style.innerText.indexOf('_ng') !== -1)
+		styles.map(el => el.remove())
 	}
 }

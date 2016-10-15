@@ -1,11 +1,43 @@
 @import "styles/responsive";
+@import 'styles/theme';
 
-$toolbar-height: 64px;
-$toolbar-height-alt: 48px;
+$toolbar-height: 48px;
+$toolbar-height-alt: ($toolbar-height / 4) * 3;
+
+body, html {
+  min-width:320px;
+  min-height:320px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-weight: 400;
+}
+
+%menu-font {
+  font-size: 18px;
+  line-height: 18px;
+}
 
 md-sidenav-layout {
   height: 100%;
   width: 100%;
+
+  md-sidenav > div {
+    min-width: 200px;
+    height: $toolbar-height !important;
+    @media #{$small-height} {
+      height: $toolbar-height-alt !important;
+    }
+
+    gt-button {
+      display: block;
+    }
+  }
+}
+
+md-toolbar {
+  min-height: $toolbar-height !important;
+  md-toolbar-row {
+    height: $toolbar-height !important;
+  }
 }
 
 @media #{$small-height} {
@@ -17,6 +49,32 @@ md-sidenav-layout {
   }
 }
 
+md-toolbar-row > * {
+  height: 100%;
+}
+
+#app-logo {
+  position: relative;
+
+  gt-icon {
+    margin-right: 8px;
+  }
+
+  &, & > * {
+    cursor: pointer;
+  }
+}
+
+#app-nav-links {
+  display: inline-flex;
+  margin-left: 32px;
+
+  gt-button:not(:first-child) {
+    margin-left: 16px;
+  }
+}
+
+
 #main-container {
   position: absolute;
   top: $toolbar-height;
@@ -25,9 +83,26 @@ md-sidenav-layout {
   right: 0;
 
   overflow: hidden;
-  background-color: red;
 
   @media #{$small-height} {
     top: $toolbar-height-alt;
   }
+}
+
+md-toolbar-row, .app-menu-links gt-button {
+  @extend %menu-font;
+}
+
+.app-menu-links gt-button {
+  height: 100%;
+
+  &.active {
+    transition: background 400ms ease-in;
+    background: $highlight;
+    color: $contrast;
+  }
+}
+
+.sidenav-link:not(.active) {
+  color: $highlight;
 }

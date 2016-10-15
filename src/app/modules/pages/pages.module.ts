@@ -9,6 +9,7 @@ const PAGES_COMPONENTS = <any[]> values(Pages)
 const PAGES_ROUTES: Routes = [
 	{ path: '', redirectTo: 'home', pathMatch: 'full' },
 	{ path: 'home', component: Pages.HomeComponent },
+	{ path: 'settings', component: Pages.SettingsComponent },
 	{ path: 'about', component: Pages.AboutComponent },
 	{ path: '**', component: Pages.NotFoundComponent },
 ]

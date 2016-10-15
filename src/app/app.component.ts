@@ -1,5 +1,14 @@
-import { Component, ViewEncapsulation } from '@angular/core'
-import { SafeHtml, DomSanitizer } from '@angular/platform-browser'
+import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core'
+import { MdDialogRef, MdDialog, MdDialogConfig } from '@angular/material'
+
+import { LoginDialogComponent } from 'app/modules/shared'
+
+export interface AppLink {
+	icon: string
+	name: string
+	subtitle?: string
+	route: string
+}
 
 @Component({
 	selector: 'gt-app',
@@ -13,16 +22,32 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser'
 	encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
-	size = 36
-	test: SafeHtml = 'HELLO'
+	title = 'Graphs & Tracks'
 
-	openSidenav() {
-		this.size = this.size === 24 ? 48 : 24
-		this.test = this.sanitizer.bypassSecurityTrustHtml(
-			'<gt-icon [size]="80">guest</gt-icon>'
-		)
+	menuLinks: AppLink[] = [
+		{ name: 'Challenges', icon: 'challenge-list', route: '/challenges' },
+		{ name: 'Community', icon: 'community-online', route: '/community' },
+		{ name: 'Settings', icon: 'app-settings', route: '/settings' },
+		{ name: 'About', icon: 'app-about', route: '/about' }
+	]
+
+
+
+	loginDialogRef: MdDialogRef<LoginDialogComponent>
+	lastCloseResult: string
+
+	constructor(public dialog: MdDialog, public viewContainerRef: ViewContainerRef) {
 	}
 
-	constructor(private sanitizer: DomSanitizer) {
+	openLogin() {
+		let config = new MdDialogConfig()
+		config.viewContainerRef = this.viewContainerRef
+
+		this.loginDialogRef = this.dialog.open(LoginDialogComponent, config)
+
+		this.loginDialogRef.afterClosed().subscribe(result => {
+			this.lastCloseResult = result
+			this.loginDialogRef = null
+		})
 	}
 }

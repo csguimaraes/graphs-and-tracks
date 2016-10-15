@@ -1,0 +1,31 @@
+@import "~app/styles/theme.scss";
+
+md-card {
+  max-width: 500px;
+  text-align: center;
+  margin: 32px auto;
+}
+
+
+md-list {
+  display: inline-block;
+  & * {
+    color: #333;
+  }
+
+  md-list-item {
+    text-align: left;
+    & /deep/ gt-button {
+      span {
+        color: #666;
+      }
+
+      gt-icon {
+        padding: 8px;
+        border-radius: 100%;
+        background: $highlight;
+        color: white;
+      }
+    }
+  }
+}

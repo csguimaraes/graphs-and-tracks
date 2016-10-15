@@ -1,0 +1,22 @@
+gt-button {
+  position: relative;
+
+  .gt-button-mask {
+    position: relative;
+    height: 100%;
+
+    &, & * { cursor: pointer !important; }
+  }
+
+  .gt-button-content {
+    height: 100%;
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
+    padding: 0 8px;
+
+    & > *:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+<div class="gt-button-mask" md-ripple>
+	<div class="gt-button-content">
+		<gt-icon *ngIf="icon && position === 'left'">{{icon}}</gt-icon>
+		<span><ng-content></ng-content></span>
+		<gt-icon *ngIf="icon && position === 'right'">{{icon}}</gt-icon>
+	</div>
+</div>

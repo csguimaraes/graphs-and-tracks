@@ -1,0 +1,57 @@
+md-card {
+  min-width: 300px;
+  md-card-content {
+    text-align: center;
+    color: #333;
+  }
+}
+
+.login-button {
+  &, & * {
+    cursor: pointer !important;
+  }
+
+  padding-right: 8px;
+  height: 35px;
+  background: none;
+  border: none;
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  color: white;
+  fill: white;
+  font-size: 18px;
+  margin: 15px auto;
+  border-bottom: 2px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  box-shadow: 0 4px 2px -2px gray;
+  font-weight: 500;
+
+  &:active {
+    transform: scale(0.9);
+    transform-origin: 50% 50%;
+    transition: transform 150ms ease-out;
+  }
+
+  &.facebook {
+    border-color: #2d5073;
+    background-color: #3b5998;
+  }
+
+  &.google {
+    border-color: #aa3a2c;
+    background-color: #d34836;
+  }
+
+  gt-icon {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0 8px;
+    height: calc(100% + 2px);
+    margin-right: 8px;
+    margin-top: 2px;
+    & /deep/ svg {
+      height: 100% !important;
+    }
+  }
+}
+

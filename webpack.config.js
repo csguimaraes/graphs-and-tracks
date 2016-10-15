@@ -1,9 +1,19 @@
 const path = require('path')
 const webpack = require('webpack')
 
+const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const NoErrorsPlugin = require('webpack/lib/NoErrorsPlugin');
+
+const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+
 const DashboardPlugin = require('webpack-dashboard/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-// const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const AwesomeTypescriptLoader = require('awesome-typescript-loader')
 
@@ -12,15 +22,13 @@ const IS_PROD = ENV === 'build'
 const HMR = hasProcessFlag('hot');
 const BASE_URL = '/'
 
-module.exports = function makeWebpackConfig() {
-	/**
-	 * Config
-	 * Reference: http://webpack.github.io/docs/configuration.html
-	 * This is the object where all configuration gets set
-	 */
-	let config = {}
+// search: '([^\\w-])color:([^;]+)',
+// replace: '$1color:$2;fill:$2;',
+// flags: 'gi'
+const TEXT_COLOR_AS_FILL = `string-replace?search=([^\\w-])color:([^;]+)&replace=$1color:$2;fill:$2;&flags=gi`
 
-	config.devtool = 'source-map'
+module.exports = function makeWebpackConfig() {
+	let config = {}
 
 	// add debug messages
 	config.debug = !IS_PROD
@@ -69,16 +77,20 @@ module.exports = function makeWebpackConfig() {
 			},
 
 			// Style loaders for the app (will generate a standalone css and be added in the template <head>)
-			// { test: /\.scss$/, include: src('app', 'app.component.ts'), loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: ['css', 'postcss', 'sass']}) },
+			{ test: /\.scss$/, exclude: src('app'), loader: ExtractTextPlugin.extract({ loader: `css!postcss!${TEXT_COLOR_AS_FILL}!sass` }) },
 
 			// Style loaders for components (will be embedded within the component code)
-			{ test: /\.scss$/, include: src('app'), loader: 'raw!postcss!sass' },
+			{ test: /\.scss$/, include: src('app'), loaders: `raw!postcss!${TEXT_COLOR_AS_FILL}!sass` },
 
 			// Support for *.json files.
 			{ test: /\.json$/, loader: 'json' },
 
-			// support for .html as raw text
-			{ test: /\.html$/, loader: 'raw' }
+			// Support for .html as raw text
+			{ test: /\.html$/, loader: 'raw' },
+
+			// Adds webfonts to the bundles
+			{ test: /\.woff(2)?([#?].*)?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
+			{ test: /\.(ttf|eot|svg)([#?].*)?$/, loader: "file-loader" }
 		],
 
 		postLoaders: [],
@@ -89,7 +101,7 @@ module.exports = function makeWebpackConfig() {
 	config.plugins = [
 		// Define env variables to help with builds
 		// Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-		new webpack.DefinePlugin({
+		new DefinePlugin({
 			'IS_PROD': IS_PROD,
 			'ENV': JSON.stringify(ENV),
 			'HMR': HMR,
@@ -100,10 +112,17 @@ module.exports = function makeWebpackConfig() {
 			}
 		}),
 
+		new SourceMapDevToolPlugin({
+			filename: '[file].map',
+			exclude: /(vendor|polyfills)\.js/
+		}),
+
+		new NamedModulesPlugin(),
+
 		// Generate common chunks if necessary
 		// Reference: https://webpack.github.io/docs/code-splitting.html
 		// Reference: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-		new webpack.optimize.CommonsChunkPlugin({
+		new CommonsChunkPlugin({
 			names: ['app', 'vendor', 'polyfills']
 		}),
 
@@ -119,12 +138,11 @@ module.exports = function makeWebpackConfig() {
 
 		// Extract css files
 		// Reference: https://github.com/webpack/extract-text-webpack-plugin
-		// new ExtractTextPlugin({
-		// 	filename: 'css/[name].[hash].css',
-		// 	disable: !IS_PROD
-		// }),
+		new ExtractTextPlugin({
+			filename: 'css/[name].[hash].css'
+		}),
 
-		new webpack.ContextReplacementPlugin(
+		new ContextReplacementPlugin(
 			/angular\/core\/(esm\/src|src)\/linker/,
 			src()
 		)
@@ -140,15 +158,15 @@ module.exports = function makeWebpackConfig() {
 		config.plugins.push(
 			// Only emit files when there are no errors
 			// Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
-			new webpack.NoErrorsPlugin(),
+			new NoErrorsPlugin(),
 
 			// Dedupe modules in the output
 			// Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
-			new webpack.optimize.DedupePlugin(),
+			new DedupePlugin(),
 
 			// Minify all javascript, switch loaders to minimizing mode
 			// Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-			new webpack.optimize.UglifyJsPlugin({mangle: { keep_fnames: true }}),
+			new UglifyJsPlugin({mangle: { keep_fnames: true }}),
 
 			// Copy assets from the public folder
 			// Reference: https://github.com/kevlened/copy-webpack-plugin
