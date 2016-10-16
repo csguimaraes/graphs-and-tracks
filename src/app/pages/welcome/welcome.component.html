@@ -1,0 +1,27 @@
+<div>
+	<md-card>
+		<md-card-title [routerLink]="'/about'" class="flex-vcenter">
+			<gt-icon size="auto">app-logo</gt-icon>
+			<span>Graphs and Tracks</span>
+		</md-card-title>
+		<md-card-content>
+			<p>
+				A simulation designed for math and physics students to help develop <br class="hide-sw">
+				an intuitive understanding of graphs of position, velocity and acceleration. <br class="hide-sw">
+				Test your understanding of one-dimensional motion by reading graphs <br class="hide-sw">
+				and producing the corresponding motion. <br class="hide-sw">
+			</p>
+			
+			<br>
+			
+			<md-list>
+				<md-list-item *ngFor="let homeLink of homeLinks">
+					<gt-button [icon]="homeLink.icon" [routerLink]="homeLink.route">
+						<b md-line>{{ homeLink.name }}</b>
+						<span md-line>{{ homeLink.subtitle }}</span>
+					</gt-button>
+				</md-list-item>
+			</md-list>
+		</md-card-content>
+	</md-card>
+</div>

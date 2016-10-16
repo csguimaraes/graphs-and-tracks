@@ -51,7 +51,10 @@ module.exports = function makeWebpackConfig() {
 		root: src(),
 		extensions: ['', '.ts', '.js', '.json', '.css', '.scss', '.html'],
 		alias: {
-			'app': src('app')
+			'common': src('app/modules/common/'),
+			'challenges': src('app/modules/challenges/'),
+			'community': src('app/modules/communit/'),
+			'assets': src('assets'),
 		},
 		plugins: [
 			new AwesomeTypescriptLoader.TsConfigPathsPlugin()
@@ -129,7 +132,7 @@ module.exports = function makeWebpackConfig() {
 		// Inject script and link tags into html files
 		// Reference: https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
-			template: src('public', 'main.ejs'),
+			template: src('main.ejs'),
 			chunksSortMode: 'dependency',
 			minify: false,
 			inject: 'head',
@@ -166,12 +169,12 @@ module.exports = function makeWebpackConfig() {
 
 			// Minify all javascript, switch loaders to minimizing mode
 			// Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-			new UglifyJsPlugin({mangle: { keep_fnames: true }}),
+			new UglifyJsPlugin({ mangle: { keep_fnames: true } }),
 
 			// Copy assets from the public folder
 			// Reference: https://github.com/kevlened/copy-webpack-plugin
 			new CopyWebpackPlugin([{
-				from: src('public'),
+				from: root('public'),
 				ignore: [
 					'*.scss',
 					'main.ejs'
@@ -211,7 +214,7 @@ module.exports = function makeWebpackConfig() {
 	 * Reference: http://webpack.github.io/docs/webpack-dev-server.html
 	 */
 	config.devServer = {
-		contentBase: src('public'),
+		contentBase: root('public'),
 		historyApiFallback: true,
 		stats: 'minimal'
 	}
@@ -234,5 +237,5 @@ function hasProcessFlag(flag) {
 }
 
 function isWebpackDevServer() {
-	return process.argv[1] && !! (/webpack-dev-server/.exec(process.argv[1]));
+	return process.argv[1] && !!(/webpack-dev-server/.exec(process.argv[1]));
 }

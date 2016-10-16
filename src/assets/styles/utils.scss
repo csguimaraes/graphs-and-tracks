@@ -1,0 +1,10 @@
+.flex-fill {
+  flex: 1 1 auto !important;
+}
+
+.flex-vcenter {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+  line-height: 1;
+}

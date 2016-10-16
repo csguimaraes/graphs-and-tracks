@@ -1,0 +1,18 @@
+@import "./variables";
+
+$small-width: "only screen and (max-width : #{$breakpoint-width})";
+$small-height: "only screen and (max-height : #{$breakpoint-height})";
+
+.show-sw {
+  display: none;
+}
+
+@media #{$small-width} {
+  .show-sw {
+    display: inherit;
+  }
+
+  .hide-sw {
+    display: none !important;
+  }
+}

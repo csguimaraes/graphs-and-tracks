@@ -1,0 +1,25 @@
+.md-overlay-pane {
+  top: 40% !important;
+}
+
+md-dialog-container {
+  padding: 0 !important;
+  overflow: visible;
+
+  focus-trap > div > * > md-card {
+    padding: 0 !important;
+    md-card-content {
+      padding: 16px;
+    }
+  }
+
+  md-toolbar-row .flex-vcenter {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+md-card-title, md-card-content {
+  color: #333;
+}

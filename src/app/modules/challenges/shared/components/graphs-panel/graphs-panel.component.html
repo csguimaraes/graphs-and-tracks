@@ -1,0 +1,73 @@
+<md-card [class.fullscreen]="zoomActive">
+	<div class="content-wrapper">
+		<div id="graph-header" class="card-header">
+			<span></span>
+			<span class="card-header-selector graph-selector s"
+					[class.active]="activeGraph === 's'"
+					[class.pulsing]="requestingSelectionOf === 's'"
+					(click)="selectGraph('s', $event)"
+			>
+				POSITION
+			</span>
+			<span class="card-header-selector graph-selector v"
+					[class.active]="activeGraph === 'v'"
+					[class.pulsing]="requestingSelectionOf === 'v'"
+					(click)="selectGraph('v', $event)"
+			>
+				VELOCITY
+			</span>
+			<span class="card-header-selector graph-selector a"
+					[class.active]="activeGraph === 'a'"
+					[class.pulsing]="requestingSelectionOf === 'a'"
+					(click)="selectGraph('a', $event)"
+			>
+				ACCELERATION
+			</span>
+			<span></span>
+		</div>
+
+		<div id="graph-legend" class="card-header-actions card-header-actions-right">
+			<span class="graph-legend goal {{activeGraph}}">CHALLENGE</span>
+			<span class="graph-legend trial {{activeGraph}}">MOTION</span>
+			<span class="action graph-action" (click)="refresh(false, true)">
+				<md-icon small>cancel</md-icon>
+				CLEAR
+			</span>
+			<span class="action graph-action" (click)="toggleZoom()">
+				<md-icon>{{ zoomActive ? 'fullscreen_exit' : 'fullscreen' }}</md-icon>
+				{{ zoomActive ? 'RESTORE' : 'MAXIMIZE' }}
+			</span>
+		</div>
+
+		<div id="chart-container" class="card-content-with-header">
+			<svg id="chart" [attr.class]="activeGraph">
+				<defs>
+					<clipPath id="trial-line-clip">
+						<rect x="0" width="0"
+				        [attr.y]="margin.top * -1"
+					      [attr.height]="height + margin.top + margin.bottom"
+						></rect>
+					</clipPath>
+				</defs>
+				<g id="main-group" [attr.transform]="'translate(' + margin.left +','+ margin.top +')'">
+					<path #goalLine class="line goal"
+							[attr.d]="goalLinePath"
+							[attr.clip-path]="(lineToClip === -1) ? 'url(' + activeUrl + '#trial-line-clip)' : ''"
+					></path>
+					<path class="line trial" *ngFor="let trialPathData of trialLinePaths; let idx = index"
+							[attr.d]="trialPathData"
+							[attr.clip-path]="(lineToClip === idx) ? 'url(' + activeUrl + '#trial-line-clip)' : ''"
+					></path>
+
+
+					<text class="axis-title" transform="rotate(-90)" dy=".71em" style="text-anchor: middle;"
+							[attr.y]="(margin.left * -1) + 3"
+							[attr.x]="height / -2"
+						>
+						{{ axisTitle }}
+					</text>
+				</g>
+			</svg>
+		</div>
+	</div>
+</md-card>

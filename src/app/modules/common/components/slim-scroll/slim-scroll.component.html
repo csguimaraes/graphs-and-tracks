@@ -1,0 +1,15 @@
+<div #contentWrapper id="content-wrapper" (scroll)="onScroll($event)">
+	<ng-content></ng-content>
+</div>
+<div id="scrollbar" [class.enabled]="enabled"
+     gtSlider
+     [vertical]="true"
+     [emitTap]="true"
+     (slide)="onDrag($event)"
+     (tap)="onTap($event)"
+>
+	<div #scrollbarHandler
+	     id="scrollbar-handler"
+	
+	></div>
+</div>

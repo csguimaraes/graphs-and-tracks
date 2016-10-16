@@ -1,29 +1,41 @@
 import { NgModule, ApplicationRef } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { RouterModule, Route } from '@angular/router'
 import { BrowserModule } from '@angular/platform-browser'
-
 import { createNewHosts, createInputTransfer } from '@angularclass/hmr'
 
-import { AppComponent } from './app.component'
+import { CommonModule } from './modules'
 import { AppState, StoreType } from './app.state'
 
-import { PagesModule, SharedModule } from 'app/modules'
+import { RootComponent } from './root/root.component'
+import * as Pages from './pages'
+
+const APP_MODULES = [
+	CommonModule
+]
+
+const APP_ROUTES: Route[] = [
+	{ path: '', redirectTo: 'home', pathMatch: 'full' },
+	{ path: 'welcome', component: Pages.WelcomeComponent },
+	{ path: 'settings', component: Pages.SettingsComponent },
+	{ path: 'about', component: Pages.AboutComponent },
+	{ path: '**', component: Pages.NotFoundComponent },
+]
 
 @NgModule({
 	declarations: [
-		AppComponent,
+		RootComponent,
 	],
 	imports: [
 		BrowserModule,
-		RouterModule.forRoot([]),
-		SharedModule,
-		PagesModule,
+		RouterModule.forRoot(APP_ROUTES),
+
+		...APP_MODULES
 	],
 	providers: [
 		AppState,
 	],
 	bootstrap: [
-		AppComponent,
+		RootComponent,
 	],
 })
 export class AppModule {

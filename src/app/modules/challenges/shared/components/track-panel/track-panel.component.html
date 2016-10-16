@@ -1,0 +1,37 @@
+<md-card [class.no-interaction]="rolling" [class.fullscreen]="zoomActive">
+	<md-card-content id="track">
+		<gt-track
+				(change)="onTrackChange($event)"
+				[mode]="mode" [postsSetup]="setup.posts" [position]="setup.position"
+		></gt-track>
+	</md-card-content>
+	<md-card-content id="track-controls">
+		<gt-scale id="position-scale"
+				[class.pulsing-scale]="requestingSelectionOf === 's'"
+				[color]="colors.position" [domain]="mode.domain.position" [value]="setup.position"
+				(slide)="!rollingSingle && track.updateBallPostion($event)" (change)="positionSetter($event)"
+		></gt-scale>
+
+		<div id="slider-info-container">
+			<span id="position-slider-info" class="slider-info">
+				<span class="slider-info-label">INITIAL POSITION</span>
+				<span class="slider-info-value">{{setup.position}} <small>cm</small></span>
+			</span>
+			<span id="ball-roller" class="slider-info"
+					[class.pulsing-alt]="requestingSelectionOf === 'b'"
+					(click)="rollBall()">
+				ROLL BALL
+			</span>
+			<span id="velocity-slider-info" class="slider-info">
+				<span class="slider-info-value">{{setup.velocity}} <small>cm/s</small></span>
+				<span class="slider-info-label">INITIAL VELOCITY</span>
+			</span>
+		</div>
+
+		<gt-scale id="velocity-scale"
+				[class.pulsing-scale]="requestingSelectionOf === 'v'"
+				[color]="colors.velocity" [domain]="mode.domain.velocity" [value]="setup.velocity"
+				(change)="velocitySetter($event)"
+		></gt-scale>
+	</md-card-content>
+</md-card>

@@ -1,0 +1,82 @@
+<svg>
+	<g id="track-group">
+		<circle id="ball"
+				[attr.r]="ball.radius - ball.stroke"
+				[attr.cx]="ball.position.x"
+				[attr.cy]="ball.position.y"
+		></circle>
+
+		<path class="track-line"></path>
+		<path class="track-outline"></path>
+
+		<template ngFor let-post [ngForOf]="posts" let-idx="index">
+			<!-- inner post -->
+			<rect *ngIf="idx > 0 && idx < (posts.length - 1)"
+					class="post"
+
+					[attr.x]="post.x" [attr.y]="post.y + trackWidth / 2"
+					[attr.width]="post.width" [attr.height]="post.height"
+			></rect>
+
+			<!-- post incrementer -->
+			<rect *ngIf="postsSetup[idx] !== mode.domain.posts.max"
+					class="post-incrementer"
+
+					(mouseover)="previewTrackChange(idx, postsSetup[idx] + 1)"
+					(mouseout)="clearPreview()"
+					(click)="incrementPost(idx)"
+
+					[attr.x]="post.x - post.width" [attr.y]="margin.top * -1"
+					[attr.width]="post.width * 3" [attr.height]="post.y + margin.top"
+				></rect>
+
+			<!-- post base -->
+			<path
+					class="post-base" d="M0,0.5 L.5,0 H2.5 L3,0.5 V2 H0 Z"
+
+					(mouseover)="previewTrackChange(idx, mode.domain.posts.min)"
+					(mouseout)="clearPreview()"
+					(click)="setPostToMinimum(idx)"
+
+					[attr.transform]="'translate('+ (post.x - post.width) +', '+ (scaleY(-1)) +') scale('+ trackWidth +')'"
+					></path>
+			<text *ngIf="showHeights" class="post-height-label" text-anchor="middle"
+					[attr.x]="post.x + (post.width / 2)" [attr.y]="scaleY(-1) + trackWidth" dy=".4em">
+				{{ postsSetup[idx] }}
+			</text>
+
+			<!-- post dragger -->
+			<rect
+					class="post-dragger"
+
+					(mouseover)="postsSetup[idx] > mode.domain.posts.min ? previewTrackChange(idx, postsSetup[idx] - 1) : false"
+					(mouseout)="clearPreview()"
+
+					gtSlider [vertical]="true" [reference]="svg.node()"
+					[start]="margin.top" [end]="margin.bottom"
+					(slide)="onPostDrag($event, idx)" (change)="onPostDrag($event, idx, true)"
+					[emitTap]="true" (tap)="decrementPost(idx)"
+
+					[attr.x]="post.x - post.width" [attr.y]="post.y"
+					[attr.width]="post.width * 3" [attr.height]="post.height + (postsSetup[idx] === mode.domain.posts.min ? (trackWidth * 2) : 0)"
+			></rect>
+		</template>
+
+		<!--<circle
+				r="3"
+				[attr.cx]="ballDebugX"
+				[attr.cy]="ballDebugY"
+				fill="white"
+		></circle>-->
+
+		<path id="ramp-error"
+				*ngIf="wrongRamp !== undefined"
+				[attr.d]="wrongRampOutline"
+		></path>
+
+		<path class="post-highlight"
+				*ngFor="let highlight of postHighlights"
+				[attr.d]="highlight"
+		></path>
+	</g>
+</svg>

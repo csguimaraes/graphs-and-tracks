@@ -11,9 +11,10 @@
     "watch": "webpack --watch --progress --profile",
     "build": "rimraf dist && webpack --progress --profile --bail",
     "server": "webpack-dashboard -- webpack-dev-server --inline --port 8080",
+    "server-alt": "webpack-dev-server --inline --port 8080",
     "lint": "tslint --force \"src/**/*.ts\"",
     "test": "npm run lint",
-    "start": "npm run server",
+    "start": "npm run server-alt",
     "start:hmr": "npm run server -- --hot --inline",
     "preinstall": "npm i -g typescript@next webpack webpack-dev-server"
   },
