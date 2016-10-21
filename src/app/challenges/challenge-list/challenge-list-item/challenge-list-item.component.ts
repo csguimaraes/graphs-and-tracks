@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core'
-import { Challenge } from '../../../shared/types'
+import { Challenge } from 'challenges'
 
 @Component({
 	selector: 'gt-challenge-list-item',

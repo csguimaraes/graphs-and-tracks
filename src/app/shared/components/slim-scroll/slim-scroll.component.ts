@@ -9,7 +9,7 @@ import {
 } from '@angular/core'
 
 @Component({
-	selector: 'gt-scroller',
+	selector: 'gt-slim-scroll',
 	styleUrls: ['slim-scroll.component.scss'],
 	templateUrl: 'slim-scroll.component.html'
 })

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ChangeDetectionStrategy, Input, ViewEncapsulation, ChangeDetectorRef, OnInit, AfterViewInit } from '@angular/core'
 
-const ICONS = require('app/assets/icons.json')
+const ICONS = require('assets/icons.json')
 const DEFAULT_SIZE = 24
 
 @Component({

@@ -27,7 +27,7 @@ const BASE_URL = '/'
 // flags: 'gi'
 const TEXT_COLOR_AS_FILL = `string-replace?search=([^\\w-])color:([^;]+)&replace=$1color:$2;fill:$2;&flags=gi`
 
-module.exports = function makeWebpackConfig() {
+module.exports = (function makeWebpackConfig() {
 	let config = {}
 
 	// add debug messages
@@ -48,17 +48,8 @@ module.exports = function makeWebpackConfig() {
 
 	config.resolve = {
 		cache: true,
-		root: src(),
+		root: 'src',
 		extensions: ['', '.ts', '.js', '.json', '.css', '.scss', '.html'],
-		alias: {
-			'common': src('app/modules/common/'),
-			'challenges': src('app/modules/challenges/'),
-			'community': src('app/modules/communit/'),
-			'assets': src('assets'),
-		},
-		plugins: [
-			new AwesomeTypescriptLoader.TsConfigPathsPlugin()
-		]
 	}
 
 	config.module = {
@@ -220,7 +211,7 @@ module.exports = function makeWebpackConfig() {
 	}
 
 	return config
-}()
+})()
 
 // HELPERS
 

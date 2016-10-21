@@ -10,7 +10,3 @@ $warn:    md-palette($md-red);
 $theme: md-light-theme($primary, $accent, $warn);
 
 @include angular-material-theme($theme);
-
-
-$highlight: md-color($primary, darker);
-$contrast: md-color($primary, darker-contrast);

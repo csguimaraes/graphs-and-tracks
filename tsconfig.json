@@ -6,13 +6,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "noEmitHelpers": true,
-    "baseUrl": "./src",
-    "paths": {
-      "common": [ "app/modules/common" ],
-      "challenges": [ "app/modules/challenges" ],
-      "community": [ "app/modules/community" ],
-      "assets": [ "src/assets" ]
-    }
+    "baseUrl": "./src"
   },
   "compileOnSave": false,
   "buildOnSave": false,

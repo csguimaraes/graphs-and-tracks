@@ -1,4 +1,5 @@
 import * as lodash from 'lodash'
+import { User } from './declarations'
 
 export type ExportType = 'module' | 'component' | 'serice' | 'directive' | 'pipe' | 'model'
 
@@ -18,4 +19,9 @@ export function filterExports(exports: Object, forType: ExportType, warn = false
 	}
 
 	return results
+}
+
+
+export function X(): User {
+	return null
 }

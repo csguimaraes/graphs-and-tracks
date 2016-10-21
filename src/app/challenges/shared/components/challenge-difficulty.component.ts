@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core'
-import { CHALLENGE_DIFFICULTY } from '../../shared/types'
+import { CHALLENGE_DIFFICULTY } from 'challenges'
 
 @Component({
 	selector: 'gt-challenge-difficulty',

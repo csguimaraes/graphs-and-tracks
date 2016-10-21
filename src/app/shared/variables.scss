@@ -1,7 +1,11 @@
+$primary: #009688;
+$primary-contrast: white;
+
 $breakpoint-height: 768px;
 $breakpoint-width: 900px;
 
 $toolbar-height: 48px;
+$toolbar-height-sh: ($toolbar-height / 4) * 3;
 
 $color-s: orangered;
 $color-s-light: lighten(orangered, 10);
@@ -12,3 +16,13 @@ $color-v-dark: darken(forestgreen, 30);
 $color-a: steelblue;
 $color-a-light: lighten(steelblue, 10);
 $color-a-dark: darken(steelblue, 30);
+
+
+$color-hint: darkorange;
+$color-hint-bg: papayawhip;
+
+$color-tutorial: dodgerblue;
+$color-tutorial-bg: #CEF;
+
+$color-success: darkgreen;
+$color-success-bg: #CFE;

@@ -1,14 +1,7 @@
 import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core'
 import { MdDialogRef, MdDialog, MdDialogConfig } from '@angular/material'
 
-import { LoginDialogComponent } from 'common'
-
-export interface AppLink {
-	icon: string
-	name: string
-	subtitle?: string
-	route: string
-}
+import { LoginDialogComponent, AppLink } from 'shared'
 
 @Component({
 	selector: 'gt-app',
@@ -25,8 +18,6 @@ export class RootComponent {
 		{ name: 'Settings', icon: 'app-settings', route: '/settings' },
 		{ name: 'About', icon: 'app-about', route: '/about' }
 	]
-
-
 
 	loginDialogRef: MdDialogRef<LoginDialogComponent>
 	lastCloseResult: string

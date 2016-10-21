@@ -1,15 +1,8 @@
 import { Component } from '@angular/core'
-
-// TODO: is duplicated
-export interface AppLink {
-	icon: string
-	name: string
-	subtitle?: string
-	route: string
-}
+import { AppLink } from 'shared'
 
 @Component({
-	selector: 'gt-home',
+	selector: 'gt-welcome',
 	styleUrls: ['./welcome.component.scss'],
 	templateUrl: './welcome.component.html'
 })
@@ -35,7 +28,3 @@ export class WelcomeComponent {
 		},
 	]
 }
-
-
-
-

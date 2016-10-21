@@ -27,7 +27,6 @@ export class AppState {
 		throw new Error('do not mutate the `.state` directly')
 	}
 
-
 	get(prop?: any) {
 		// use our state getter for the clone
 		const state = this.state
@@ -35,7 +34,7 @@ export class AppState {
 	}
 
 	set(prop: string, value: any) {
-		// internally mutate our state
+		// internally mutate our st ate
 		return this._state[prop] = value
 	}
 

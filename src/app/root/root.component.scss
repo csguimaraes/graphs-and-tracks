@@ -1,9 +1,11 @@
-@import '~assets/styles/variables';
+@import './reset';
+@import './utils';
+@import './responsive';
 
 body, html {
   min-width:320px;
   min-height:320px;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
   font-weight: 400;
 }
 
@@ -14,18 +16,18 @@ body, html {
 
 @media #{$small-width} {
   md-sidenav > div {
-    height: $toolbar-height-alt !important;
+    height: $toolbar-height-sh !important;
   }
 
   md-toolbar {
-    min-height: $toolbar-height-alt !important;
+    min-height: $toolbar-height-sh !important;
     md-toolbar-row {
-      height: $toolbar-height-alt !important;
+      height: $toolbar-height-sh !important;
     }
   }
 
   #main-container {
-    top: $toolbar-height-alt;
+    top: $toolbar-height-sh;
   }
 }
 
@@ -81,7 +83,6 @@ md-toolbar-row > * {
   bottom: 0;
   left: 0;
   right: 0;
-
   overflow: hidden;
 }
 
@@ -94,12 +95,12 @@ md-toolbar-row, .app-menu-links gt-button {
 
   &.active {
     transition: background 400ms ease-in;
-    background: $highlight;
-    color: $contrast;
+    background: $primary;
+    color: $primary-contrast;
   }
 }
 
 .sidenav-link:not(.active) {
-  color: $highlight;
+  color: $primary;
 }
 

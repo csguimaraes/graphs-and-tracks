@@ -1,4 +1,4 @@
-@import "~app/styles/theme.scss";
+@import "../../shared/variables.scss";
 
 md-card {
   max-width: 500px;
@@ -6,7 +6,7 @@ md-card {
   margin: 32px auto;
 
   md-card-title {
-    color: $highlight;
+    color: $primary;
     font-size: 32px;
   }
 }
@@ -22,9 +22,6 @@ md-list {
     margin: 8px 0;
     text-align: left;
     & /deep/ gt-button {
-      b {
-        font-weight: 600 !important;
-      }
 
       span {
         color: #666;
@@ -33,7 +30,7 @@ md-list {
       gt-icon {
         padding: 8px;
         border-radius: 100%;
-        background: $highlight;
+        background: $primary;
         color: white;
       }
     }

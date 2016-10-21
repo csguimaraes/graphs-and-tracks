@@ -8,8 +8,6 @@ export class ChallengesService {
 	private tutorial: Challenge
 	private exploration: Challenge
 	private examples: Challenge[]
-	// private community: Challenge[]
-	// private teacher: Challenge[]
 
 	constructor() {
 		this.loadBuiltinChallenges()

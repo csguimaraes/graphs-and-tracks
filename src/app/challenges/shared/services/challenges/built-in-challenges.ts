@@ -1,4 +1,4 @@
-import { CHALLENGE_DIFFICULTY, CHALLENGE_TYPE, Challenge, ChallengeMode, MotionSetup } from 'challenges'
+import { CHALLENGE_DIFFICULTY, CHALLENGE_TYPE, Challenge, ChallengeMode, MotionSetup } from '../../declarations'
 
 export const MODE_NORMAL: ChallengeMode = {
 	simulation: {

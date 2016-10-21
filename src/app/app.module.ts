@@ -1,35 +1,42 @@
 import { NgModule, ApplicationRef } from '@angular/core'
-import { RouterModule, Route } from '@angular/router'
 import { BrowserModule } from '@angular/platform-browser'
+import { HttpModule } from '@angular/http'
+import { MaterialModule } from '@angular/material'
+
+
+import { filterExports } from './shared/helpers'
 import { createNewHosts, createInputTransfer } from '@angularclass/hmr'
 
-import { CommonModule } from './modules'
 import { AppState, StoreType } from './app.state'
+import { APP_ROUTING } from './app.routing'
 
 import { RootComponent } from './root/root.component'
+
 import * as Pages from './pages'
+import * as Challenges from './challenges'
+import * as SharedExports from './shared'
 
-const APP_MODULES = [
-	CommonModule
-]
+const PAGES_COMPONENTS = filterExports(Pages, 'component')
+const CHALLENGE_COMPONENTS = filterExports(Challenges, 'component')
 
-const APP_ROUTES: Route[] = [
-	{ path: '', redirectTo: 'home', pathMatch: 'full' },
-	{ path: 'welcome', component: Pages.WelcomeComponent },
-	{ path: 'settings', component: Pages.SettingsComponent },
-	{ path: 'about', component: Pages.AboutComponent },
-	{ path: '**', component: Pages.NotFoundComponent },
-]
+const SHARED_COMPONENTS = filterExports(SharedExports, 'component')
+const SHARED_DIRECTIVES = filterExports(SharedExports, 'directive')
 
 @NgModule({
 	declarations: [
 		RootComponent,
+		...PAGES_COMPONENTS,
+		...CHALLENGE_COMPONENTS,
+
+		...SHARED_COMPONENTS,
+		...SHARED_DIRECTIVES,
 	],
 	imports: [
 		BrowserModule,
-		RouterModule.forRoot(APP_ROUTES),
+		HttpModule,
+		MaterialModule.forRoot(),
 
-		...APP_MODULES
+		APP_ROUTING
 	],
 	providers: [
 		AppState,
@@ -37,9 +44,13 @@ const APP_ROUTES: Route[] = [
 	bootstrap: [
 		RootComponent,
 	],
+	entryComponents: [
+		SharedExports.LoginDialogComponent
+	]
 })
 export class AppModule {
-	constructor(public appRef: ApplicationRef, public appState: AppState) {}
+	constructor(public appRef: ApplicationRef, public appState: AppState) {
+	}
 
 	hmrOnInit(store: StoreType) {
 		if (!store || !store.state) {
@@ -64,7 +75,7 @@ export class AppModule {
 		const state = this.appState._state
 		store.state = state
 		store.disposeOldHosts = createNewHosts(cmpLocation)
-		store.restoreInputValues  = createInputTransfer()
+		store.restoreInputValues = createInputTransfer()
 		this.removeStyles()
 	}
 

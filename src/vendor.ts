@@ -9,6 +9,7 @@ import '@angular/router'
 // Material 2
 import '@angular/material'
 import 'assets/material-theme.scss'
+import 'assets/material-custom.scss'
 
 // RxJS
 import 'rxjs'

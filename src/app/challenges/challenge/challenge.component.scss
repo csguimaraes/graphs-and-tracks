@@ -1,6 +1,4 @@
-$color-s: lighten(orangered, 10);
-$color-v: lighten(forestgreen, 10);
-$color-a: lighten(steelblue, 10);
+@import '~shared/variables.scss';
 
 md-card-content {
   position: relative;
@@ -248,21 +246,21 @@ md-card-content {
 }
 
 .hint {
-  background: papayawhip;
-  #message-title, & .button, & .link { color: darkorange; }
-  #message-actions, #message-close { background: lighten(darkorange, 40); }
+  background: $color-hint-bg;
+  #message-title, & .button, & .link { color: $color-hint; }
+  #message-actions, #message-close { background: lighten($color-hint, 40); }
 }
 
 .tutorial {
-  background: #CEF;
-  #message-title, & .button, & .link { color: dodgerblue; }
-  #message-actions, #message-close { background: lighten(dodgerblue, 40); }
+  background: $color-tutorial-bg;
+  #message-title, & .button, & .link { color: $color-tutorial; }
+  #message-actions, #message-close { background: lighten($color-tutorial, 40); }
 }
 
 .success {
-  background: #CFE;
-  #message-title, & .button, & .link { color: darkgreen; }
-  #message-actions, #message-close { background: #AEA; }
+  background: $color-success-bg;
+  #message-title, & .button, & .link { color: $color-success; }
+  #message-actions, #message-close { background: lighten($color-success, 40); }
 }
 
 .disabled {
