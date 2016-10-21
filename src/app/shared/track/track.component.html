@@ -54,7 +54,7 @@
 
 					gtSlider [vertical]="true" [reference]="svg.node()"
 					[start]="margin.top" [end]="margin.bottom"
-					(slide)="onPostDrag($event, idx)" (change)="onPostDrag($event, idx, true)"
+					(slided)="onPostDrag($event, idx)" (change)="onPostDrag($event, idx, true)"
 					[emitTap]="true" (tap)="decrementPost(idx)"
 
 					[attr.x]="post.x - post.width" [attr.y]="post.y"

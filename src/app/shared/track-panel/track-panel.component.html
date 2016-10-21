@@ -9,12 +9,12 @@
 		<gt-scale id="position-scale"
 				[class.pulsing-scale]="requestingSelectionOf === 's'"
 				[color]="colors.position" [domain]="mode.domain.position" [value]="setup.position"
-				(slide)="!rollingSingle && track.updateBallPostion($event)" (change)="positionSetter($event)"
+				(slided)="!rollingSingle && track.updateBallPostion($event)" (change)="positionSetter($event)"
 		></gt-scale>
 
 		<div id="slider-info-container">
 			<span id="position-slider-info" class="slider-info">
-				<span class="slider-info-label">INITIAL POSITION</span>
+				<span class="slider-info-label">Initial Position</span>
 				<span class="slider-info-value">{{setup.position}} <small>cm</small></span>
 			</span>
 			<span id="ball-roller" class="slider-info"
@@ -24,7 +24,7 @@
 			</span>
 			<span id="velocity-slider-info" class="slider-info">
 				<span class="slider-info-value">{{setup.velocity}} <small>cm/s</small></span>
-				<span class="slider-info-label">INITIAL VELOCITY</span>
+				<span class="slider-info-label">Initial Velocity</span>
 			</span>
 		</div>
 

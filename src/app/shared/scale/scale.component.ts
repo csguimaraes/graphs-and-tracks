@@ -18,7 +18,7 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 	@Input() color = 'black'
 
 	@Output() change = new EventEmitter<number>()
-	@Output() slide = new EventEmitter<number>()
+	@Output() slided = new EventEmitter<number>()
 
 	@ViewChild(SliderDirective) slider: SliderDirective
 
@@ -62,7 +62,7 @@ export class ScaleComponent implements OnInit, AfterViewInit {
 			this.value = newValue
 		}
 
-		this.slide.emit(this.min + (this.scaleRange * position))
+		this.slided.emit(this.min + (this.scaleRange * position))
 	}
 
 	onChange(position: number) {

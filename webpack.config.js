@@ -1,19 +1,20 @@
-let path = require('path')
-let webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
 
 // Webpack Plugins
-let CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
-let HtmlWebpackPlugin = require('html-webpack-plugin')
-let ExtractTextPlugin = require('extract-text-webpack-plugin')
-let CopyWebpackPlugin = require('copy-webpack-plugin')
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 
 /**
  * Env
  * Get npm lifecycle event to identify the environment
  */
-let ENV = process.env.npm_lifecycle_event
-let isProd = ENV === 'build'
-let baseUrl = '/'
+const ENV = process.env.npm_lifecycle_event
+const isProd = ENV === 'build'
+const baseUrl = '/'
 module.exports = function makeWebpackConfig() {
 	/**
 	 * Config
@@ -45,8 +46,8 @@ module.exports = function makeWebpackConfig() {
 		root: root(),
 		extensions: ['', '.ts', '.js', '.json', '.css', '.scss', '.html'],
 		alias: {
-			'app': 'src/app',
-			'common': 'src/common'
+			'app': root('src/app'),
+			'common': root('src/common')
 		}
 	}
 
@@ -67,12 +68,10 @@ module.exports = function makeWebpackConfig() {
 			},
 
 			// Style loaders for components (will be embedded within the component code)
-			{ test: /\.css$/, include: root('src', 'app'), loader: 'raw!postcss' },
 			{ test: /\.scss$/, include: root('src', 'app'), loader: 'raw!postcss!sass' },
 
-			// Style loaders for the app (will generate a standalone css and be added in the index.html head)
-			{ test: /\.css$/, exclude: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss') },
-			{ test: /\.scss$/, include: root('public'), loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass') },
+			// Style loaders for the app (will generate a standalone css and be added in the index.html head) ${TEXT_COLOR_AS_FILL}
+			{ test: /\.scss$/, include: root('public'), loader: ExtractTextPlugin.extract({ loader: `css!postcss!sass` }) },
 
 
 
@@ -125,7 +124,14 @@ module.exports = function makeWebpackConfig() {
 
 		// Extract css files
 		// Reference: https://github.com/webpack/extract-text-webpack-plugin
-		new ExtractTextPlugin('css/[name].[hash].css', { disable: !isProd })
+		new ExtractTextPlugin({
+			filename: 'css/[name].[hash].css'
+		}),
+
+		new ContextReplacementPlugin(
+			/angular\/core\/(esm\/src|src)\/linker/,
+			root('src')
+		),
 	]
 
 	config.htmlLoader = {

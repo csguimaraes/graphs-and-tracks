@@ -1,1 +1,14 @@
+@import '~@angular/material/core/theming/all-theme';
+
+@include md-core();
+
+$primary: md-palette($md-teal);
+$accent:  md-palette($md-cyan);
+
+$warn:    md-palette($md-red);
+
+$theme: md-light-theme($primary, $accent, $warn);
+
+@include angular-material-theme($theme);
+
 $effects-enabled: true;

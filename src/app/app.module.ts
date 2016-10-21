@@ -1,12 +1,6 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-
-import { MdIconModule } from '@angular2-material/icon'
-import { MdToolbarModule } from '@angular2-material/toolbar'
-import { MdCardModule } from '@angular2-material/card'
-import { MdGridListModule } from '@angular2-material/grid-list'
-import { MdListModule } from '@angular2-material/list'
-import { MdMenuModule } from '@angular2-material/menu'
+import { MaterialModule } from '@angular/material'
 
 import { AppComponent } from './app.component'
 import { APP_ROUTING, APP_ROUTING_PROVIDERS } from './app.routing'
@@ -34,15 +28,7 @@ import { ChallengeDifficultyComponent } from './challenges/challenge-list/challe
 @NgModule({
 	imports: [
 		BrowserModule,
-
-		// Material 2
-		MdIconModule.forRoot(),
-		MdToolbarModule.forRoot(),
-		MdCardModule.forRoot(),
-		MdGridListModule.forRoot(),
-		MdListModule.forRoot(),
-		MdMenuModule.forRoot(),
-
+		MaterialModule.forRoot(),
 		APP_ROUTING
 	],
 	declarations: [

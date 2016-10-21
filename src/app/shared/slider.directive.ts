@@ -30,7 +30,7 @@ export class SliderDirective implements OnInit, OnDestroy {
 	@Input() start: number = 0
 	@Input() end: number = 0
 
-	@Output() slide: EventEmitter<number> = new EventEmitter<number>()
+	@Output() slided: EventEmitter<number> = new EventEmitter<number>()
 	@Output() change: EventEmitter<number> = new EventEmitter<number>()
 	@Output() tap: EventEmitter<number> = new EventEmitter<number>()
 
@@ -92,7 +92,7 @@ export class SliderDirective implements OnInit, OnDestroy {
 
 	onPan = (event: HammerInput) => {
 		let relativePosition = this.getRelativePosition(event)
-		this.slide.emit(relativePosition)
+		this.slided.emit(relativePosition)
 	}
 
 	onPanEnd = (event: HammerInput) => {
