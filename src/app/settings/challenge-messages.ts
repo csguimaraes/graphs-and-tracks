@@ -62,7 +62,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			You can set the starting position of the ball by clicking on new position values
 			or by dragging the scale pointers. Drag the pointers rather than the ball itself.
 		`,
-		requires: [UI_CONTROL.POSITION_SCALE]
+		requires: [UI_CONTROL.POSITION_SCALE],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
 		title: 'Setting the initial speed and direction',
@@ -83,7 +84,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			The height of each post is displayed at its base.
 			Try rolling the ball for different track
 		`,
-		requires: [UI_CONTROL.TRACK_POST_ANY]
+		requires: [UI_CONTROL.TRACK_POST_ANY],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
 		title: 'Test your new setup',
@@ -95,7 +97,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			Acceleration graphs will help you for find out how steep to make your ramps.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON],
-		triggers: [UI_CONTROL.ACCELERATION_GRAPH]
+		triggers: [UI_CONTROL.ACCELERATION_GRAPH, UI_CONTROL.TUTORIAL_NEXT_ON_ANIMATION_END]
 	},
 	{
 		title: 'One step at a time',
@@ -104,7 +106,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			<br> <br>
 			To see the motion for only one sloping section at a time, click and <b>hold down</b> the <b class="b">ROLL BALL</b> button.
 		`,
-		requires: [UI_CONTROL.ROLL_BUTTON_HOLD]
+		requires: [UI_CONTROL.ROLL_BUTTON_HOLD],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT_ON_ANIMATION_END]
 	},
 	{
 		title: 'Tutorial complete',

@@ -26,10 +26,7 @@ $slider-line-height: $track-controls-height / 3;
 }
 
 #tapper {
-  background: rgba(0,255,0,.2);
-  &:active {
-    background: rgba(0,255,0,.6);
-  }
+  background: papayawhip;
 }
 
 #panel-wrapper {
@@ -46,7 +43,7 @@ $slider-line-height: $track-controls-height / 3;
 
   #panel-wrapper:not(.no-interaction) & /deep/ {
     circle, path, rect {
-      pointer-events: all !important;
+      pointer-events: all;
     }
 
     .track-line {

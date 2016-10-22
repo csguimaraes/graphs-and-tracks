@@ -92,7 +92,7 @@ export class ChallengeComponent implements OnInit {
 			this.tutorialCheckRequirement(UI_CONTROL.ROLL_BUTTON)
 			this.performMotion(setup)
 		} else {
-			console.warn('This shouldn\'t happen')
+			this.bumpCurrentMessage()
 		}
 	}
 
@@ -293,7 +293,7 @@ export class ChallengeComponent implements OnInit {
 				nextTime = Math.floor(motion[idx + 1].t * 1000)
 				if (currentTime <= t && t < nextTime) {
 					// This index is surrounded by two data points that have our current animation time
-					// som we can interpolate the current position value from them
+					// so we can interpolate the current position value from them
 					found = true
 					break
 				} else {
@@ -482,6 +482,11 @@ export class ChallengeComponent implements OnInit {
 	}
 
 	tutorialNextStep() {
+		if (this.tutorialWaitingAnimationEnd) {
+			// If the user manually clicks next before the animation ends
+			this.tutorialWaitingAnimationEnd = false
+		}
+
 		this.tutorialStepIndex++
 		let currentStep = TUTORIAL_STEPS[this.tutorialStepIndex]
 
@@ -556,6 +561,10 @@ export class ChallengeComponent implements OnInit {
 				}
 			}
 		}
+	}
+
+	bumpCurrentMessage() {
+		this.setCurrentMessage(this.message, this.message.type, true)
 	}
 
 	setCurrentMessage(message: Message, type?: string, bump = false) {

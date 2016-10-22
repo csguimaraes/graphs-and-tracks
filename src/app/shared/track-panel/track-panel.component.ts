@@ -202,8 +202,7 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	clearHighlights() {
-		this.track.highlightRamp()
-		this.track.highlightPost()
+		this.track.clearHighlights()
 		this.requestingSelectionOf = undefined
 	}
 

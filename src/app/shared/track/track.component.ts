@@ -116,7 +116,9 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 	highlightRamp(atPosition?: number) {
 		if (atPosition !== undefined) {
 			this.wrongRamp = Math.floor(atPosition / this.rampSize)
+		}
 
+		if (this.wrongRamp !== undefined) {
 			let rampHeads = this.getRampHeads(this.wrongRamp)
 
 			let x1 = rampHeads.left.x, y1 = rampHeads.left.y,
@@ -124,24 +126,24 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 				r = this.trackWidth / 2
 
 			this.wrongRampOutline = `M${x1},${y1 - r} L${x2},${y2 - r} L${x2},${y2 + r} L${x1},${y1 + r} Z`
-		} else {
-			this.wrongRamp = undefined
-			this.wrongRampOutline = undefined
 		}
 	}
 
 	highlightPost(atPosition?: number) {
 		this.postHighlights = []
-		this.postHighlight = atPosition
-		if (atPosition !== undefined) {
 
-			if (atPosition === -1) {
+		if (atPosition !== undefined) {
+			this.postHighlight = atPosition
+		}
+
+		if (this.postHighlight !== undefined) {
+			if (this.postHighlight === -1) {
 				for (let idx = 0; idx < this.postsSetup.length; idx++) {
 					let highlight = this.generatePostHighlight(idx)
 					this.postHighlights.push(highlight)
 				}
 			} else {
-				let highlight = this.generatePostHighlight(atPosition)
+				let highlight = this.generatePostHighlight(this.postHighlight)
 				this.postHighlights.push(highlight)
 			}
 		}
@@ -172,6 +174,7 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		this.recalculate()
 		this.drawTrackLine(this.postsSetup)
 		this.updateBallPostion(this.position)
+		this.refreshHighlights()
 
 		if (fireChangeAt !== undefined) {
 			if (this.postHighlight !== undefined) {
@@ -289,6 +292,21 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		posts[postIndex] = value
 
 		this.drawTrackLine(posts, true)
+	}
+
+	refreshHighlights() {
+		this.highlightPost()
+		this.highlightRamp()
+	}
+
+	clearHighlights() {
+		// Clear ramp highlight
+		this.wrongRamp = undefined
+		this.wrongRampOutline = undefined
+
+		// Clear posts highlight
+		this.postHighlight = undefined
+		this.postHighlights = []
 	}
 
 	clearPreview() {
