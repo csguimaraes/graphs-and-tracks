@@ -1,5 +1,5 @@
-<md-grid-list card-no-pad card-fill rowHeight="fit" cols="4" gutterSize="8px">
-	<md-grid-tile colspan="1" rowspan="4">
+<md-grid-list card-no-pad card-fill rowHeight="fit" [cols]="grid.cols" gutterSize="8px">
+	<md-grid-tile [colspan]="grid.info.colspan" [rowspan]="grid.info.rowspan">
 		<md-card id="info-card">
 			<div class="content-wrapper">
 				<div class="card-header">
@@ -137,17 +137,22 @@
 		</md-card>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="3" rowspan="4">
+	<md-grid-tile [colspan]="grid.graph.colspan" [rowspan]="grid.graph.rowspan"
+	              [class.zoom-active]="zoom === 'graph'">
 		<gt-graphs-panel
-				[mode]="challenge.mode" [goal]="goalMotion"
-				(change)="onGraphPanelChange($event)"
+		[mode]="challenge.mode" [goal]="goalMotion"
+		(change)="onGraphPanelChange($event)"
+		(zoom)="onZoomToggle($event)"
 		></gt-graphs-panel>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="4" rowspan="3">
+	<md-grid-tile [colspan]="grid.track.colspan" [rowspan]="grid.track.rowspan"
+	              [class.zoom-active]="zoom === 'track'">
 		<gt-track-panel
-				[mode]="goalMotion.mode"
-				(abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"
+		[mode]="goalMotion.mode"
+		(abort)="onAbort()" (roll)="onRollBall($event)"
+		(change)="onTrackPanelChange($event)"
+		(zoom)="onZoomToggle($event)"
 		></gt-track-panel>
 	</md-grid-tile>
 </md-grid-list>

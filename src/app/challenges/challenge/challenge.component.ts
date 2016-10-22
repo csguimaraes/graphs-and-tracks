@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, trigger, ChangeDetectorRef } from '@angular/core'
+import { Component, ViewChild, trigger, ChangeDetectorRef, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import * as lodash from 'lodash'
@@ -15,6 +15,26 @@ import { AuthService } from '../../shared/auth.service'
 
 const SETUP_STORAGE_KEY = 'latest-track-setup'
 type SwitchDirection = 'toLeft' | 'toRight' | 'none'
+
+type TileSetup = { 'rowspan': number, 'colspan': number }
+type GridSetup = { 'info': TileSetup, 'graph': TileSetup, 'track': TileSetup, 'cols': number, 'rows': number }
+type ZoomTarget = 'track' | 'graph'
+
+const GRID_NORMAL: GridSetup = {
+	rows: 7,
+	cols: 5,
+	info: { colspan: 1, rowspan: 4},
+	graph: { colspan: 4, rowspan: 4},
+	track: { colspan: 5, rowspan: 3},
+}
+
+const GRID_INFO_FIXED: GridSetup = {
+	rows: 8,
+	cols: 5,
+	info: { colspan: 1, rowspan: 8},
+	graph: { colspan: 4, rowspan: 4},
+	track: { colspan: 4, rowspan: 4},
+}
 
 @Component({
 	selector: 'gt-challenge',
@@ -64,6 +84,9 @@ export class ChallengeComponent implements OnInit {
 
 	types = CHALLENGE_TYPE
 
+	grid: GridSetup
+	zoom: ZoomTarget
+
 	constructor(
 		private challenges: ChallengesService,
 		private router: Router,
@@ -73,6 +96,8 @@ export class ChallengeComponent implements OnInit {
 	) {
 		this.challengeId = route.snapshot.params['id']
 		route.params.subscribe(p => this.loadChallengeById(p['id']))
+
+		this.fetchGridSetup(false)
 	}
 
 	ngOnInit() {
@@ -626,5 +651,52 @@ export class ChallengeComponent implements OnInit {
 		setTimeout(() => {
 			this.updateCommitNumberOfAttempts(this.challenge.attempts.length)
 		}, 100)
+	}
+
+	@HostListener('window:resize')
+	onResize() {
+		this.fetchGridSetup()
+	}
+
+	@HostListener('document:keyup', ['$event'])
+	handleKeyup(event: KeyboardEvent) {
+		// Cancel graph zoom if user press ESC
+		if (event.keyCode === 27 && this.zoom) {
+			this.zoom = undefined
+			this.fetchGridSetup()
+		}
+	}
+
+	fetchGridSetup(refresh = true) {
+		let height = window.innerHeight
+		let grid: GridSetup
+
+		if (this.zoom) {
+			grid = GRID_INFO_FIXED
+		} else {
+			grid = height < 768 ? GRID_INFO_FIXED : GRID_NORMAL
+		}
+
+		if (this.grid !== grid) {
+			this.grid = grid
+		}
+
+		if (refresh) {
+			this.changeDetector.markForCheck()
+			setTimeout(() => {
+				this.graphsPanel.safeRefresh()
+				this.trackPanel.track.refresh()
+			}, 1)
+		}
+	}
+
+	onZoomToggle(where: ZoomTarget) {
+		if (this.zoom === where) {
+			this.zoom = undefined
+		} else {
+			this.zoom = where
+		}
+
+		this.fetchGridSetup()
 	}
 }

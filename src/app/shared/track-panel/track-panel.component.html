@@ -1,12 +1,6 @@
 <md-card [class.fullscreen]="zoomActive">
 	<div id="tapper" [class.wait]="rolling"></div>
 	<div id="panel-wrapper" [class.no-interaction]="rolling">
-		<div id="track">
-			<gt-track
-					(change)="onTrackChange($event)"
-					[mode]="mode" [postsSetup]="setup.posts" [position]="setup.position"
-			></gt-track>
-		</div>
 		<div id="track-controls">
 			<gt-scale id="position-scale"
 			          [class.pulsing-scale]="requestingSelectionOf === 's'"
@@ -35,6 +29,12 @@
 			          [color]="colors.velocity" [domain]="mode.domain.velocity" [value]="setup.velocity"
 			          (change)="velocitySetter($event)"
 			></gt-scale>
+		</div>
+		<div id="track">
+			<gt-track
+					(change)="onTrackChange($event)"
+					[mode]="mode" [postsSetup]="setup.posts" [position]="setup.position"
+			></gt-track>
 		</div>
 	</div>
 </md-card>

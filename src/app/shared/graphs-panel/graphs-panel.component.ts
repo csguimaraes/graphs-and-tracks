@@ -20,9 +20,18 @@ declare let d3
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-	@Input() mode: ChallengeMode
-	@Input() goal: Motion
-	@ViewChild('goalLine') goalLine: ElementRef
+	@Input()
+	mode: ChallengeMode
+
+	@Input()
+	goal: Motion
+
+	@Output()
+	zoom = new EventEmitter<string>()
+
+	@ViewChild('goalLine')
+	goalLine: ElementRef
+
 
 	goalData: MotionData[]
 	goalLinePath: string
@@ -49,7 +58,6 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 
 	activeUrl
 	initialized = false
-	zoomActive = false
 	velocityDomain: number[]
 	doubleTapRecognizer: HammerManager
 	requestingSelectionOf: DataType
@@ -354,17 +362,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 	}
 
 	toggleZoom() {
-		this.zoomActive = !(this.zoomActive)
-		this.changeDetector.detectChanges()
-		this.safeRefresh()
-	}
-
-	@HostListener('document:keyup', ['$event'])
-	cancelZoom(event: KeyboardEvent) {
-		// Cancel graph zoom if user press ESC
-		if (event.keyCode === 27 && this.zoomActive) {
-			this.toggleZoom()
-		}
+		this.zoom.emit('graph')
 	}
 
 	@HostListener('window:resize')

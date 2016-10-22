@@ -14,6 +14,7 @@ $ball-stroke: 4;
 }
 
 svg {
+  overflow: visible;
 }
 
 svg /deep/ {
@@ -63,7 +64,7 @@ svg /deep/ {
     fill: crimson;
     stroke-width: 3px;
     stroke-dashoffset: 0;
-    stroke: red;
+    stroke: #800;
 
     // R = 10, N = 5, GAP = 2x
     // ((Math.PI * 2 * R) / N) - GAP

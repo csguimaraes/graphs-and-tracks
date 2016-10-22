@@ -287,3 +287,9 @@ md-card-content {
   opacity: .4;
   pointer-events: none !important;
 }
+
+.zoom-active {
+  top: 0 !important;
+  height: calc(100% + 6px) !important;
+  z-index: 99999;
+}

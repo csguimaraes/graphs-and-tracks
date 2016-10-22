@@ -23,6 +23,9 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	roll = new EventEmitter<MotionSetup>()
 
 	@Output()
+	zoom = new EventEmitter<string>()
+
+	@Output()
 	change = new EventEmitter<UI_CONTROL>()
 
 	@Output()
@@ -263,7 +266,6 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	toggleZoom() {
-		this.zoomActive = !(this.zoomActive)
-		setTimeout(() => this.track.refresh(), 10)
+		this.zoom.emit('track')
 	}
 }
