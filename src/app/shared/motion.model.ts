@@ -9,6 +9,7 @@ export class Motion {
 
 	junctions: Junction[]
 	ramps: Ramp[]
+	fellOffAt: { ramp: number, velocity: number }
 
 	private _data: MotionData[]
 
@@ -121,7 +122,12 @@ export class Motion {
 			let nextRamp = this.getRampAt(nextPosition, nextVelocity)
 
 			// Check if the ball still inside the track
-			let fellOff = nextPosition < sDomain.min || sDomain.max < nextPosition
+			let fellOff: boolean
+			if ((nextPosition < sDomain.min) || (sDomain.max < nextPosition)) {
+				fellOff = true
+				this.fellOffAt = { ramp: r.number, velocity: v }
+			}
+
 			if (t === dt && fellOff) {
 				// We end it here if the ball fell of the track right after T=0
 				break

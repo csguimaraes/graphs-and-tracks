@@ -258,6 +258,10 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.track.updateBallPostion(position)
 	}
 
+	animateFall(fallState: { velocity: number, ramp: number}) {
+		this.track.animateFall(fallState)
+	}
+
 	cancelBallReset() {
 		if (this.ballResetTimout) {
 			clearInterval(this.ballResetTimout)

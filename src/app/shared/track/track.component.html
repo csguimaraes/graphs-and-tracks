@@ -1,11 +1,5 @@
 <svg>
 	<g id="track-group">
-		<circle id="ball"
-				[attr.r]="ball.radius - ball.stroke"
-				[attr.cx]="ball.position.x"
-				[attr.cy]="ball.position.y"
-		></circle>
-
 		<path class="track-line"></path>
 		<path class="track-outline"></path>
 
@@ -78,5 +72,11 @@
 				*ngFor="let highlight of postHighlights"
 				[attr.d]="highlight"
 		></path>
+		
+		<circle id="ball"
+		        [attr.r]="ball.radius - ball.stroke"
+		        [attr.cx]="ball.position.x"
+		        [attr.cy]="ball.position.y"
+		></circle>
 	</g>
 </svg>

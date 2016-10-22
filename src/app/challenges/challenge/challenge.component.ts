@@ -81,6 +81,7 @@ export class ChallengeComponent implements OnInit {
 	commitedAttempts: number = 0
 	commitedAttemptsMessage: string
 	lastTrialResult: TrialResult
+	ballFallAt: any
 
 	types = CHALLENGE_TYPE
 
@@ -261,6 +262,10 @@ export class ChallengeComponent implements OnInit {
 
 		this.trackPanel.cancelBallReset()
 		this.animate(trialMotion.data, ANIMATION_DURATION, setup.breakDown)
+
+		if (trialMotion.fellOffAt) {
+			this.ballFallAt = trialMotion.fellOffAt
+		}
 	}
 
 	animate(motion: MotionData[], duration: number, breakdown = false) {
@@ -344,6 +349,10 @@ export class ChallengeComponent implements OnInit {
 				}
 
 				this.endAnimation()
+
+				if (this.ballFallAt) {
+					this.trackPanel.animateFall(this.ballFallAt)
+				}
 			}
 
 			if (typeof position !== 'number') {

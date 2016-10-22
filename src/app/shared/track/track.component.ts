@@ -508,4 +508,39 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 			end: this.scaleX.invert(tangentPointRight.x)
 		}
 	}
+
+	animateFall(fallState: { velocity: number, ramp: number}) {
+		let rampInclination = this.getRampInclination(fallState.ramp - 1)
+
+		// Get velocity components disconsidering direction
+		let down = rampInclination.rad < 0
+		let vx = (fallState.velocity * Math.cos(Math.abs(rampInclination.rad))) / (10)
+		let vy = (fallState.velocity * Math.sin(Math.abs(rampInclination.rad))) / (5 * (down ? -1 : 1))
+
+
+		let x = this.ball.position.x
+		let y = this.ball.position.y
+
+		let g = .2
+		let gt = 10
+
+		let dt = Date.now()
+		let fallFrame = () => {
+			vy += g * ((Date.now() - dt) / gt)
+			y = y + vy
+			x = x + vx
+
+			this.rotateBall({ x: this.ball.position.x, y: this.ball.position.y }, {x, y})
+			this.ball.position.x = x
+			this.ball.position.y = y
+
+			if (y < 400) {
+				requestAnimationFrame(fallFrame)
+			}
+
+			dt = Date.now()
+		}
+
+		fallFrame()
+	}
 }

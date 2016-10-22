@@ -42,7 +42,7 @@ $slider-line-height: $track-controls-height / 3;
   position: absolute;
 
   #panel-wrapper:not(.no-interaction) & /deep/ {
-    circle, path, rect {
+    path, rect {
       pointer-events: all;
     }
 
