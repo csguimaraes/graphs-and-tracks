@@ -234,10 +234,6 @@ export class ChallengeComponent implements OnInit {
 			}
 		}
 
-		if (!this.isTutorial) {
-			this.clearHints()
-		}
-
 		this.trackPanel.cancelBallReset()
 		this.animate(trialMotion.data, ANIMATION_DURATION, setup.breakDown)
 	}
@@ -344,16 +340,7 @@ export class ChallengeComponent implements OnInit {
 			this.graphsPanel.setTrialLineClip(1)
 
 			if (this.lastTrialResult && this.isTutorial === false) {
-				this.hintDismissed = true
-				let bumpDelay = 500
-
-				setTimeout(() => {
-					this.showTrialResult(this.lastTrialResult)
-				}, bumpDelay)
-
-				setTimeout(() => {
-					this.hintDismissed = false
-				}, bumpDelay + 50)
+				this.showTrialResult(this.lastTrialResult)
 			}
 		}
 	}
@@ -369,21 +356,24 @@ export class ChallengeComponent implements OnInit {
 				this.graphsPanel.highlightError(error)
 				this.trackPanel.highlightResult(error)
 
+				let message: Message
 				switch (error.type) {
 					case 's':
-						this.setCurrentMessage(HINT_MESSAGES['position'], 'hint')
+						message = HINT_MESSAGES['position']
 						break
 					case 'v':
-						this.setCurrentMessage(HINT_MESSAGES['velocity'], 'hint')
+						message = HINT_MESSAGES['velocity']
 						break
 					case 'a':
-						this.setCurrentMessage(HINT_MESSAGES['posts'], 'hint')
+						message = HINT_MESSAGES['posts']
 						break
 					default:
 						this.canShowSolution = false
-						this.setCurrentMessage(HINT_MESSAGES['intro'], 'hint')
+						message = HINT_MESSAGES['intro']
 						break
 				}
+
+				this.setCurrentMessage(message, 'hint', true)
 			}
 		} else {
 			let message = lodash.sample(KUDOS.intros)
@@ -428,6 +418,7 @@ export class ChallengeComponent implements OnInit {
 
 	showSolution() {
 		this.trackPanel.setup = lodash.cloneDeep(this.challenge.goal)
+		this.trackPanel.clearHighlights()
 	}
 
 	clearHighlights() {

@@ -105,8 +105,7 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		let value = Math.round((range * position) / domain.step) * domain.step
 
 		if (commit) {
-			this.postsSetup[postIndex] = value
-			this.refresh(postIndex)
+			this.setPost(postIndex, value)
 		} else {
 			let posts = this.postsSetup.slice()
 			posts[postIndex] = value
