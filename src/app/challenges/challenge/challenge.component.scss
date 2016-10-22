@@ -118,6 +118,10 @@ md-card-content {
   }
 }
 
+.challenge-status-container.invisible {
+  opacity: 0 !important;
+}
+
 #message-box {
   visibility: hidden;
   position: absolute;

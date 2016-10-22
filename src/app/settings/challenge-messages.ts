@@ -17,7 +17,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			Click on <b class="b">ROLL BALL</b>.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON],
-		triggers: [UI_CONTROL.POSITION_GRAPH, UI_CONTROL.TUTORIAL_NEXT]
+		triggers: [UI_CONTROL.POSITION_GRAPH, UI_CONTROL.TUTORIAL_NEXT_ON_ANIMATION_END]
 	},
 	{
 		title: 'Position graph',

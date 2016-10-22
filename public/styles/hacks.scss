@@ -37,6 +37,9 @@ md-card-actions {
   }
 }
 
+md-grid-tile {
+  overflow: visible !important;
+}
 
 md-grid-list[card-no-pad] {
   md-grid-tile md-card {

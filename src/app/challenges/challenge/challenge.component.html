@@ -49,6 +49,7 @@
 							<span class="hidden-small">TUTORIAL</span>
 					</span>
 					
+					<!--
 					<span id="button-details" class="action" title="View this challenge details"
 					      [class.disabled]="isTutorial"
 					      [class.active]="detailsEnabled && !isTutorial"
@@ -57,9 +58,10 @@
 						<md-icon small>assignment</md-icon>
 						<span class="hidden-small">INFO</span>
 					</span>
+					-->
 				</div>
 				
-				<md-card-content class="card-content-with-header-and-actions" scroll-y>
+				<md-card-content class="card-content-with-header-and-actions">
 					<div id="challenge-details" *ngIf="detailsEnabled">
 						<div class="nowrap">
 							<span class="hidden-small">
@@ -81,15 +83,17 @@
 						></gt-challenge-difficulty>
 					</div>
 					
-					<div id="challenge-stats"
-					     [class.complete]="challenge.complete"
-					>
-						<md-icon [class.one-bump]="challenge.attempts.length === commitedAttempts">{{ challenge.complete ?  'check' : 'not_interested' }}</md-icon>
-						<span>{{ challenge.complete ?  'Challenge Defeated' : 'Incomplete Challenge' }}</span>
-						<br>
-						<small [class.one-bumpy]="challenge.attempts.length === commitedAttempts">
-							{{ commitedAttemptsMessage }}
-						</small>
+					<div class="challenge-status-container" [class.invisible]="hintDismissed !== true">
+						<div id="challenge-stats"
+						     [class.complete]="challenge.complete"
+						>
+							<md-icon [class.one-bump]="challenge.attempts.length === commitedAttempts">{{ challenge.complete ?  'check' : 'not_interested' }}</md-icon>
+							<span>{{ challenge.complete ?  'Challenge Defeated' : 'Incomplete Challenge' }}</span>
+							<br>
+							<small [class.one-bumpy]="challenge.attempts.length === commitedAttempts">
+								{{ commitedAttemptsMessage }}
+							</small>
+						</div>
 					</div>
 					
 					<div id="message-box" class="{{ message ? message.type : 'invisible' }}">

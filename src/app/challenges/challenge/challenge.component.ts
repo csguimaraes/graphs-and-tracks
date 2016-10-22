@@ -56,6 +56,7 @@ export class ChallengeComponent implements OnInit {
 	tutorialStep: TutorialStep
 	tutorialStepIndex: number
 	tutorialRequires: UI_CONTROL[] = []
+	tutorialWaitingAnimationEnd = false
 
 	commitedAttempts: number = 0
 	commitedAttemptsMessage: string
@@ -330,6 +331,11 @@ export class ChallengeComponent implements OnInit {
 	}
 
 	endAnimation(justPause = false) {
+		if (this.tutorialWaitingAnimationEnd) {
+			this.tutorialWaitingAnimationEnd = false
+			this.tutorialNextStep()
+		}
+
 		this.trackPanel.onAnimationEnded(justPause)
 
 		if (justPause === false) {
@@ -484,7 +490,7 @@ export class ChallengeComponent implements OnInit {
 		}
 
 		this.tutorialStep = currentStep
-		this.setCurrentMessage(this.tutorialStep, 'tutorial')
+		this.setCurrentMessage(this.tutorialStep, 'tutorial', true)
 
 		this.tutorialRequires = []
 		let requirements: UI_CONTROL[] = currentStep.requires || []
@@ -544,12 +550,22 @@ export class ChallengeComponent implements OnInit {
 					case UI_CONTROL.TUTORIAL_NEXT:
 						this.tutorialNextStep()
 						break
+					case UI_CONTROL.TUTORIAL_NEXT_ON_ANIMATION_END:
+						this.tutorialWaitingAnimationEnd = true
+						break
 				}
 			}
 		}
 	}
 
-	setCurrentMessage(message: Message, type?: string) {
+	setCurrentMessage(message: Message, type?: string, bump = false) {
+		if (bump) {
+			this.message = undefined
+			this.changeDetector.markForCheck()
+			setTimeout(() => this.setCurrentMessage(message, type), 50)
+			return
+		}
+
 		if (message) {
 			type = type || message.type
 			switch (type) {
