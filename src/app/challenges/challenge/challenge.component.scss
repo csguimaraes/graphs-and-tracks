@@ -180,6 +180,20 @@ md-card-content {
       b.v { color: $color-v; }
       b.a { color: $color-a; }
       b.b { color: crimson; }
+
+      .solid, .dashed {
+        border-bottom-width: 2px;
+        margin: 0 5px;
+        font-size: 14px;
+      }
+
+      .solid {
+        border-bottom-style: solid;
+      }
+
+      .dashed {
+        border-bottom-style: dashed;
+      }
     }
   }
 }

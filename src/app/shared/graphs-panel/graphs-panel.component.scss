@@ -33,10 +33,10 @@ $ball-margin: 20px;
       height: calc(100% - 10px);
       border-bottom-width: 2px;
       border-bottom-style: solid;
+      padding-bottom: 3px;
       // min-width: 100px;
       margin: 0 4px;
       vertical-align: top;
-      padding-bottom: 3px;
 
       &.goal { border-bottom-style: dashed; }
       &.s { border-bottom-color: $color-s; }

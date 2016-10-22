@@ -27,16 +27,16 @@
 		</div>
 
 		<div id="graph-legend" class="card-header-actions card-header-actions-right">
-			<span class="graph-legend goal {{activeGraph}}">CHALLENGE</span>
-			<span class="graph-legend trial {{activeGraph}}">MOTION</span>
+			<!--<span class="graph-legend goal {{activeGraph}}">CHALLENGE</span>
+			<span class="graph-legend trial {{activeGraph}}">MOTION</span>-->
 			<span class="action graph-action" (click)="refresh(false, true)">
 				<md-icon small>cancel</md-icon>
 				CLEAR
 			</span>
-			<span class="action graph-action" (click)="toggleZoom()">
+			<!--<span class="action graph-action" (click)="toggleZoom()">
 				<md-icon>{{ zoomActive ? 'fullscreen_exit' : 'fullscreen' }}</md-icon>
 				{{ zoomActive ? 'RESTORE' : 'MAXIMIZE' }}
-			</span>
+			</span>-->
 		</div>
 
 		<div id="chart-container" class="card-content-with-header">

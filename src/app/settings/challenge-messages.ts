@@ -11,8 +11,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Motion graphs',
 		content: `
-			Try to recreate the motion by setting the initial conditions and adjusting the tracks. When you roll the ball,
-			your graphs <span>(solid lines)</span> should match the challenge graphs <span>(dashed lines)</span>.
+			Try to recreate the motion by setting the initial conditions and adjusting the tracks. <br> When you roll the ball,
+			your graphs (<span class="solid">solid lines</span>) should match the challenge graphs (<span class="dashed">dashed lines</span>).
 			<br> <br>
 			Click on <b class="b">ROLL BALL</b>.
 		`,
