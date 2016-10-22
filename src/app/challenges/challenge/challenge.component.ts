@@ -267,8 +267,14 @@ export class ChallengeComponent implements OnInit {
 			let now = Date.now()
 			let elapsedTime = now - animationStartedAt
 
-			if (!(this.trackPanel.rolling) || elapsedTime > duration) {
-				this.endAnimation()
+			let overtime = elapsedTime > duration
+			let aborted = !overtime && this.trackPanel.rolling !== true
+			if (aborted || overtime) {
+				if (aborted) {
+					this.endAnimation(false, true)
+				} else {
+					this.endAnimation()
+				}
 				return
 			}
 
@@ -326,7 +332,7 @@ export class ChallengeComponent implements OnInit {
 		animationFrame()
 	}
 
-	endAnimation(justPause = false) {
+	endAnimation(justPause = false, aborted = false) {
 		if (this.tutorialWaitingAnimationEnd) {
 			this.tutorialWaitingAnimationEnd = false
 			this.tutorialNextStep()
@@ -337,7 +343,10 @@ export class ChallengeComponent implements OnInit {
 		if (justPause === false) {
 			// Restore some values
 			this.segmentedAnimationIndex = undefined
-			this.graphsPanel.setTrialLineClip(1)
+
+			if (!aborted) {
+				this.graphsPanel.setTrialLineClip(1)
+			}
 
 			if (this.lastTrialResult && this.isTutorial === false) {
 				this.showTrialResult(this.lastTrialResult)
