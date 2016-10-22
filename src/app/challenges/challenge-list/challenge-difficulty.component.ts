@@ -15,7 +15,7 @@ import { CHALLENGE_DIFFICULTY } from '../../shared/types'
 			width: auto;
 			height: auto;
 			font-size: 16px !important;
-			line-height: 15px;
+			line-height: 18px;
 			vertical-align: text-top;
 		}
 		

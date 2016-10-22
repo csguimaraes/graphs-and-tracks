@@ -6,10 +6,6 @@
   right: 0;
 }
 
-:host:hover #scrollbar {
-  opacity: 1;
-}
-
 #content-wrapper {
   position: absolute;
   width: 100%;
@@ -21,7 +17,6 @@
 }
 
 #scrollbar {
-  opacity: 0;
   transition: opacity 300ms ease-out 100ms;
   position: absolute;
   width: 10px;

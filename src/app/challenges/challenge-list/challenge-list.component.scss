@@ -30,7 +30,7 @@ md-grid-list {
     border-radius: 16px;
     text-align: center;
 
-    &, & > * {
+    &, & /deep/ * {
       cursor: pointer;
     }
 
@@ -61,7 +61,7 @@ md-grid-list {
   margin: 0 -8px;
 
   & > * {
-    flex: 1 1 0;
+    flex: 0 1 0;
   }
 }
 

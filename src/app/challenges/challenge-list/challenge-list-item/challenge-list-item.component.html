@@ -1,24 +1,12 @@
 <div id="item-container" [routerLink]="['/challenges', challenge.id]">
-	<div class="challenge-name nowrap"
-	     [class.complete]="challenge.complete"
-	     [class.incomplete]="!(challenge.complete)"
-	>
+	<div class="challenge-name nowrap">
 		<div id="stats">
 			<b>
-				<template [ngIf]="challenge.complete">
-					<md-icon small>check</md-icon>
-					{{ challenge.name }}
-				</template>
-				<template [ngIf]="!challenge.complete">
-					<md-icon small>not_interested</md-icon>
-					{{ challenge.name }}
-				</template>
+				{{ challenge.name }}
 			</b>
-			
 			<br>
-			
 			<span>
-				{{ challengeStatus }}
+				Standard Challenge
 			</span>
 		</div>
 	</div>
