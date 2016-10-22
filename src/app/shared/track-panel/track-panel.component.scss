@@ -17,15 +17,54 @@ $track-controls-height: 110px;
 $track-height: calc(100% - #{$track-controls-height});
 $slider-line-height: $track-controls-height / 3;
 
+#panel-wrapper, #tapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#tapper {
+  background: rgba(0,255,0,.2);
+  &:active {
+    background: rgba(0,255,0,.6);
+  }
+}
+
+#panel-wrapper {
+  pointer-events: none !important;
+}
+
 #track {
+  width: 100%;
   height: $track-height;
   margin-bottom: 0 !important;
+  max-height: 300px;
+  bottom: $track-controls-height;
+  position: absolute;
+
+  #panel-wrapper:not(.no-interaction) & /deep/ {
+    circle, path, rect {
+      pointer-events: all !important;
+    }
+
+    .track-line {
+      pointer-events: stroke !important;
+    }
+  }
 }
 
 #track-controls {
   height: $track-controls-height;
   overflow: hidden;
-  position: relative;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+
+  #panel-wrapper:not(.no-interaction) & /deep/ * {
+    pointer-events: all !important;
+  }
 
   gt-scale {
     margin: 0 #{$ball-margin - 5};

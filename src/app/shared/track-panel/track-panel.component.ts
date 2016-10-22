@@ -92,13 +92,25 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 		// Initialize tap recognizer in the whole track panel
-		let card = this.element.nativeElement.querySelector('md-card')
+
+		let card = this.element.nativeElement.querySelector('md-card #tapper')
 		let tapHandler = this.tapHandler = new Hammer.Manager(<any> card)
-		tapHandler.add(new Hammer.Tap({ event: 'singletap', taps: 1 }))
+
+		let singleTap = new Hammer.Tap({ event: 'singletap', taps: 1 })
+		let doubleTap = new Hammer.Tap({ event: 'doubletap', taps: 2 })
+
+		doubleTap.recognizeWith(singleTap)
+		singleTap.requireFailure(doubleTap)
+		tapHandler.add([doubleTap, singleTap])
+
 		tapHandler.on('singletap', () => {
 			if (this.rolling) {
 				this.abort.emit()
 			}
+		})
+
+		tapHandler.on('doubletap', () => {
+			this.toggleZoom()
 		})
 	}
 
@@ -249,5 +261,10 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			clearInterval(this.ballResetTimout)
 			this.ballResetTimout = undefined
 		}
+	}
+
+	toggleZoom() {
+		this.zoomActive = !(this.zoomActive)
+		setTimeout(() => this.track.refresh(), 10)
 	}
 }

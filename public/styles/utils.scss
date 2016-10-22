@@ -32,11 +32,12 @@
   overflow-y: auto !important;
 }
 
-.no-interaction {
+.wait, .wait * {
   cursor: wait !important;
-  & > * {
-    pointer-events: none !important;
-  }
+}
+
+.no-interaction, .no-interaction * {
+  pointer-events: none !important;
 }
 
 .todo {
