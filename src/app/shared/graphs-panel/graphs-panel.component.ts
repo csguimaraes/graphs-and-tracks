@@ -249,8 +249,8 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 				break
 
 			case 'v':
-				scaleY.domain(this.getVelocityDomain())
-				ticks = this.height > 200 ? 10 : 5
+				scaleY.domain([-150, 150])
+				ticks = this.height > 300 ? 15 : 5
 				this.axisTitle = 'Velocity (cm/s)'
 				break
 
@@ -351,27 +351,6 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		}
 
 		return lineGenerator(data)
-	}
-
-	getVelocityDomain() {
-		return [-150, 150]
-		/*let tickMultiple = 10
-		if (this.velocityDomain === undefined) {
-			// Velocity graph domain is min and max values from all datasets (challenge and trials)
-			let datasets = [this.goalData, ...this.trialsData]
-			let min = Infinity, max = -Infinity
-			for (let dataset of datasets) {
-				min = Math.min(min, d3.min(dataset, (d: MotionData) => d.v))
-				max = Math.max(max, d3.max(dataset, (d: MotionData) => d.v))
-			}
-
-			let maxAbs = Math.max(Math.abs(min), Math.abs(max))
-			let maxMultiple = Math.ceil(maxAbs / tickMultiple) * tickMultiple
-
-			this.velocityDomain = [maxMultiple * -1, maxMultiple]
-		}
-
-		return this.velocityDomain*/
 	}
 
 	toggleZoom() {

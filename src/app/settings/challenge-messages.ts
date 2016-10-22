@@ -22,8 +22,9 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Position graph',
 		content: `
-			On the <b class="s">POSITION</b> graph, note that the graph for the actual motion <span>(solid curve)</span>
-			does NOT match the given graph (dashed). <br>
+			On the <b class="s">POSITION</b> graph, note that in general, the actual motion (<span class="solid">solid</span>)
+			does NOT match the given graph (<span class="dashed">dashed</span>).
+			<br>
 			Your task is to match the graphs.<br>
 			<br>
 			Now select the <b class="v">VELOCITY</b> graph.
@@ -34,9 +35,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Velocity graph',
 		content: `
-			Here is the velocity graph for this first example of motion.
+			Here is the <b class="v">VELOCITY</b> graph for this first example of motion.
+			Try rolling the ball to see the velocity vs. time graph for the current setup.
 			<br> <br>
-			Let's see the <b class="a">ACCELERATION</b> graph now.
+			When you are ready, take a look at the <b class="a">ACCELERATION</b> graph.
 		`,
 		requires: [UI_CONTROL.ACCELERATION_GRAPH],
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
@@ -44,9 +46,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Three graphs, any motion',
 		content: `
-			Use information contained in these three graphs to discover the motion of the ball which is one-dimensional <span>(along a straight line)</span>.
+			Try experimenting with graphs of acceleration vs. time by adjusting the inclinations of the ramps and rolling the ball.
+			Use information contained in these three graphs to discover the motion of the ball. The motion is one-dimensional (along a straight line).
 			<br> <br>
-			Now return to the position vs. time graph by clicking on <b class="s">POSITION</b>.
+			When ready, return to the position vs. time graph by clicking on <b class="s">POSITION</b>.
 		`,
 		requires: [UI_CONTROL.POSITION_GRAPH],
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
@@ -64,7 +67,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Setting the initial speed and direction',
 		content: `
-			The ball in the challenge motion may already be moving at time t=0.
+			In some challenge motions, the ball may already be moving at time t=0.
 			<br> <br>
 			Its initial velocity may be positive <span>(to the right)</span> or negative <span>(to the left)</span>, or zero <span>(at rest)</span>.
 			<br> <br>
@@ -76,8 +79,9 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Change the Track setup',
 		content: `
-			Drag the top of a <b>POST</b> to raise or lower its <b>height</b>,
-			or simply tap above or below a post head to gradually change the height value of that post.
+			Drag the top of a <b>POST</b> to raise or lower it, or simply tap above or below to increase or decrease its <b>height</b>.
+			The height of each post is displayed at its base.
+			Try rolling the ball for different track
 		`,
 		requires: [UI_CONTROL.TRACK_POST_ANY]
 	},
@@ -133,11 +137,9 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 	velocity: {
 		title: 'Initial velocity',
 		content: `
-			Take a careful look at the <b class="v">velocity graph</b>.
+			Take a careful look at the <b class="v">VELOCITY</b> graph at time t=0 to set your initial velocity.
 			<br> <br>
-			If the velocity at time t=0 is positive, this means the ball is initially rolling to the right;
-			<br>
-			if it’s negative the ball is rolling to the left.
+			If the initial velocity is positive, this means the ball is initially rolling to the right; if it’s negative the ball rolls to the left.
 		`
 	},
 	posts: {
