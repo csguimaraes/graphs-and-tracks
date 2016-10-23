@@ -9,20 +9,21 @@
 							<br>
 							<span>FOLLOW THE TUTORIAL</span>
 						</div>
-						<div class="list-action todo">
-							<md-icon>public</md-icon>
-							<br>
-							<span>BROWSE COMMUNITY CHALLENGES</span>
-						</div>
 						<div class="list-action" [routerLink]="'/challenges/editor'">
 							<md-icon>format_paint</md-icon>
 							<br>
 							<span>CREATE YOUR OWN CHALLENGE</span>
 						</div>
+						<div class="list-action todo">
+							<md-icon>public</md-icon>
+							<br>
+							<span>BROWSE COMMUNITY CHALLENGES</span>
+						</div>
 					</div>
 					<div class="list-container">
 						<gt-challenge-list-item *ngFor="let challengeSample of examples" [challenge]="challengeSample"></gt-challenge-list-item>
-						
+						<!-- Flex not so flex -->
+						<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
 						<!--
 						<div id="no-custom-challenges">
 							<md-icon>important_devices</md-icon>

@@ -1,4 +1,4 @@
-import { Component, ViewChild, trigger, ChangeDetectorRef, HostListener, OnInit } from '@angular/core'
+import { Component, ViewChild, trigger, ChangeDetectorRef, HostListener, OnInit, ElementRef, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import * as lodash from 'lodash'
@@ -42,12 +42,15 @@ const GRID_INFO_FIXED: GridSetup = {
 	styleUrls: ['./challenge.component.scss'],
 	animations: [ trigger('challengeSwitch', SWITCH_ANIMATION)]
 })
-export class ChallengeComponent implements OnInit {
+export class ChallengeComponent implements OnInit, AfterViewInit {
 	@ViewChild(TrackPanelComponent)
 	trackPanel: TrackPanelComponent
 
 	@ViewChild(GraphsPanelComponent)
 	graphsPanel: GraphsPanelComponent
+
+	@ViewChild('cardHeader')
+	cardHeader: ElementRef
 
 	challengeId: string
 	challenge: Challenge
@@ -105,6 +108,22 @@ export class ChallengeComponent implements OnInit {
 		this.isReady = true
 		this.loadChallengeById(this.challengeId)
 		this.loadTrackSetup()
+	}
+
+	ngAfterViewInit() {
+		let swipeHandler = new Hammer.Manager(this.cardHeader.nativeElement)
+		let swipe = new Hammer.Swipe({ direction: Hammer.DIRECTION_HORIZONTAL })
+
+		swipeHandler.add([swipe])
+
+		swipeHandler.on('swipeleft', () => {
+			this.navigateTo('toLeft')
+		})
+
+		swipeHandler.on('swiperight', () => {
+			this.navigateTo('toRight')
+		})
+
 	}
 
 	onRollBall(setup: MotionSetup) {
@@ -419,6 +438,7 @@ export class ChallengeComponent implements OnInit {
 				this.setCurrentMessage(message, 'hint', true)
 			}
 		} else {
+			this.hintsEnabled = false
 			let message = lodash.sample(KUDOS.intros)
 			let messageEnd: string
 			let icon = KUDOS.icons['normal']

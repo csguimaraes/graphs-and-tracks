@@ -29,6 +29,8 @@ $ball-margin: 20px;
   span {
     font-size: 11px !important;
     padding: 0 4px;
+    margin: 0 8px;
+
     &.graph-legend {
       height: calc(100% - 10px);
       border-bottom-width: 2px;

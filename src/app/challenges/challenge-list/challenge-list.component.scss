@@ -21,7 +21,7 @@ md-grid-list {
   margin: 0 -16px;
 
   .list-action {
-    flex: 1 1 auto;
+    flex: 1 1 33%;
     padding: 16px;
     margin: 0 16px;
     box-sizing: border-box;
@@ -61,7 +61,12 @@ md-grid-list {
   margin: 0 -8px;
 
   & > * {
-    flex: 0 1 0;
+    flex: 1 0 auto;
+    min-width: 232px;
+  }
+
+  & > div {
+    height: 0;
   }
 }
 

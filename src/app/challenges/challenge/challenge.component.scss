@@ -27,8 +27,8 @@ md-card-content {
       cursor: pointer !important;
     }
 
-    will-change: background;
-    transition: background 100ms linear;
+    will-change: background, margin;
+    transition: background 100ms linear 200ms, margin 100ms ease-in 200ms;
 
     &:hover {
       background: #DDD;
@@ -37,6 +37,14 @@ md-card-content {
     &.disabled {
       opacity: .3;
       pointer-events: none;
+
+      &.right {
+        margin-right: -20px;
+      }
+
+      &.left {
+        margin-left: -20px;
+      }
     }
   }
 }

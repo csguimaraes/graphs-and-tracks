@@ -64,6 +64,8 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 	postHighlight: number
 	postHighlights: string[]
 
+	animatingFall = false
+
 	constructor(private changeDetector: ChangeDetectorRef, elementRef: ElementRef) {
 		this.host = elementRef.nativeElement
 	}
@@ -520,25 +522,28 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 
 		let x = this.ball.position.x
 		let y = this.ball.position.y
+		let y0 = y
 
 		let g = .2
 		let gt = 10
+		let dt = Date.now() - 100
 
-		let dt = Date.now()
+		this.animatingFall = true
 		let fallFrame = () => {
 			vy += g * ((Date.now() - dt) / gt)
 			y = y + vy
 			x = x + vx
 
-			this.rotateBall({ x: this.ball.position.x, y: this.ball.position.y }, {x, y})
+			this.rotateBall({x, y: y0}, { x: this.ball.position.x, y: y0 })
 			this.ball.position.x = x
 			this.ball.position.y = y
 
-			if (y < 400) {
+			if (y < 400 && this.animatingFall) {
+				dt = Date.now()
 				requestAnimationFrame(fallFrame)
+			} else {
+				this.animatingFall = false
 			}
-
-			dt = Date.now()
 		}
 
 		fallFrame()

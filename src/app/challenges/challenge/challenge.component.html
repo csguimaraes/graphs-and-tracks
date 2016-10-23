@@ -2,8 +2,8 @@
 	<md-grid-tile [colspan]="grid.info.colspan" [rowspan]="grid.info.rowspan">
 		<md-card id="info-card">
 			<div class="content-wrapper">
-				<div class="card-header">
-					<span class="challenge-selector" (click)="navigateTo('toRight')"
+				<div #cardHeader class="card-header">
+					<span class="challenge-selector left" (click)="navigateTo('toRight')"
 					      [class.disabled]="collectionIndex === 0"
 					>
 						<md-icon>chevron_left</md-icon>
@@ -23,7 +23,7 @@
 						</template>
 					</span>
 					<span
-							class="challenge-selector" (click)="navigateTo('toLeft')"
+							class="challenge-selector right" (click)="navigateTo('toLeft')"
 							[class.disabled]="collectionIndex === (collectionIds.length - 1)"
 					>
 						<md-icon>chevron_right</md-icon>
@@ -97,11 +97,6 @@
 					</div>
 					
 					<div id="message-box" class="{{ message ? message.type : 'invisible' }}">
-						<md-icon id="message-close"
-							*ngIf="message?.type !== 'tutorial'"
-							(click)="clearHints()"
-						>close</md-icon>
-						
 						<b id="message-title">
 							<md-icon [innerHTML]="message?.icon"></md-icon>
 							<span [innerHTML]="message?.title"></span>
@@ -126,6 +121,7 @@
 								</span>
 							</template>
 							<template [ngIf]="message?.type === 'success'">
+								<span class="link" (click)="clearHints()">Dismiss</span>
 								<span class="button" [routerLink]="['../']">
 									Go To Challenges List
 								</span>
