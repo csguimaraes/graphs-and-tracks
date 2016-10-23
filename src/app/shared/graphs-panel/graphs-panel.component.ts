@@ -193,7 +193,16 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 	}
 
 	addTrialData(data: MotionData[]) {
-		this.trialsData.push(data)
+		// Now only latest trial is being held
+		let trials = []
+		let latest = this.trialsData.pop()
+		if (latest) {
+			trials.push(latest)
+		}
+
+		trials.push(data)
+
+		this.trialsData = trials
 
 		// Clear cached data domain for velocity
 		this.velocityDomain = undefined
