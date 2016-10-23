@@ -19,9 +19,13 @@ $ball-margin: 20px;
       text-shadow: 0 0 .1em gray;
     }
 
-    &.s.active, &.s.pulsing { background: $color-s; }
-    &.v.active, &.v.pulsing { background: $color-v; }
-    &.a.active, &.a.pulsing { background: $color-a; }
+    &.s { color: $color-s; }
+    &.v { color: $color-v; }
+    &.a { color: $color-a; }
+
+    &.s.active, &.s.pulsing { background: $color-s; color: white; }
+    &.v.active, &.v.pulsing { background: $color-v; color: white; }
+    &.a.active, &.a.pulsing { background: $color-a; color: white; }
   }
 }
 
