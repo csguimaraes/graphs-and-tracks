@@ -74,7 +74,7 @@ export const CHALLENGES_EASY: Challenge[] = [
 		type: CHALLENGE_TYPE.EXAMPLE,
 		difficulty: CHALLENGE_DIFFICULTY.EASY,
 		mode: MODE_NORMAL,
-		goal: { position: 400, velocity: 60, posts: [0, 0, 0, 0, 0, 0] }
+		goal: { position: 400, velocity: -60, posts: [0, 0, 0, 0, 0, 0] }
 	},
 	{
 		id: '5',
@@ -93,7 +93,7 @@ export const CHALLENGES_INTERMEDIATE: Challenge[] = [
 		type: CHALLENGE_TYPE.EXAMPLE,
 		difficulty: CHALLENGE_DIFFICULTY.INTERMEDIATE,
 		mode: MODE_NORMAL,
-		goal: { position: 350, velocity: 60, posts: [5, 4, 3, 2, 1, 0] }
+		goal: { position: 350, velocity: -60, posts: [5, 4, 3, 2, 1, 0] }
 	},
 	{
 		id: '7',
@@ -125,7 +125,7 @@ export const CHALLENGES_INTERMEDIATE: Challenge[] = [
 		type: CHALLENGE_TYPE.EXAMPLE,
 		difficulty: CHALLENGE_DIFFICULTY.INTERMEDIATE,
 		mode: MODE_NORMAL,
-		goal: { position: 450, velocity: 200, posts: [10, 2, 2, 1, 0, 2, 4] }
+		goal: { position: 450, velocity: 10, posts: [10, 2, 2, 1, 0, 2, 4] }
 	}
 ]
 

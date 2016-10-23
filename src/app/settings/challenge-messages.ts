@@ -2,28 +2,37 @@ import { TutorialStep, Message, UI_CONTROL } from '../shared/types'
 
 export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
-		title: 'Welcome to Graphs & Tracks!',
+		title: 'Welcome to Graphs and Tracks!',
 		content: `
-			Your mission is to discover the true motion of a rolling ball by using the
+			Your mission is to discover the motion of a rolling ball by using the
 			information provided in graphs of position, velocity and acceleration.
 		`
 	},
 	{
 		title: 'Motion graphs',
 		content: `
-			Try to recreate the motion by setting the initial conditions and adjusting the tracks. <br> When you roll the ball,
-			your graphs (<span class="solid">solid lines</span>) should match the challenge graphs (<span class="dashed">dashed lines</span>).
+			Try to recreate the motion by setting the initial conditions and adjusting the tracks.
+			<br>
+			When you are successful, your graph will match the challenge graph.
 			<br> <br>
-			Click on <b class="b">ROLL BALL</b>.
+			Click on the <b class="b">ROLL BALL</b> button.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON],
 		triggers: [UI_CONTROL.POSITION_GRAPH, UI_CONTROL.TUTORIAL_NEXT_ON_ANIMATION_END]
 	},
 	{
+		title: 'Motion graphs',
+		content: `
+			Your graphs, with <span class="solid">solid lines</span>, should match the challenge graphs, the <span class="dashed">dashed lines</span>.
+		`,
+		requires: [],
+		triggers: [UI_CONTROL.POSITION_GRAPH]
+	},
+	{
 		title: 'Position graph',
 		content: `
-			On the <b class="s">POSITION</b> graph, note that in general, the actual motion (<span class="solid">solid</span>)
-			does NOT match the given graph (<span class="dashed">dashed</span>).
+			On the <b class="s">POSITION</b> graph, note that in general, the actual motion (<span class="solid">solid line</span>)
+			does NOT match the given graph (<span class="dashed">dashed line</span>).
 			<br>
 			Your task is to match the graphs.<br>
 			<br>
@@ -35,10 +44,11 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Velocity graph',
 		content: `
-			Here is the <b class="v">VELOCITY</b> graph for this first example of motion.
-			Try rolling the ball to see the velocity vs. time graph for the current setup.
+			Here is the <b class="v">VELOCITY</b> graph for this first example of motion. <br> 
+			Can you see places where the speed changes? Or stays the same for a period of time?
+			
 			<br> <br>
-			When you are ready, take a look at the <b class="a">ACCELERATION</b> graph.
+			When ready to continue, click on <b class="a">ACCELERATION</b>.
 		`,
 		requires: [UI_CONTROL.ACCELERATION_GRAPH],
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
@@ -66,7 +76,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
-		title: 'Setting the initial speed and direction',
+		title: 'Setting initial speed and direction',
 		content: `
 			In some challenge motions, the ball may already be moving at time t=0.
 			<br> <br>
@@ -142,8 +152,8 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 	velocity: {
 		title: 'Initial velocity',
 		content: `
-			Take a careful look at the <b class="v">VELOCITY</b> graph at time t=0 to set your initial velocity.
-			<br> <br>
+			Use the <b class="v">VELOCITY</b> graph to read off the initial velocity.
+			<br>
 			If the initial velocity is positive, this means the ball is initially rolling to the right; if it’s negative the ball rolls to the left.
 		`
 	},
