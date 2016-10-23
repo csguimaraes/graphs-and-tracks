@@ -10,31 +10,58 @@ md-card {
 
 md-card-title {
   margin-bottom: 4px;
+  font-size: 28px !important;
+  color: #009688;
+  md-icon {
+    font-size: 32px;
+    margin-right: 8px;
+    width: auto;
+    height: auto;
+  }
 }
 
-h1 {
-  font-size: 200%;
-  color: teal;
-}
 
 p {
   font-size: 14px;
-  color:#999;
+  color:#666;
+  line-height: 1.5;
 }
 
 a {
   text-decoration: none;
   font-weight: 600;
-  color: darken(teal, 10);
   cursor: pointer;
 }
 
 md-list {
   text-align: left;
 
-  & /deep/ {
-    md-list-item /deep/ *{
+  md-list-item {
+    display: block;
+    border-radius: 8px;
+    transition: background 300ms ease-in;
+    cursor: pointer;
+
+    & /deep/ * {
       cursor: pointer;
     }
+
+    &:hover {
+      background: #F0F0F0;
+    }
+  }
+
+  h3 {
+    font-weight: 500;
+    color: #009688;
+  }
+
+  md-icon {
+    background: #009688 !important;
+    color: white;
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
   }
 }

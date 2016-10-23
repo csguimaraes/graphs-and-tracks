@@ -271,3 +271,10 @@ md-card.with-scroller {
   overflow: hidden;
   padding: 0 !important;
 }
+
+
+.flex-vcenter {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+}

@@ -12,7 +12,8 @@ md-card-content {
     position: relative;
 
     & > div {
-      background: #EAEAEA !important;
+      background: #009688 !important;
+      color: white;
       position: absolute;
       transform-origin: 50% 50%;
       width: 100%;
@@ -28,7 +29,7 @@ md-card-content {
     }
 
     will-change: background, margin;
-    transition: background 100ms linear 200ms, margin 100ms ease-in 200ms;
+    transition: background 300ms linear 200ms, margin 300ms ease-in 200ms;
 
     &:hover {
       background: #DDD;
@@ -252,7 +253,6 @@ md-card-content {
   }
 
   .button {
-    background: white;
     animation: 1s pulse linear infinite;
 
     md-icon {
@@ -275,19 +275,22 @@ md-card-content {
 
 .hint {
   background: papayawhip;
-  #message-title, & .button, & .link { color: darkorange; }
+  & .button { color: papayawhip; background: darkorange; }
+  #message-title, & .link { color: darkorange; }
   #message-actions, #message-close { background: lighten(darkorange, 40); }
 }
 
 .tutorial {
   background: #CEF;
-  #message-title, & .button, & .link { color: dodgerblue; }
+  & .button { color: #CEF; background: dodgerblue; }
+  #message-title, & .link { color: dodgerblue; }
   #message-actions, #message-close { background: lighten(dodgerblue, 40); }
 }
 
 .success {
   background: #CFE;
-  #message-title, & .button, & .link { color: darkgreen; }
+  & .button { color: #CFE; background: darkgreen; }
+  #message-title, & .link { color: darkgreen; }
   #message-actions, #message-close { background: #AEA; }
 }
 

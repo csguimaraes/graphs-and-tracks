@@ -112,7 +112,9 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Tutorial complete',
 		content: `
-			That's it, now you're ready to start. You can go to the <a [routerLink]="['/challenges']">challenges list</a> and
+			Another thing that may help is zooming the graphs or the track panels by double-tapping on it.
+			<br><br>
+			Well that's it, now you're ready to start. You can go to the <a [routerLink]="['/challenges']">Challenges List</a> and
 			pick your first one.
 		`,
 		requires: []

@@ -1,31 +1,41 @@
 <div>
 	<md-card>
-		<md-card-title>
-			Graphs and Tracks
+		<md-card-title [routerLink]="'/about'" class="flex-vcenter">
+			<md-icon>multiline_chart</md-icon>
+			<span>Graphs and Tracks</span>
 		</md-card-title>
 		<md-card-content>
-		<b>by</b> <a [routerLink]="'/about'">David Trowbridge</a>
 			<p>
-				Learn about graphs of position, velocity and acceleration.
-				<br>
-				Test your understanding of motion<br>
-				by rolling a ball along challenging track arrangements.
+				A simulation designed for math and physics students to help develop <br class="hide-sw">
+				an intuitive understanding of graphs of position, velocity and acceleration. <br class="hide-sw">
+				Test your understanding of one-dimensional motion by reading graphs <br class="hide-sw">
+				and producing the corresponding motion. <br class="hide-sw">
 			</p>
+			
 			<br>
-
+			
 			<md-list>
-				<md-list-item [routerLink]="'/challenges'">
-					<md-icon md-list-avatar>star</md-icon>
-					<h3 md-line>Challenge List</h3>
-					<p md-line>
-						Browse all available challenges
-					</p>
-				</md-list-item>
 				<md-list-item [routerLink]="tutorialChallengeLink">
 					<md-icon md-list-avatar>school</md-icon>
 					<h3 md-line> First time here? </h3>
 					<p md-line>
-						Use this tutorial to learn how to solve a challenge
+						Use this tutorial to learn how the program works
+					</p>
+				</md-list-item>
+				
+				<md-list-item class="todo">
+					<md-icon md-list-avatar>gps_fixed</md-icon>
+					<h3 md-line>Practice</h3>
+					<p md-line>
+						Get comfortable with using the program
+					</p>
+				</md-list-item>
+				
+				<md-list-item [routerLink]="'/challenges'">
+					<md-icon md-list-avatar>star</md-icon>
+					<h3 md-line>Challenge List</h3>
+					<p md-line>
+						Browse all the available challenges
 					</p>
 				</md-list-item>
 			</md-list>
