@@ -709,13 +709,13 @@ body, md-sidenav-layout {
   padding: 16px;
   height: calc(100% - 40px);
   box-sizing: border-box; }
-@media screen and (max-width: 960px) {
+@media (max-width: 960px) {
   .hidden-small {
     display: none !important; }
   md-toolbar {
     font-size: 14px !important; } }
 
-@media screen and (max-width: 720px) {
+@media (max-width: 720px) {
   .hidden-mobile {
     display: none !important; } }
 /*
@@ -781,4 +781,4 @@ md-toolbar, md-toolbar-row {
   right: 0 !important;
   bottom: 0 !important; }
 
-/*# sourceMappingURL=app.a2234e69a1bd6ca086c1.css.map*/
+/*# sourceMappingURL=app.63943cd85303b9831b9f.css.map*/
