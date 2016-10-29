@@ -187,10 +187,10 @@ export class ChallengeEditorComponent implements OnInit {
 		animationFrame()
 	}
 
-	endAnimation(justPause = false) {
+	endAnimation(justPause = false, aborted = false) {
 		this.trackPanel.onAnimationEnded(justPause)
-
-		if (justPause === false) {
+		
+		if (!aborted) {
 			// Restore some values
 			this.graphsPanel.setTrialLineClip(1)
 		}

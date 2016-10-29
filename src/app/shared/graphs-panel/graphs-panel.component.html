@@ -31,8 +31,14 @@
 				<defs>
 					<clipPath id="trial-line-clip">
 						<rect x="0" width="0"
-				        [attr.y]="margin.top * -1"
-					      [attr.height]="height + margin.top + margin.bottom"
+						      [attr.y]="margin.top * -1"
+						      [attr.height]="height + margin.top + margin.bottom"
+						></rect>
+					</clipPath>
+					<clipPath id="shadow-line-clip">
+						<rect x="0" width="0"
+						      [attr.y]="margin.top * -1"
+						      [attr.height]="height + margin.top + margin.bottom"
 						></rect>
 					</clipPath>
 				</defs>
@@ -43,7 +49,7 @@
 					></path>
 					<path class="line trial" *ngFor="let trialPathData of trialLinePaths; let idx = index"
 							[attr.d]="trialPathData"
-							[attr.clip-path]="(lineToClip === idx) ? 'url(' + activeUrl + '#trial-line-clip)' : ''"
+							[attr.clip-path]="(lineToClip === idx) ? 'url(' + activeUrl + '#trial-line-clip)' : ((lineToClip - 1 === idx) ? 'url(' + activeUrl + '#shadow-line-clip)' : '')"
 					></path>
 
 
