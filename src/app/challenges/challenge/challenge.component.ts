@@ -284,7 +284,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		if (trialMotion.fellOffAt) {
 			this.ballFallAt = trialMotion.fellOffAt
 		}
-
+		
 		this.animate(trialMotion.data, ANIMATION_DURATION, setup.breakDown)
 	}
 

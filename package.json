@@ -42,7 +42,7 @@
     "codelyzer": "0.0.26",
     "copy-webpack-plugin": "*",
     "css-loader": "*",
-    "extract-text-webpack-plugin": "*",
+    "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "file-loader": "*",
     "html-loader": "*",
     "html-webpack-plugin": "*",

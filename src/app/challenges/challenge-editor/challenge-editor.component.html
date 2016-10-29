@@ -3,34 +3,16 @@
 		<md-card id="info-card">
 			<div class="content-wrapper">
 				<div class="card-header">
-					<span class="challenge-selector" (click)="navigateTo('toRight')"
-					      [class.disabled]="collectionIndex === 0"
-					>
-						<md-icon>chevron_left</md-icon>
-					</span>
+					<span></span>
 					<span id="title-container" class="active">
-						<template [ngIf]="auth.user.settings.effects">
-							<template ngFor let-name [ngForOf]="[challenge.name]">
-								<div [@challengeSwitch]="switchDirection">
-									{{ name }}
-								</div>
-							</template>
-						</template>
-						<template [ngIf]="!(auth.user.settings.effects)">
-							<div>
-								{{ name }}
-							</div>
-						</template>
+						<div>
+							{{ challenge.name }}
+						</div>
 					</span>
-					<span
-							class="challenge-selector" (click)="navigateTo('toLeft')"
-							[class.disabled]="collectionIndex === (collectionIds.length - 1)"
-					>
-						<md-icon>chevron_right</md-icon>
-					</span>
+					<span></span>
 				</div>
 				
-				<md-card-content class="card-content-with-header-and-actions" scroll-y>
+				<md-card-content class="card-content-with-header-and-actions">
 				</md-card-content>
 			</div>
 		</md-card>

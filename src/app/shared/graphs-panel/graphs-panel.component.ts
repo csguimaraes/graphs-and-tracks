@@ -32,7 +32,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 	@ViewChild('goalLine')
 	goalLine: ElementRef
 
-
+	ignoreGoal = false
 	goalData: MotionData[]
 	goalLinePath: string
 
@@ -171,7 +171,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 			this.activeGraph = type
 
 			if (refresh) {
-				this.refresh(true, this.autoClearTrials)
+				this.refresh(true, false)
 			}
 
 			switch (type) {
@@ -192,17 +192,22 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		}
 	}
 
-	addTrialData(data: MotionData[]) {
-		// Now only latest trial is being held
-		let trials = []
-		let latest = this.trialsData.pop()
-		if (latest) {
-			trials.push(latest)
+	addTrialData(data: MotionData[], single = false) {
+		if (single) {
+			// Only the latest trial is shown
+			this.trialsData = [data]
+		} else {
+			// Now only latest trial is being held
+			let trials = []
+			let latest = this.trialsData.pop()
+			if (latest) {
+				trials.push(latest)
+			}
+			
+			trials.push(data)
+			
+			this.trialsData = trials
 		}
-
-		trials.push(data)
-
-		this.trialsData = trials
 
 		// Clear cached data domain for velocity
 		this.velocityDomain = undefined
@@ -318,7 +323,9 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 			.call(axisY)
 
 		// Plot goal line
-		this.goalLinePath = this.generateLinePath(data, type)
+		if (!this.ignoreGoal) {
+			this.goalLinePath = this.generateLinePath(data, type)
+		}
 
 		// Plot available trial lines
 		let trialLinePaths = []

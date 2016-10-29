@@ -1,16 +1,15 @@
 {
-	"compilerOptions": {
-		"target": "ES5",
-		"module": "commonjs",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"sourceMap": true,
-		"noEmitHelpers": true
-	},
-	"compileOnSave": false,
-	"buildOnSave": false,
-	"exclude": [
-		"old",
-		"node_modules"
-	]
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "noEmitHelpers": true,
+    "experimentalDecorators": true
+  },
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "exclude": [
+    "node_modules"
+  ]
 }
