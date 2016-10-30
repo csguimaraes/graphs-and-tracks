@@ -95,7 +95,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			Try rolling the ball for different track
 		`,
 		requires: [UI_CONTROL.TRACK_POST_ANY],
-		triggers: [UI_CONTROL.TUTORIAL_NEXT]
+		triggers: []
 	},
 	{
 		title: 'Test your new setup',
@@ -117,7 +117,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			To see the motion for only one sloping section at a time, click and <b>hold down</b> the <b class="b">ROLL BALL</b> button.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON_HOLD],
-		triggers: [UI_CONTROL.TUTORIAL_NEXT_ON_ANIMATION_END]
+		triggers: []
 	},
 	{
 		title: 'Tutorial complete',
