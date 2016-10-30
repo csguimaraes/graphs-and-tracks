@@ -49,7 +49,7 @@
 					gtSlider [vertical]="true" [reference]="svg.node()"
 					[start]="margin.top" [end]="margin.bottom"
 					(slided)="onPostDrag($event, idx)" (change)="onPostDrag($event, idx, true)"
-					[emitTap]="true" (tap)="decrementPost(idx)"
+					[emitTap]="true" (taped)="decrementPost(idx)"
 
 					[attr.x]="post.x - post.width" [attr.y]="post.y"
 					[attr.width]="post.width * 3" [attr.height]="post.height + (postsSetup[idx] === mode.domain.posts.min ? (trackWidth * 2) : 0)"

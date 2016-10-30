@@ -1,0 +1,46 @@
+:host {
+  height: 100%;
+  width: 100%;
+}
+
+span, a, b, i {
+  white-space: nowrap;
+}
+
+md-card {
+  height: 100%;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+md-card-content {
+  font-size: 16px;
+  color: #333;
+}
+
+md-card-title {
+  font-size: 24px !important;
+}
+
+md-card-subtitle {
+  font-size: 18px !important;
+  font-weight: 500;
+}
+
+md-card-title, md-card-subtitle {
+  color: #009688;
+}
+
+a {
+  text-decoration: none;
+  font-weight: bold;
+  &, &:visited {
+    color: #009688;
+  }
+}
+
+ol {
+  li {
+    margin: 16px 0;
+  }
+}

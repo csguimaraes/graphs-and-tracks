@@ -131,9 +131,15 @@ export class ChallengePracticeComponent implements OnInit {
 		let animationFrame = () => {
 			let now = Date.now()
 			let elapsedTime = now - animationStartedAt
-
-			if (!(this.trackPanel.rolling) || elapsedTime > duration) {
-				this.endAnimation()
+			
+			let overtime = elapsedTime > duration
+			let aborted = !overtime && this.trackPanel.rolling !== true
+			if (aborted || overtime) {
+				if (aborted) {
+					this.endAnimation(false, true)
+				} else {
+					this.endAnimation()
+				}
 				return
 			}
 

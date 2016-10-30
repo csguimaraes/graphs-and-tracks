@@ -10,7 +10,7 @@
 			Challenges
 		</span>
 	</a>
-
+	<!--
 	<a [routerLink]="['playground']" class="todo">
 		<md-icon>public</md-icon>
 		<span class="hidden-mobile">
@@ -24,17 +24,26 @@
 			Settings
 		</span>
 	</a>
+	-->
 
 	<div class="filler"></div>
 
-	<a id="menu-user-status"> <!--md-icon-button [md-menu-trigger-for]="menu"-->
+	<a [routerLink]="['about']">
+		<md-icon>info_outline</md-icon>
+		<span class="hidden-mobile">
+			About
+		</span>
+	</a>
+
+	<!--
+	<a id="menu-user-status"> <!--md-icon-button [md-menu-trigger-for]="menu"
 		<img [src]="auth.user.avatarUrl">
 		<span class="hidden-small">
 			{{ auth.user.username }}
 		</span>
 		<md-icon>arrow_drop_down</md-icon>
 	</a>
-	<!--md-menu id="user-menu" #menu="mdMenu" x-position="after">
+	md-menu id="user-menu" #menu="mdMenu" x-position="after">
 		<button md-menu-item> Refresh </button>
 		<button md-menu-item> Settings </button>
 		<button md-menu-item> Help </button>
