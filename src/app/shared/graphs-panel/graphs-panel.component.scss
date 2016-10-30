@@ -12,6 +12,10 @@ $ball-margin: 20px;
       &:hover {
         background: #E0E0E0;
       }
+
+      &:not(.active) {
+        margin: 0 8px !important;
+      }
     }
 
     &.active, &.pulsing {
@@ -29,28 +33,6 @@ $ball-margin: 20px;
   }
 }
 
-#graph-legend {
-  span {
-    font-size: 11px !important;
-    padding: 0 4px;
-    margin: 0 8px;
-
-    &.graph-legend {
-      height: calc(100% - 10px);
-      border-bottom-width: 2px;
-      border-bottom-style: solid;
-      padding-bottom: 3px;
-      // min-width: 100px;
-      margin: 0 4px;
-      vertical-align: top;
-
-      &.goal { border-bottom-style: dashed; }
-      &.s { border-bottom-color: $color-s; }
-      &.v { border-bottom-color: $color-v; }
-      &.a { border-bottom-color: $color-a; }
-    }
-  }
-}
 
 #chart-container {
   width: calc(100% - #{$ball-margin * 2});
@@ -63,6 +45,8 @@ $ball-margin: 20px;
   box-sizing: border-box;
   margin-left: $ball-margin;
   margin-right: $ball-margin;
+
+  //noinspection CssInvalidPropertyValue
   pointer-events: bounding-box;
 
   &:not(.s) /deep/ .axis-x {
