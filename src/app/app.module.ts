@@ -6,6 +6,7 @@ import { AppComponent } from './app.component'
 import { APP_ROUTING, APP_ROUTING_PROVIDERS } from './app.routing'
 
 import { ChallengesService } from './shared/challenges.service'
+import { StorageService } from './shared/storage.service'
 import { AuthService } from './shared/auth.service'
 
 import { DumpPipe } from './shared/dump.pipe'
@@ -60,6 +61,7 @@ import { ChallengeDifficultyComponent } from './challenges/challenge-list/challe
 	providers: [
 		APP_ROUTING_PROVIDERS,
 		ChallengesService,
+		StorageService,
 		AuthService
 	],
 	bootstrap: [ AppComponent ]
