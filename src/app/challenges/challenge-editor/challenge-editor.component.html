@@ -12,7 +12,36 @@
 					<span></span>
 				</div>
 				
-				<md-card-content class="card-content-with-header-and-actions">
+				<md-card-content class="card-content-with-header">
+					<md-input id="challenge-name" maxlength="16" placeholder="Challenge Name" [(ngModel)]="name"></md-input>
+					<br><br>
+
+					<md-radio-group id="challenge-difficulty" [(ngModel)]="difficulty" [selected]="defaultOption">
+						<md-radio-button [value]="0">
+							<gt-challenge-difficulty
+											[level]="0"
+											[full]="true"
+							></gt-challenge-difficulty>
+						</md-radio-button>
+						<md-radio-button [value]="1" #defaultOption>
+							<gt-challenge-difficulty
+											[level]="1"
+											[full]="true"
+							></gt-challenge-difficulty>
+						</md-radio-button>
+						<md-radio-button [value]="2">
+							<gt-challenge-difficulty
+											[level]="2"
+											[full]="true"
+							></gt-challenge-difficulty>
+						</md-radio-button>
+					</md-radio-group>
+
+					<br><br>
+
+					<button id="button-save" md-button md-raised-button color="primary" [disabled]="!canSave()" (click)="save()">
+						SAVE
+					</button>
 				</md-card-content>
 			</div>
 		</md-card>

@@ -95,9 +95,16 @@
 							</small>
 						</div>
 						<br>
-						<div id="challenge-retry" (click)="onRetry()">
-							<md-icon>replay</md-icon>
-							Retry Challenge
+						<div id="challenge-bottom-actions">
+							<div id="challenge-retry" (click)="onRetry()">
+								<md-icon>replay</md-icon>
+								Retry Challenge
+							</div>
+
+							<div *ngIf="isCustom()" id="challenge-remove" (click)="onRemove()">
+								<md-icon>delete_forever</md-icon>
+								Delete Challenge
+							</div>
 						</div>
 					</div>
 					

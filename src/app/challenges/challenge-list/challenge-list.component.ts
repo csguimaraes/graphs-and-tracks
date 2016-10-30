@@ -8,11 +8,16 @@ import { Challenge, CHALLENGE_TYPE } from '../../shared/types'
 	styleUrls: ['./challenge-list.component.scss']
 })
 export class ChallengeListComponent implements OnInit {
-	examples: Challenge[]
+	localChallenges: Challenge[]
 
 	constructor(private challenges: ChallengesService) {}
 
 	ngOnInit() {
-		this.examples = this.challenges.getByType(CHALLENGE_TYPE.EXAMPLE)
+		let examples = this.challenges.getByType(CHALLENGE_TYPE.EXAMPLE)
+		let custom = this.challenges.getByType(CHALLENGE_TYPE.CUSTOM)
+		this.localChallenges = [
+			...examples,
+			...custom,
+		]
 	}
 }

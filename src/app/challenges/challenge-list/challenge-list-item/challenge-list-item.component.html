@@ -1,12 +1,15 @@
-<div id="item-container" [routerLink]="['/challenges', challenge.id]">
+<div id="item-container" [routerLink]="['/challenges', challenge.id]" [class.complete]="challenge.complete">
 	<div class="challenge-name nowrap">
-		<div id="stats">
+		<div class="stats">
 			<b>
 				{{ challenge.name }}
 			</b>
 			<br>
-			<span>
+			<span *ngIf="!isCustom()">
 				Standard Challenge
+			</span>
+			<span *ngIf="isCustom()">
+				Custom Challenge
 			</span>
 		</div>
 	</div>

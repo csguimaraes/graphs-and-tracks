@@ -4,6 +4,38 @@ $color-a: lighten(steelblue, 10);
 
 md-card-content {
   position: relative;
+
+}
+
+#info-card {
+  md-card-content {
+    padding: 16px;
+  }
+}
+
+#button-save {
+  &, & /deep/ * {
+    cursor: pointer !important;
+  }
+
+  margin: 0 auto;
+  display: block;
+}
+
+#challenge-name {
+  width: 100%;
+}
+
+#challenge-difficulty {
+  display: flex;
+  & > * {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  & > *:hover /deep/ * {
+    cursor: pointer;
+  }
 }
 
 .card-header {

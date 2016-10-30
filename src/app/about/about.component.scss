@@ -32,6 +32,8 @@ md-card-title, md-card-subtitle {
 }
 
 a {
+  border-bottom: 1px dashed #009688;
+  cursor: pointer !important;
   text-decoration: none;
   font-weight: bold;
   &, &:visited {

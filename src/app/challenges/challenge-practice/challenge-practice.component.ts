@@ -84,7 +84,7 @@ export class ChallengePracticeComponent implements OnInit {
 		let challenge = this.challenges.getById(challengeId)
 		if (challenge) {
 			this.onAbort()
-			this.loadChallenge(challenge)
+			this.loadChallenge(lodash.cloneDeep(challenge))
 		} else {
 			// TODO: navigate 404
 		}

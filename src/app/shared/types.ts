@@ -4,6 +4,7 @@ export type DataType = 's' | 'v' | 'a' | 'p' | 'b'
 
 export enum CHALLENGE_TYPE {
 	EXAMPLE,
+	CUSTOM,
 	TUTORIAL,
 	PRACTICE,
 	COMMUNITY,

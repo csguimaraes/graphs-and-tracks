@@ -26,4 +26,18 @@ export class ChallengesService {
 
 		return result
 	}
+	
+	save(challenge: Challenge) {
+		challenge.id = Date.now().toString()
+		challenge.attempts = 0
+		challenge.complete = false
+		challenge.type = CHALLENGE_TYPE.CUSTOM
+		this.storage.challenges.push(challenge)
+	}
+	
+	remove(challengeId: string) {
+		let challenge = this.storage.challenges.find(c => c.id === challengeId)
+		let idx = this.storage.challenges.indexOf(challenge)
+		this.storage.challenges.splice(idx, 1)
+	}
 }

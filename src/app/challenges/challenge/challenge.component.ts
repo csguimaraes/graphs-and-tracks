@@ -747,4 +747,13 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		this.challenge.attempts = 0
 		this.bumpChallengeStatus()
 	}
+	
+	onRemove() {
+		this.challenges.remove(this.challenge.id)
+		this.router.navigateByUrl('/challenges')
+	}
+	
+	isCustom() {
+		return this.challenge.type === CHALLENGE_TYPE.CUSTOM
+	}
 }

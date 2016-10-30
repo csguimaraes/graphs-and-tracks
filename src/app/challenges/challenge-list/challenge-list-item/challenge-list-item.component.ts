@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core'
-import { Challenge } from '../../../shared/types'
+import { Challenge, CHALLENGE_TYPE } from '../../../shared/types'
 
 @Component({
 	selector: 'gt-challenge-list-item',
@@ -31,6 +31,10 @@ export class ChallengeListItemComponent implements OnInit {
 		}
 
 		return message
+	}
+	
+	isCustom() {
+		return this.challenge.type === CHALLENGE_TYPE.CUSTOM
 	}
 }
 

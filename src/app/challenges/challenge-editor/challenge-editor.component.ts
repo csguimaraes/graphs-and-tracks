@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 
 import * as lodash from 'lodash'
 
-import { Challenge, MotionSetup, MotionData, UI_CONTROL } from '../../shared/types'
+import { Challenge, MotionSetup, MotionData, UI_CONTROL, CHALLENGE_DIFFICULTY } from '../../shared/types'
 import { interpolate } from '../../shared/helpers'
 import { ANIMATION_DURATION, INITIAL_SETUP } from '../../settings'
 import { ChallengesService } from '../../shared/challenges.service'
@@ -10,6 +10,7 @@ import { Motion } from '../../shared/motion.model'
 import { GraphsPanelComponent } from '../../shared/graphs-panel/graphs-panel.component'
 import { TrackPanelComponent } from '../../shared/track-panel/track-panel.component'
 import { AuthService } from '../../shared/auth.service'
+import { Router } from '@angular/router'
 
 const SETUP_STORAGE_KEY = 'latest-track-setup'
 
@@ -27,9 +28,12 @@ export class ChallengeEditorComponent implements OnInit {
 
 	challengeId: string
 	challenge: Challenge
+	name: string
+	difficulty: CHALLENGE_DIFFICULTY
 
 	collectionIndex: number
 	collectionIds: string[]
+	motionComplete = false
 
 	goalMotion: Motion
 	
@@ -39,7 +43,8 @@ export class ChallengeEditorComponent implements OnInit {
 
 	constructor(
 		private challenges: ChallengesService,
-		public  auth: AuthService
+		public  auth: AuthService,
+		public  router: Router
 	) {
 		this.challengeId = 'editor'
 	}
@@ -70,7 +75,6 @@ export class ChallengeEditorComponent implements OnInit {
 
 	onTrackPanelChange(control: UI_CONTROL) {
 		this.storeSetup()
-		
 		// TODO: Add setting for optional preview
 		// let newGoalMotion = Motion.fromSetup(this.trackPanel.setup)
 		// this.graphsPanel.animateGoalUpdate(newGoalMotion.data)
@@ -84,7 +88,7 @@ export class ChallengeEditorComponent implements OnInit {
 		let challenge = this.challenges.getById(challengeId)
 		if (challenge) {
 			this.onAbort()
-			this.loadChallenge(challenge)
+			this.loadChallenge(lodash.cloneDeep(challenge))
 		} else {
 			// TODO: navigate 404
 		}
@@ -97,6 +101,7 @@ export class ChallengeEditorComponent implements OnInit {
 	}
 
 	performMotion(setup: MotionSetup) {
+		this.motionComplete = false
 		let trialMotion = Motion.fromSetup(setup)
 		this.graphsPanel.addTrialData(trialMotion.data, true)
 		this.trackPanel.cancelBallReset()
@@ -198,7 +203,10 @@ export class ChallengeEditorComponent implements OnInit {
 		
 		if (!aborted) {
 			// Restore some values
+			this.motionComplete = true
 			this.graphsPanel.setTrialLineClip(1)
+		} else {
+			this.motionComplete = false
 		}
 	}
 
@@ -208,5 +216,28 @@ export class ChallengeEditorComponent implements OnInit {
 
 	loadTrackSetup() {
 		this.trackPanel.setup = lodash.cloneDeep(INITIAL_SETUP)
+	}
+	
+	canSave() {
+		return this.motionComplete && this.name && this.difficulty !== undefined
+	}
+	
+	save() {
+		this.challenge.goal = this.trackPanel.setup
+		this.challenge.name = this.name
+		switch (this.difficulty) {
+			case 0:
+				this.challenge.difficulty = CHALLENGE_DIFFICULTY.EASY
+				break
+			case 1:
+				this.challenge.difficulty = CHALLENGE_DIFFICULTY.INTERMEDIATE
+				break
+			case 2:
+				this.challenge.difficulty = CHALLENGE_DIFFICULTY.HARD
+				break
+		}
+		
+		this.challenges.save(this.challenge)
+		this.router.navigateByUrl('/challenges')
 	}
 }

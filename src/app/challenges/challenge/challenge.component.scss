@@ -87,6 +87,7 @@ md-card-content {
 }
 
 #challenge-stats {
+  text-align: center;
   font-size: 18px;
   line-height: 18px;
   padding: 16px;
@@ -317,4 +318,29 @@ md-card-content {
   top: 0 !important;
   height: calc(100% + 6px) !important;
   z-index: 99999;
+}
+
+
+#challenge-bottom-actions {
+  display: flex;
+  flex-flow: row wrap;
+
+  & > * {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
+
+#challenge-remove {
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 18px;
+  padding: 16px;
+
+  color: #333;
+
+  md-icon {
+    vertical-align: middle;
+    margin-top: -3px;
+  }
 }

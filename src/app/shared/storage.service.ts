@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { Challenge } from './types'
 
+import { Challenge } from './types'
 import * as Settings from '../settings'
 
 const MAIN_KEY = 'gt'
@@ -46,7 +46,7 @@ export class StorageService {
 	}
 	
 	private loadBuiltinChallenges() {
-		let all: Challenge[] = [
+		let allChallenges: Challenge[] = [
 			...Settings.CHALLENGES_EASY,
 			...Settings.CHALLENGES_INTERMEDIATE,
 			...Settings.CHALLENGES_HARD,
@@ -55,12 +55,12 @@ export class StorageService {
 			Settings.PRACTICE_SETUP,
 		]
 		
-		for (let challenge of all) {
+		for (let challenge of allChallenges) {
 			challenge.attempts = challenge.attempts || 0
 			challenge.complete = challenge.complete !== undefined ? challenge.complete : false
 		}
 		
-		return all
+		return allChallenges
 	}
 }
 
