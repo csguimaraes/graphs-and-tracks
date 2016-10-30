@@ -13,6 +13,7 @@ import { DumpPipe } from './shared/dump.pipe'
 import { HomeComponent } from './home/home.component'
 import { ChallengeComponent } from './challenges/challenge/challenge.component'
 import { ChallengeEditorComponent } from './challenges/challenge-editor/challenge-editor.component'
+import { ChallengePracticeComponent } from './challenges/challenge-practice/challenge-practice.component'
 import { ChallengeListComponent } from './challenges/challenge-list/challenge-list.component'
 import { TrackPanelComponent } from './shared/track-panel/track-panel.component'
 import { GraphsPanelComponent } from './shared/graphs-panel/graphs-panel.component'
@@ -44,6 +45,7 @@ import { ChallengeDifficultyComponent } from './challenges/challenge-list/challe
 
 		ChallengeComponent,
 		ChallengeEditorComponent,
+		ChallengePracticeComponent,
 		TrackPanelComponent,
 		GraphsPanelComponent,
 

@@ -37,10 +37,19 @@ export const TUTORIAL_CHALLENGE: Challenge = {
 export const EDITOR_SETUP: Challenge = {
 	id: 'editor',
 	name: 'New Challenge',
-	type: CHALLENGE_TYPE.EXPLORATION,
+	type: CHALLENGE_TYPE.PRACTICE,
 	difficulty: CHALLENGE_DIFFICULTY.EASY,
 	mode: MODE_NORMAL,
 	goal: { position: 50, velocity: -30, posts: [4, 2, 0, 0, 0, 0] }
+}
+
+export const PRACTICE_SETUP: Challenge = {
+	id: 'practice',
+	name: 'Practice Mode',
+	type: CHALLENGE_TYPE.PRACTICE,
+	difficulty: CHALLENGE_DIFFICULTY.EASY,
+	mode: MODE_NORMAL,
+	goal: { position: 250, velocity: 60, posts: [4, 2, 0, 0, 2, 4] }
 }
 
 export const CHALLENGES_EASY: Challenge[] = [

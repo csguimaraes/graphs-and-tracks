@@ -1,0 +1,46 @@
+<md-grid-list card-no-pad card-fill rowHeight="fit" cols="4" gutterSize="8px">
+	<md-grid-tile colspan="1" rowspan="4">
+		<md-card id="info-card">
+			<div class="content-wrapper">
+				<div class="card-header">
+					<span [routerLink]="'/challenges/tutorial'">
+						<md-icon>chevron_left</md-icon>
+						Tutorial
+					</span>
+					<!--<span id="title-container" class="active">
+						<div>
+							{{ challenge.name }}
+						</div>
+					</span>-->
+					<span class="filler"></span>
+					<span [routerLink]="'/challenges'">
+						Challenges
+						<md-icon>chevron_right</md-icon>
+					</span>
+				</div>
+				
+				<md-card-content class="card-content-with-header">
+					Try making adjustments to the tracks.
+					<br> <br>
+					You can adjust the post heights either by clicking above or below the top of a <b>post</b>, or by dragging up or down.
+					<br> <br>
+					Experiment with the scales of <b class="s">Initial Position</b> and <b class="v">Initial Velocity</b>.
+				</md-card-content>
+			</div>
+		</md-card>
+	</md-grid-tile>
+	
+	<md-grid-tile colspan="3" rowspan="4">
+		<gt-graphs-panel
+				[mode]="challenge.mode" [goal]="goalMotion"
+				(change)="onGraphPanelChange($event)"
+		></gt-graphs-panel>
+	</md-grid-tile>
+	
+	<md-grid-tile colspan="4" rowspan="3">
+		<gt-track-panel
+				[mode]="goalMotion.mode"
+				(abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"
+		></gt-track-panel>
+	</md-grid-tile>
+</md-grid-list>

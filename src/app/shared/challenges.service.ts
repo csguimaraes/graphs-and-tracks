@@ -6,7 +6,8 @@ import * as Settings from '../settings'
 @Injectable()
 export class ChallengesService {
 	private tutorial: Challenge
-	private exploration: Challenge
+	private editor: Challenge
+	private practice: Challenge
 	private examples: Challenge[]
 	// private community: Challenge[]
 	// private teacher: Challenge[]
@@ -26,8 +27,8 @@ export class ChallengesService {
 				result = [this.tutorial]
 				break
 
-			case CHALLENGE_TYPE.EXPLORATION:
-				result = [this.exploration]
+			case CHALLENGE_TYPE.PRACTICE:
+				result = [this.practice]
 				break
 
 			default:
@@ -44,8 +45,12 @@ export class ChallengesService {
 				result = this.tutorial
 				break
 
+			case 'practice':
+				result = this.practice
+				break
+			
 			case 'editor':
-				result = this.exploration
+				result = this.editor
 				break
 
 			default:
@@ -79,11 +84,13 @@ export class ChallengesService {
 		]
 
 		this.tutorial = Settings.TUTORIAL_CHALLENGE
-		this.exploration = Settings.EDITOR_SETUP
+		this.editor = Settings.EDITOR_SETUP
+		this.practice = Settings.PRACTICE_SETUP
 
 		let all = [
 			this.tutorial,
-			this.exploration,
+			this.practice,
+			this.editor,
 			...this.examples
 		]
 

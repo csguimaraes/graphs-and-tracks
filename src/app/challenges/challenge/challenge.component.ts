@@ -245,7 +245,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		this.hintsUsed = false
 		this.isDemo =
 			this.challenge.type === CHALLENGE_TYPE.TUTORIAL ||
-			this.challenge.type === CHALLENGE_TYPE.EXPLORATION
+			this.challenge.type === CHALLENGE_TYPE.PRACTICE
 		
 		this.isTutorial = this.challenge.type === CHALLENGE_TYPE.TUTORIAL
 		if (this.isTutorial) {

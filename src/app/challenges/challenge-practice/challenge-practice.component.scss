@@ -7,37 +7,30 @@ md-card-content {
 }
 
 .card-header {
-  #title-container {
-    background: transparent;
-    position: relative;
-
-    & > div {
-      background: #009688 !important;
-      color: white;
-      position: absolute;
-      transform-origin: 50% 50%;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
+  & > span {
+    &:first-child {
+      padding-right: 16px;
     }
-  }
 
-  .challenge-selector {
+    &:last-child {
+      padding-left: 16px;
+    }
+
+    flex: 0 0 auto;
+    background: #009688 !important;
+    color: white !important;
+
     &, md-icon {
       cursor: pointer !important;
     }
 
-    will-change: background;
-    transition: background 100ms linear;
-
-    &:hover {
-      background: #DDD;
+    md-icon {
+      width: auto;
+      vertical-align: text-bottom;
     }
 
-    &.disabled {
-      opacity: .3;
-      pointer-events: none;
+    &.filler {
+      visibility: hidden;
     }
   }
 }

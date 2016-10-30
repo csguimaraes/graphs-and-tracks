@@ -15,7 +15,7 @@
 			<br>
 			
 			<md-list>
-				<md-list-item [routerLink]="tutorialChallengeLink">
+				<md-list-item [routerLink]="'/challenges/tutorial'">
 					<md-icon md-list-avatar>school</md-icon>
 					<h3 md-line> First time here? </h3>
 					<p md-line>
@@ -23,7 +23,7 @@
 					</p>
 				</md-list-item>
 				
-				<md-list-item class="todo">
+				<md-list-item [routerLink]="'/challenges/practice'">
 					<md-icon md-list-avatar>gps_fixed</md-icon>
 					<h3 md-line>Practice</h3>
 					<p md-line>

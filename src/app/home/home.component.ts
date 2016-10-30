@@ -18,9 +18,6 @@ export class HomeComponent {
 	setup: Types.MotionSetup
 	mode: Types.ChallengeMode
 
-
-	tutorialChallengeLink = '/challenges/tutorial'
-
 	constructor(private router: Router) {
 		this.mode = Settings.MODE_NORMAL
 		this.setup = {
@@ -40,7 +37,7 @@ export class HomeComponent {
 	@HostListener('window:keydown', ['$event'])
 	onKeydown(ev: KeyboardEvent) {
 		if (ev.which === 39  || ev.which === 13) {
-			this.router.navigateByUrl(`${this.tutorialChallengeLink}#tutorial`)
+			this.router.navigateByUrl(`/challenges/tutorial`)
 		}
 	}
 }
