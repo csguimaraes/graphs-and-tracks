@@ -18,7 +18,7 @@ export class ChallengeListItemComponent implements OnInit {
 
 	getChallengeStatus() {
 		let message = ''
-		let count = this.challenge.attempts.length
+		let count = this.challenge.attempts
 		let complete = this.challenge.complete
 
 		if (complete) {

@@ -22,18 +22,18 @@ type ZoomTarget = 'track' | 'graph'
 
 const GRID_NORMAL: GridSetup = {
 	rows: 7,
-	cols: 5,
-	info: { colspan: 1, rowspan: 4},
-	graph: { colspan: 4, rowspan: 4},
-	track: { colspan: 5, rowspan: 3},
+	cols: 12,
+	info: { colspan: 3, rowspan: 4},
+	graph: { colspan: 9, rowspan: 4},
+	track: { colspan: 12, rowspan: 3},
 }
 
 const GRID_INFO_FIXED: GridSetup = {
 	rows: 8,
-	cols: 5,
-	info: { colspan: 1, rowspan: 8},
-	graph: { colspan: 4, rowspan: 4},
-	track: { colspan: 4, rowspan: 4},
+	cols: 12,
+	info: { colspan: 3, rowspan: 8},
+	graph: { colspan: 9, rowspan: 4},
+	track: { colspan: 9, rowspan: 4},
 }
 
 @Component({
@@ -272,11 +272,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 				this.lastTrialResult = undefined
 			} else {
 				this.lastTrialResult = this.goalMotion.evaluateTrial(trialMotion)
-				this.challenge.attempts.push({
-					accuracy: -1,
-					setup: setup,
-					motion: trialMotion
-				})
+				this.challenge.attempts++
 			}
 		}
 		
@@ -444,7 +440,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 			let message = lodash.sample(KUDOS.intros)
 			let messageEnd: string
 			let icon = KUDOS.icons['normal']
-			if (this.challenge.attempts.length > 1) {
+			if (this.challenge.attempts > 1) {
 				if (this.hintsUsed) {
 					messageEnd = KUDOS.h1n1
 				} else {
@@ -452,7 +448,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 					messageEnd = KUDOS.h0n1
 				}
 				
-				messageEnd = messageEnd.replace('%N%', this.challenge.attempts.length.toString())
+				messageEnd = messageEnd.replace('%N%', this.challenge.attempts.toString())
 			} else {
 				if (this.hintsUsed) {
 					messageEnd = KUDOS.h1n0
@@ -472,7 +468,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 			this.challenge.complete = true
 		}
 		
-		this.updateCommitNumberOfAttempts(this.challenge.attempts.length)
+		this.updateCommitNumberOfAttempts(this.challenge.attempts)
 	}
 	
 	clearHints() {
@@ -680,7 +676,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	bumpChallengeStatus() {
 		this.commitedAttempts = -1
 		setTimeout(() => {
-			this.updateCommitNumberOfAttempts(this.challenge.attempts.length)
+			this.updateCommitNumberOfAttempts(this.challenge.attempts)
 		}, 100)
 	}
 	
@@ -700,6 +696,8 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	
 	fetchGridSetup(refresh = true) {
 		let height = window.innerHeight
+		let width = window.innerWidth
+		
 		let grid: GridSetup
 		
 		if (this.zoom) {
@@ -708,7 +706,20 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 			grid = height < 768 ? GRID_INFO_FIXED : GRID_NORMAL
 		}
 		
-		if (this.grid !== grid) {
+		if (width < 960) {
+			if (width < 720) {
+				grid.info.colspan = 5
+				grid.track.colspan = 7
+				grid.graph.colspan = 7
+			} else {
+				grid.info.colspan = 4
+				grid.track.colspan = 8
+				grid.graph.colspan = 8
+			}
+		}
+		
+		
+		if (!lodash.isEqual(this.grid, grid)) {
 			this.grid = grid
 		}
 		
@@ -729,5 +740,11 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		}
 		
 		this.fetchGridSetup()
+	}
+	
+	onRetry() {
+		this.challenge.complete = false
+		this.challenge.attempts = 0
+		this.bumpChallengeStatus()
 	}
 }

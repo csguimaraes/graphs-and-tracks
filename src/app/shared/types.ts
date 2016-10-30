@@ -54,7 +54,7 @@ export interface Challenge {
 	type: CHALLENGE_TYPE
 	mode?: ChallengeMode
 	complete?: boolean
-	attempts?: Attempt[]
+	attempts?: number
 }
 
 export interface Attempt {

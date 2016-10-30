@@ -6,7 +6,6 @@ import { StorageService } from './storage.service'
 @Injectable()
 export class ChallengesService {
 	constructor(private storage: StorageService) {
-		console.log(storage)
 	}
 
 	getByType(type: CHALLENGE_TYPE = CHALLENGE_TYPE.EXAMPLE): Challenge[] {

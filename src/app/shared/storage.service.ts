@@ -56,7 +56,7 @@ export class StorageService {
 		]
 		
 		for (let challenge of all) {
-			challenge.attempts = challenge.attempts || []
+			challenge.attempts = challenge.attempts || 0
 			challenge.complete = challenge.complete !== undefined ? challenge.complete : false
 		}
 		

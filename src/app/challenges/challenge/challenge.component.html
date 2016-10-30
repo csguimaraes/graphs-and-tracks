@@ -87,12 +87,17 @@
 						<div id="challenge-stats"
 						     [class.complete]="challenge.complete"
 						>
-							<md-icon [class.one-bump]="challenge.attempts.length === commitedAttempts">{{ challenge.complete ?  'check' : 'not_interested' }}</md-icon>
+							<md-icon [class.one-bump]="challenge.attempts === commitedAttempts">{{ challenge.complete ?  'check' : 'not_interested' }}</md-icon>
 							<span>{{ challenge.complete ?  'Challenge Met' : 'Incomplete Challenge' }}</span>
 							<br>
-							<small [class.one-bumpy]="challenge.attempts.length === commitedAttempts">
+							<small [class.one-bumpy]="challenge.attempts === commitedAttempts">
 								{{ commitedAttemptsMessage }}
 							</small>
+						</div>
+						<br>
+						<div id="challenge-retry" (click)="onRetry()">
+							<md-icon>replay</md-icon>
+							Retry Challenge
 						</div>
 					</div>
 					

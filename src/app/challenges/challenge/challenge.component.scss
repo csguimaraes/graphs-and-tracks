@@ -111,6 +111,20 @@ md-card-content {
   }
 }
 
+#challenge-retry {
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 18px;
+  padding: 16px;
+
+  color: #333;
+
+  md-icon {
+    vertical-align: middle;
+    margin-top: -3px;
+  }
+}
+
 #challenge-details {
   background: lighten(#009688, 50);
   color: #009688;
