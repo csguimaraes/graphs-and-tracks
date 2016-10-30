@@ -67,7 +67,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Finding the right place',
 		content: `
-			Note the scale of <b class="s">INITIAL POSITION</b> directly below the tracks.
+			Note the scale of <b class="s">Initial Position</b> directly below the tracks.
 			<br> <br>
 			You can set the starting position of the ball by clicking on new position values
 			or by dragging the scale pointers. Drag the pointers rather than the ball itself.
@@ -82,7 +82,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			<br> <br>
 			Its initial velocity may be positive <span>(to the right)</span> or negative <span>(to the left)</span>, or zero <span>(at rest)</span>.
 			<br> <br>
-			Use the <b class="v">INITIAL VELOCITY</b> scale to set the ball’s starting velocity.
+			Use the <b class="v">Initial Velocity</b> scale to set the ball’s starting velocity.
 		`,
 		requires: [UI_CONTROL.VELOCITY_SCALE],
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
@@ -122,10 +122,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Tutorial complete',
 		content: `
-			Another thing that may help is zooming the graphs or the track panels by double-tapping on it.
+			Another useful hint: Double-tap on graphs or tracks panels to zoom in or zoom out.
 			<br><br>
-			Well that's it, now you're ready to start. You can go to the <a [routerLink]="['/challenges']">Challenges List</a> and
-			pick your first one.
+			That’s it. Feel free to experiment in the <a [routerLink]="['/challenges/practice']">Practice section</a>,
+			or go directly to the <a [routerLink]="['/challenges']">Challenges List</a> to pick your first one.
 		`,
 		requires: []
 	},
@@ -164,7 +164,7 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 			<br><br>
 			Take a careful look at the <b class="a">acceleration graph</b> to see whether the acceleration
 			on this ramp should be <b>positive</b> <span>(sloping downward to the right)</span>,
-			<b>negative</b> <span>(sloping upward to the right)</span> or zero (level).
+			<b>negative</b> <span>(sloping upward to the right)</span> or <b>zero</b> (level).
 			<br> <br>
 			Holding down the <b class="b">ROLL BALL</b> button will show the motion one segment at a time.
 		`

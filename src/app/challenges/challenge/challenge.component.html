@@ -88,7 +88,7 @@
 						     [class.complete]="challenge.complete"
 						>
 							<md-icon [class.one-bump]="challenge.attempts.length === commitedAttempts">{{ challenge.complete ?  'check' : 'not_interested' }}</md-icon>
-							<span>{{ challenge.complete ?  'Challenge Defeated' : 'Incomplete Challenge' }}</span>
+							<span>{{ challenge.complete ?  'Challenge Met' : 'Incomplete Challenge' }}</span>
 							<br>
 							<small [class.one-bumpy]="challenge.attempts.length === commitedAttempts">
 								{{ commitedAttemptsMessage }}
