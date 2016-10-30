@@ -488,7 +488,7 @@ md-toolbar {
   display: flex !important; }
 
 .filler {
-  flex: 1 1 auto; }
+  flex: 1 1 auto !important; }
 
 [fill] {
   width: 100%;
@@ -709,13 +709,13 @@ body, md-sidenav-layout {
   padding: 16px;
   height: calc(100% - 40px);
   box-sizing: border-box; }
-@media (max-width: 960px) {
+@media screen and (max-width: 960px) {
   .hidden-small {
     display: none !important; }
   md-toolbar {
     font-size: 14px !important; } }
 
-@media (max-width: 720px) {
+@media screen and (max-width: 720px) {
   .hidden-mobile {
     display: none !important; } }
 /*
@@ -781,4 +781,4 @@ md-toolbar, md-toolbar-row {
   right: 0 !important;
   bottom: 0 !important; }
 
-/*# sourceMappingURL=app.63943cd85303b9831b9f.css.map*/
+/*# sourceMappingURL=app.3529f5c6bef9cf96bd35.css.map*/
