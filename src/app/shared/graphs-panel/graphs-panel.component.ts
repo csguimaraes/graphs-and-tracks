@@ -174,7 +174,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 			this.activeGraph = type
 			
 			if (refresh) {
-				this.refresh(true, false)
+				this.refresh(true, this.autoClearTrials)
 			}
 			
 			switch (type) {

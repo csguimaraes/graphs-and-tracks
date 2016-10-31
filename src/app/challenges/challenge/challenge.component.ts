@@ -511,7 +511,6 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		this.hintsEnabled = true
 		this.hintDismissed = false
 		this.tutorialStepIndex = -1
-		// this.graphsPanel.autoClearTrials = false
 		this.loadTrackSetup()
 		this.tutorialNextStep()
 	}
@@ -520,7 +519,6 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		this.hintsEnabled = false
 		this.hintDismissed = true
 		this.tutorialRequires = []
-		this.graphsPanel.autoClearTrials = true
 		
 		if (window.history.length > 1) {
 			window.history.back()
