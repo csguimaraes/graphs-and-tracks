@@ -213,7 +213,7 @@ $header-full-height: $header-height + ($header-padding * 2);
 
   &.card-header-actions-full {
     width: 100%;
-    padding: 0 8px;
+    padding: 0;
     box-sizing: border-box;
 
     & > span {

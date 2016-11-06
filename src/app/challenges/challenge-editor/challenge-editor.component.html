@@ -47,14 +47,14 @@
 		</md-card>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="9" rowspan="6">
+	<md-grid-tile colspan="9" rowspan="7">
 		<gt-graphs-panel
 				[mode]="challenge.mode" [goal]="goalMotion"
 				(change)="onGraphPanelChange($event)"
 		></gt-graphs-panel>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="12" rowspan="6">
+	<md-grid-tile colspan="12" rowspan="5">
 		<gt-track-panel
 				[mode]="goalMotion.mode"
 				(abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"

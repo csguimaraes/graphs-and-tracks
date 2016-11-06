@@ -26,7 +26,7 @@
 	</a>
 	-->
 
-	<a (click)="toggleFullscreen()">
+	<a [routerLink]="['about']">
 		<md-icon>info_outline</md-icon>
 		<span class="hidden-mobile">
 			About
@@ -34,8 +34,6 @@
 	</a>
 
 	<div class="filler"></div>
-
-	<!--<a [routerLink]="['about']">-->
 
 	<a (click)="toggleFullscreen()">
 		<template [ngIf]="!fullscreen">

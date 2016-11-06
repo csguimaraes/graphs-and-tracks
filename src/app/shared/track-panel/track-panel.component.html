@@ -1,40 +1,39 @@
 <md-card [class.fullscreen]="zoomActive">
 	<div id="tapper" [class.wait]="rolling"></div>
 	<div id="panel-wrapper" [class.no-interaction]="rolling">
-		<div id="track-controls">
-			<gt-scale id="position-scale"
-			          [class.pulsing-scale]="requestingSelectionOf === 's'"
-			          [color]="colors.position" [domain]="mode.domain.position" [value]="setup.position"
-			          (slided)="!rollingSingle && track.updateBallPostion($event)" (change)="positionSetter($event)"
-			></gt-scale>
-			
-			<div id="slider-info-container">
-			<span id="position-slider-info" class="slider-info">
-				<span class="slider-info-label hidden-mobile">Initial Position</span>
-				<span class="slider-info-value">{{setup.position}} <small>cm</small></span>
-			</span>
+		<div id="track-labels">
+			<div id="roll-ball-wrapper">
 				<span id="ball-roller" class="slider-info"
 				      [class.pulsing-alt]="requestingSelectionOf === 'b'"
 				      (click)="rollBall()">
 				ROLL BALL
 			</span>
-				<span id="velocity-slider-info" class="slider-info">
-				<span class="slider-info-value">{{setup.velocity}} <small>cm/s</small></span>
-				<span class="slider-info-label hidden-mobile">Initial Velocity</span>
-			</span>
 			</div>
-			
+			<div id="scale-labels">
+				<span id="position-slider-info" class="slider-info">
+					<span class="slider-info-label"><span class="hidden-small">Initial </span>Position</span>
+				</span>
+				<span id="velocity-slider-info" class="slider-info">
+					<span class="slider-info-label"><span class="hidden-small">Initial </span>Velocity</span>
+				</span>
+			</div>
+		</div>
+
+		<div id="track-content">
+			<gt-track
+							(change)="onTrackChange($event)"
+							[mode]="mode" [postsSetup]="setup.posts" [position]="setup.position"
+			></gt-track>
+			<gt-scale id="position-scale"
+			          [class.pulsing-scale]="requestingSelectionOf === 's'"
+			          [color]="colors.position" [domain]="mode.domain.position" [value]="setup.position"
+			          (slided)="!rollingSingle && track.updateBallPostion($event)" (change)="positionSetter($event)"
+			></gt-scale>
 			<gt-scale id="velocity-scale"
 			          [class.pulsing-scale]="requestingSelectionOf === 'v'"
 			          [color]="colors.velocity" [domain]="mode.domain.velocity" [value]="setup.velocity"
 			          (change)="velocitySetter($event)"
 			></gt-scale>
-		</div>
-		<div id="track">
-			<gt-track
-					(change)="onTrackChange($event)"
-					[mode]="mode" [postsSetup]="setup.posts" [position]="setup.position"
-			></gt-track>
 		</div>
 	</div>
 </md-card>
