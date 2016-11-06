@@ -20,6 +20,9 @@ md-card-title {
   }
 }
 
+.primary {
+  color: #009688;
+}
 
 p {
   font-size: 14px;
@@ -35,6 +38,8 @@ a {
 
 md-list {
   text-align: left;
+  min-width: 60%;
+  display: inline-block;
 
   md-list-item {
     display: block;

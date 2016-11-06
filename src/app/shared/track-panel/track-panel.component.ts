@@ -100,20 +100,12 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 		let tapHandler = this.tapHandler = new Hammer.Manager(<any> card)
 
 		let singleTap = new Hammer.Tap({ event: 'singletap', taps: 1 })
-		let doubleTap = new Hammer.Tap({ event: 'doubletap', taps: 2 })
-
-		doubleTap.recognizeWith(singleTap)
-		singleTap.requireFailure(doubleTap)
-		tapHandler.add([doubleTap, singleTap])
+		tapHandler.add([singleTap])
 
 		tapHandler.on('singletap', () => {
 			if (this.rolling) {
 				this.abort.emit()
 			}
-		})
-
-		tapHandler.on('doubletap', () => {
-			this.toggleZoom()
 		})
 	}
 

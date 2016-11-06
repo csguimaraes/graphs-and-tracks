@@ -5,7 +5,6 @@ import {
 	ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewChild, SimpleChanges, OnChanges
 } from '@angular/core'
 
-import * as Hammer from 'hammerjs'
 import { Tween } from 'tween.js'
 
 import { MotionData, ChallengeMode, DataType, UI_CONTROL, TrialError } from '../types'
@@ -39,7 +38,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 	trialsData: MotionData[][]
 	trialLinePaths: string[]
 	
-	margin = { top: 20, right: 20, bottom: 30, left: 50 }
+	margin = { top: 20, right: 10, bottom: 30, left: 30 }
 	height: number = 0
 	width: number = 0
 	
@@ -80,13 +79,6 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 	
 	ngAfterViewInit() {
 		this.initialized = true
-		
-		let recognizer = this.doubleTapRecognizer = new Hammer.Manager(<any> this.svg)
-		recognizer.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }))
-		recognizer.on('doubletap', ev => {
-			this.toggleZoom()
-		})
-		
 		this.goalData = this.goal.data
 		this.safeRefresh()
 	}
@@ -234,14 +226,14 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 			this.trialsData = []
 		}
 		
+		let isEdge = /Edge\/\d./i.test(window.navigator.userAgent)
+		this.lineToClip = undefined
 		if (animated) {
 			if (this.trialsData.length) {
 				this.lineToClip = this.trialsData.length - 1
-			} else {
+			} else if (!isEdge) {
 				this.lineToClip = -1
 			}
-		} else {
-			this.lineToClip = undefined
 		}
 		
 		this.activeUrl = document.location.pathname
@@ -338,7 +330,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		}
 		
 		this.trialLinePaths = trialLinePaths
-		
+
 		if (this.lineToClip === -1) {
 			// If clip animation is set to goal
 			let animating = true
@@ -378,10 +370,6 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		}
 		
 		return lineGenerator(data)
-	}
-	
-	toggleZoom() {
-		this.zoom.emit('graph')
 	}
 	
 	@HostListener('window:resize')

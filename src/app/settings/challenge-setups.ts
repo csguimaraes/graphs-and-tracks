@@ -27,7 +27,7 @@ export const TUTORIAL_CHALLENGE_SETUP: MotionSetup = {
 
 export const TUTORIAL_CHALLENGE: Challenge = {
 	id: 'tutorial',
-	name: 'Challenge Tutorial',
+	name: 'Tutorial',
 	type: CHALLENGE_TYPE.TUTORIAL,
 	difficulty: CHALLENGE_DIFFICULTY.EASY,
 	mode: MODE_NORMAL,

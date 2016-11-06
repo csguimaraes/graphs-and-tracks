@@ -1,11 +1,35 @@
-import { Component, ViewChild, trigger, ChangeDetectorRef, HostListener, OnInit, ElementRef, AfterViewInit } from '@angular/core'
+import {
+	Component,
+	ViewChild,
+	trigger,
+	ChangeDetectorRef,
+	OnInit,
+	ElementRef,
+	AfterViewInit
+} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import * as lodash from 'lodash'
 
-import { Challenge, MotionSetup, MotionData, Message, TrialResult, CHALLENGE_TYPE, UI_CONTROL, TutorialStep } from '../../shared/types'
+import {
+	Challenge,
+	MotionSetup,
+	MotionData,
+	Message,
+	TrialResult,
+	CHALLENGE_TYPE,
+	UI_CONTROL,
+	TutorialStep
+} from '../../shared/types'
 import { interpolate } from '../../shared/helpers'
-import { HINT_MESSAGES, ANIMATION_DURATION, TUTORIAL_STEPS, INITIAL_SETUP, TUTORIAL_CHALLENGE_SETUP, KUDOS } from '../../settings'
+import {
+	HINT_MESSAGES,
+	ANIMATION_DURATION,
+	TUTORIAL_STEPS,
+	INITIAL_SETUP,
+	TUTORIAL_CHALLENGE_SETUP,
+	KUDOS
+} from '../../settings'
 import { ChallengesService } from '../../shared/challenges.service'
 import { Motion } from '../../shared/motion.model'
 import { GraphsPanelComponent } from '../../shared/graphs-panel/graphs-panel.component'
@@ -16,31 +40,11 @@ import { AuthService } from '../../shared/auth.service'
 const SETUP_STORAGE_KEY = 'latest-track-setup'
 type SwitchDirection = 'toLeft' | 'toRight' | 'none'
 
-type TileSetup = { 'rowspan': number, 'colspan': number }
-type GridSetup = { 'info': TileSetup, 'graph': TileSetup, 'track': TileSetup, 'cols': number, 'rows': number }
-type ZoomTarget = 'track' | 'graph'
-
-const GRID_NORMAL: GridSetup = {
-	rows: 7,
-	cols: 12,
-	info: { colspan: 3, rowspan: 4},
-	graph: { colspan: 9, rowspan: 4},
-	track: { colspan: 12, rowspan: 3},
-}
-
-const GRID_INFO_FIXED: GridSetup = {
-	rows: 8,
-	cols: 12,
-	info: { colspan: 3, rowspan: 8},
-	graph: { colspan: 9, rowspan: 4},
-	track: { colspan: 9, rowspan: 4},
-}
-
 @Component({
 	selector: 'gt-challenge',
 	templateUrl: './challenge.component.html',
 	styleUrls: ['./challenge.component.scss'],
-	animations: [ trigger('challengeSwitch', SWITCH_ANIMATION)]
+	animations: [trigger('challengeSwitch', SWITCH_ANIMATION)]
 })
 export class ChallengeComponent implements OnInit, AfterViewInit {
 	@ViewChild(TrackPanelComponent)
@@ -72,6 +76,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	hintsEnabled = false
 	hintDismissed = false
 	canShowSolution = false
+	usedShowSolution = false
 	
 	message: Message
 	
@@ -88,20 +93,10 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	
 	types = CHALLENGE_TYPE
 	
-	grid: GridSetup
-	zoom: ZoomTarget
-	
-	constructor(
-		private challenges: ChallengesService,
-		private router: Router,
-		private changeDetector: ChangeDetectorRef,
-		public  auth: AuthService,
-		route: ActivatedRoute
-	) {
+	constructor(private challenges: ChallengesService, private router: Router, private changeDetector: ChangeDetectorRef,
+				public  auth: AuthService, route: ActivatedRoute) {
 		this.challengeId = route.snapshot.params['id']
 		route.params.subscribe(p => this.loadChallengeById(p['id']))
-		
-		this.fetchGridSetup(false)
 	}
 	
 	ngOnInit() {
@@ -229,6 +224,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 	
 	loadChallenge(challenge: Challenge) {
+		this.usedShowSolution = false
 		this.clearHints()
 		this.segmentedAnimationIndex = undefined
 		
@@ -437,10 +433,15 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 			}
 		} else {
 			this.hintsEnabled = false
+			let titles = KUDOS.titles
 			let message = lodash.sample(KUDOS.intros)
 			let messageEnd: string
 			let icon = KUDOS.icons['normal']
-			if (this.challenge.attempts > 1) {
+			if (this.usedShowSolution) {
+				titles = ['That’s it!']
+				message = KUDOS.ss
+				messageEnd = ''
+			} else if (this.challenge.attempts > 1) {
 				if (this.hintsUsed) {
 					messageEnd = KUDOS.h1n1
 				} else {
@@ -459,13 +460,15 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 			}
 			
 			this.setCurrentMessage({
-				title: KUDOS.titles,
+				title: titles,
 				content: `${message}<br><br>${messageEnd}`,
 				icon: icon,
 				type: 'success'
 			})
 			
-			this.challenge.complete = true
+			if (this.usedShowSolution === false) {
+				this.challenge.complete = true
+			}
 		}
 		
 		this.updateCommitNumberOfAttempts(this.challenge.attempts)
@@ -478,6 +481,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 	
 	showSolution() {
+		this.usedShowSolution = true
 		this.trackPanel.setup = lodash.cloneDeep(this.challenge.goal)
 		this.trackPanel.clearHighlights()
 	}
@@ -678,69 +682,8 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		}, 100)
 	}
 	
-	@HostListener('window:resize')
-	onResize() {
-		this.fetchGridSetup()
-	}
-	
-	@HostListener('document:keyup', ['$event'])
-	handleKeyup(event: KeyboardEvent) {
-		// Cancel graph zoom if user press ESC
-		if (event.keyCode === 27 && this.zoom) {
-			this.zoom = undefined
-			this.fetchGridSetup()
-		}
-	}
-	
-	fetchGridSetup(refresh = true) {
-		let height = window.innerHeight
-		let width = window.innerWidth
-		
-		let grid: GridSetup
-		
-		if (this.zoom) {
-			grid = GRID_INFO_FIXED
-		} else {
-			grid = height < 768 ? GRID_INFO_FIXED : GRID_NORMAL
-		}
-		
-		if (width < 960) {
-			if (width < 720) {
-				grid.info.colspan = 5
-				grid.track.colspan = 7
-				grid.graph.colspan = 7
-			} else {
-				grid.info.colspan = 4
-				grid.track.colspan = 8
-				grid.graph.colspan = 8
-			}
-		}
-		
-		
-		if (!lodash.isEqual(this.grid, grid)) {
-			this.grid = grid
-		}
-		
-		if (refresh) {
-			this.changeDetector.markForCheck()
-			setTimeout(() => {
-				this.graphsPanel.safeRefresh()
-				this.trackPanel.track.refresh()
-			}, 1)
-		}
-	}
-	
-	onZoomToggle(where: ZoomTarget) {
-		if (this.zoom === where) {
-			this.zoom = undefined
-		} else {
-			this.zoom = where
-		}
-		
-		this.fetchGridSetup()
-	}
-	
 	onRetry() {
+		this.usedShowSolution = false
 		this.challenge.complete = false
 		this.challenge.attempts = 0
 		this.bumpChallengeStatus()

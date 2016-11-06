@@ -99,22 +99,22 @@
 
 .pulsing {
   @if $effects-enabled {
-    animation: pulse 1.5s linear infinite;
+    animation: pulse 600ms linear infinite;
   } @else {
-    animation: pulse 2s steps(2) infinite;
+    animation: pulse 1s steps(2) infinite;
   }
 }
 
 .pulsing-alt {
   @if $effects-enabled {
-    animation: pulse-alt 1s linear infinite;
+    animation: pulse-alt 600ms linear infinite;
   } @else {
-    animation: pulse-alt 2s steps(2) infinite;
+    animation: pulse-alt 1s steps(2) infinite;
   }
 }
 
-$header-height: 32px;
-$header-padding: 8px;
+$header-height: 24px;
+$header-padding: 4px;
 $header-actions-height: 30px;
 $header-bg: #EAEAEA;
 $header-full-height: $header-height + ($header-padding * 2);
@@ -125,8 +125,14 @@ $header-full-height: $header-height + ($header-padding * 2);
 }
 
 .card-content-with-header-and-actions {
-  margin-top: $header-full-height + $header-actions-height;
+  margin-top: $header-full-height;
   height: calc(100% - #{$header-full-height + $header-actions-height});
+  margin-bottom: 0 !important;
+
+  &.card-fill {
+    margin-top: 0;
+    height: 100%;
+  }
 }
 
 .card-header {
@@ -179,7 +185,7 @@ $header-full-height: $header-height + ($header-padding * 2);
     &.active {
       margin: -4px 10px;
       flex-shrink: 1;
-      line-height: $header-height + $header-padding;
+      line-height: $header-height + ($header-padding * 2);
     }
   }
 }
@@ -188,7 +194,7 @@ $header-full-height: $header-height + ($header-padding * 2);
   background: $header-bg;
   height: $header-actions-height;
   width: auto;
-  top: $header-height + ($header-padding * 2);
+  bottom: 0;
   display: flex;
   position: absolute;
   font-size: 14px;

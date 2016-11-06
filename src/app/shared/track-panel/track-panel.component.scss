@@ -77,9 +77,9 @@ $slider-line-height: $track-controls-height / 3;
 
     &.pulsing-scale /deep/ #slider {
       @if $effects-enabled {
-        animation: pulse 1s linear infinite;
+        animation: pulse 600ms linear infinite;
       } @else {
-        animation: pulse 2s steps(2) infinite;
+        animation: pulse 1s steps(2) infinite;
       }
     }
   }

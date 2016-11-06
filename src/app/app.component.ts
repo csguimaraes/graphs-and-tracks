@@ -8,6 +8,32 @@ import { AuthService } from './shared/auth.service'
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+	fullscreen = false
+	
 	constructor(public auth: AuthService) {
+	}
+	
+	toggleFullscreen() {
+		this.fullscreen = !this.fullscreen
+		let el: any
+		let rfs: any
+		
+		if (this.fullscreen) {
+			el = document.documentElement
+			rfs = el['requestFullscreen']
+				|| el['webkitRequestFullScreen']
+				|| el['mozRequestFullScreen']
+				|| el['msRequestFullscreen']
+		} else {
+			el = document
+			rfs = el['exitFullscreen']
+				|| el['webkitExitFullscreen']
+				|| el['mozExitFullScreen']
+				|| el['msExitFullscreen']
+		}
+		
+		if (rfs) {
+			rfs.call(el)
+		}
 	}
 }

@@ -108,7 +108,6 @@ md-card-content {
     transform-origin: 50% 50%;
     transform: scale(1);
     display: inline-block;
-    padding-left: 28px;
   }
 }
 
@@ -236,22 +235,28 @@ md-card-content {
 
 #message-actions {
   position: absolute;
+  white-space: nowrap;
   bottom: 0;
   width: 100%;
   text-align: right;
   box-sizing: border-box;
   height: auto;
   left: 0;
-  padding: 16px;
+  padding: 8px 16px;
 
   .link {
+    white-space: nowrap;
     padding: 8px;
     cursor: pointer !important;
     margin-right: 8px;
+    font-weight: 500;
+    font-size: 12px;
+    text-decoration: underline;
   }
 
   .button {
-    padding: 8px;
+    white-space: nowrap;
+    padding: 4px 8px;
     font-weight: bold;
     border-radius: 3px;
   }
@@ -260,15 +265,8 @@ md-card-content {
     cursor: pointer !important;
   }
 
-  .link {
-    margin-right: 8px;
-    font-weight: 500;
-    font-size: 12px;
-    text-decoration: underline;
-  }
-
   .button {
-    animation: 1s pulse linear infinite;
+    animation: 600ms pulse linear infinite;
 
     md-icon {
       width: auto;

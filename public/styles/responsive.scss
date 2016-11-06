@@ -13,3 +13,33 @@
     display: none !important;
   }
 }
+
+#portrait-message {
+  display: none;
+  position: absolute;
+  top: 50%;
+  width: 80%;
+  margin: 0 auto;
+  transform: translateY(-50%) translateX(-50%);
+  left: 50%;
+  text-align: center;
+  opacity: .3;
+
+  svg {
+    width: 80%;
+    filter: blur(1px);
+  }
+}
+
+@media screen and (orientation:portrait)
+{
+  #main-container {
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+  }
+
+  #portrait-message {
+    display: block !important;
+  }
+}

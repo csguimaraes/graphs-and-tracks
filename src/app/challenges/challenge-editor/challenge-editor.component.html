@@ -1,5 +1,5 @@
-<md-grid-list card-no-pad card-fill rowHeight="fit" cols="4" gutterSize="8px">
-	<md-grid-tile colspan="1" rowspan="4">
+<md-grid-list card-no-pad card-fill rowHeight="fit" cols="12" gutterSize="8px">
+	<md-grid-tile colspan="3" rowspan="6">
 		<md-card id="info-card">
 			<div class="content-wrapper">
 				<div class="card-header">
@@ -47,14 +47,14 @@
 		</md-card>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="3" rowspan="4">
+	<md-grid-tile colspan="9" rowspan="6">
 		<gt-graphs-panel
 				[mode]="challenge.mode" [goal]="goalMotion"
 				(change)="onGraphPanelChange($event)"
 		></gt-graphs-panel>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="4" rowspan="3">
+	<md-grid-tile colspan="12" rowspan="6">
 		<gt-track-panel
 				[mode]="goalMotion.mode"
 				(abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"

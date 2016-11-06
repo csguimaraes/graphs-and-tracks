@@ -74,7 +74,9 @@ md-card top-actions {
 
 md-toolbar, md-toolbar-row {
   min-height: unset !important;
-  height: 40px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  font-size: 18px !important;
 }
 
 .md-overlay-container {

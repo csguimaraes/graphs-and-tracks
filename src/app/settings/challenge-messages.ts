@@ -54,12 +54,9 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
-		title: 'Three graphs, any motion',
+		title: 'Acceleration graph',
 		content: `
 			Try experimenting with graphs of acceleration vs. time by adjusting the inclinations of the ramps and rolling the ball.
-			Use information contained in these three graphs to discover the motion of the ball. The motion is one-dimensional (along a straight line).
-			<br> <br>
-			When ready, return to the position vs. time graph by clicking on <b class="s">POSITION</b>.
 		`,
 		requires: [UI_CONTROL.POSITION_GRAPH],
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
@@ -88,11 +85,12 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
-		title: 'Change the Track setup',
+		title: 'Change the track setup',
 		content: `
 			Drag the top of a <b>POST</b> to raise or lower it, or simply tap above or below to increase or decrease its <b>height</b>.
 			The height of each post is displayed at its base.
-			Try rolling the ball for different track
+			<br>
+			Try rolling the ball along different track arrangements.
 		`,
 		requires: [UI_CONTROL.TRACK_POST_ANY],
 		triggers: []
@@ -122,10 +120,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Tutorial complete',
 		content: `
-			Another useful hint: Double-tap on graphs or tracks panels to zoom in or zoom out.
-			<br><br>
-			That’s it. Feel free to experiment in the <a [routerLink]="['/challenges/practice']">Practice section</a>,
-			or go directly to the <a [routerLink]="['/challenges']">Challenges List</a> to pick your first one.
+			That’s it. Feel free to experiment in the <a [routerLink]="['/challenges/practice']">Practice</a> section,
+			or go directly to the <a [routerLink]="['/challenges']">Challenges</a> list to pick your first one.
 		`,
 		requires: []
 	},
@@ -195,6 +191,8 @@ const KUDOS_H0N0 = 'Without using any hints, you discovered the motion on your f
 const KUDOS_H0N1 = 'Without using any hints, you found the solution after %N% tries.'
 const KUDOS_H1N0 = 'You found the correct arrangement on your first try. Now try another challenge without using any hints.'
 const KUDOS_H1N1 = 'You found the correct arrangement after %N% tries. Try another. See if you can do it without hints.'
+const KUDOS_SS = `Note that with this track arrangement and the initial position and initial velocity values as shown on the scales,
+the graphs match. <br><br> When ready, try a challenge without viewing the solution.`
 
 export const KUDOS = {
 	titles: KUDOS_TITLES,
@@ -204,4 +202,5 @@ export const KUDOS = {
 	h0n1: KUDOS_H0N1,
 	h1n0: KUDOS_H1N0,
 	h1n1: KUDOS_H1N1,
+	ss: KUDOS_SS
 }
