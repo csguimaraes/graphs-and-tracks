@@ -732,11 +732,6 @@ html, body {
 * {
   cursor: default; }
 
-/* TODO: Store global values in variables (separate file?) */
-body, md-sidenav-layout {
-  min-width: 640px;
-  min-height: 480px; }
-
 #main-container {
   padding: 8px;
   height: calc(100% - 40px);
@@ -836,4 +831,4 @@ md-dialog-container {
   md-dialog-container md-card-actions md-icon:not(.with-icon) {
     vertical-align: text-bottom !important; }
 
-/*# sourceMappingURL=app.511a976506ec6616b11b.css.map*/
+/*# sourceMappingURL=app.c380dced53efe6d5e264.css.map*/
