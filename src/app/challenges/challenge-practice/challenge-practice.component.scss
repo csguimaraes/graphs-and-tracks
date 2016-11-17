@@ -7,8 +7,13 @@ md-card-content {
 }
 
 #info-card {
+  .card-header md-icon {
+    vertical-align: top !important;
+  }
+
   md-card-content {
     padding: 16px !important;
+
     h3 {
       color: #009688 !important;
     }

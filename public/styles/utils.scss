@@ -125,8 +125,8 @@ $header-full-height: $header-height + ($header-padding * 2);
 }
 
 .card-content-with-header-and-actions {
-  margin-top: $header-full-height;
-  height: calc(100% - #{$header-full-height + $header-actions-height});
+  margin-top: $header-full-height + 6px;
+  height: calc(100% - #{$header-full-height + $header-actions-height} - 6px);
   margin-bottom: 0 !important;
 
   &.card-fill {
@@ -283,4 +283,14 @@ md-card.with-scroller {
   display: inline-flex;
   vertical-align: middle;
   align-items: center;
+}
+
+.selectable {
+  user-select: all !important;
+}
+
+.working {
+  pointer-events: none !important;
+  opacity: .95;
+  filter: grayscale(100%);
 }

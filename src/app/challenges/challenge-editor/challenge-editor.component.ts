@@ -51,7 +51,7 @@ export class ChallengeEditorComponent implements OnInit {
 
 	ngOnInit() {
 		this.isReady = true
-		this.graphsPanel.ignoreGoal = true
+		this.graphsPanel.hideGoal = true
 		this.loadChallengeById(this.challengeId)
 		this.loadTrackSetup()
 	}

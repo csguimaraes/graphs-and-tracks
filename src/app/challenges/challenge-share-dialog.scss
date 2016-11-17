@@ -1,0 +1,29 @@
+$facebook: #3b5998;
+$twitter: #00aced;
+$gplus: #dd4b39;
+
+.sharer {
+  min-width: unset !important;
+  width: auto !important;
+  color: white !important;
+  padding: 0 !important;
+
+  & /deep/ md-icon {
+    vertical-align: middle !important;
+    padding: 0 8px;
+  }
+
+  &.twitter { background: $twitter !important; }
+  &.facebook { background: $facebook !important; margin-left: 8px; }
+  &.gplus { background: $gplus !important; }
+}
+
+md-checkbox {
+  &, & * {
+    cursor: pointer;
+  }
+}
+
+md-input {
+  width: 100%;
+}

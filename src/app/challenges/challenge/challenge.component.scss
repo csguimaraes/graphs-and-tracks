@@ -90,7 +90,7 @@ md-card-content {
   text-align: center;
   font-size: 18px;
   line-height: 18px;
-  padding: 16px;
+  padding: 8px;
 
   color: salmon;
   &.complete {
@@ -108,20 +108,6 @@ md-card-content {
     transform-origin: 50% 50%;
     transform: scale(1);
     display: inline-block;
-  }
-}
-
-#challenge-retry {
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 18px;
-  padding: 16px;
-
-  color: #333;
-
-  md-icon {
-    vertical-align: middle;
-    margin-top: -3px;
   }
 }
 
@@ -326,19 +312,16 @@ md-card-content {
   & > * {
     flex: 1 1 auto;
     text-align: center;
-  }
-}
+    padding: 8px;
 
-#challenge-remove {
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 18px;
-  padding: 16px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 18px;
+    color: #333;
 
-  color: #333;
-
-  md-icon {
-    vertical-align: middle;
-    margin-top: -3px;
+    md-icon {
+      vertical-align: middle;
+      margin-top: -3px;
+    }
   }
 }

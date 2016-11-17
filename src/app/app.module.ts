@@ -27,6 +27,8 @@ import { ChallengeListItemComponent } from './challenges/challenge-list/challeng
 import { EditorComponent } from './editor/editor.component'
 import { SlimScrollComponent } from './shared/slim-scroll/slim-scroll.component'
 import { ChallengeDifficultyComponent } from './challenges/challenge-list/challenge-difficulty.component'
+import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component'
+import { ChallengeShareDialogComponent } from './challenges/challenge-share-dialog'
 
 @NgModule({
 	imports: [
@@ -35,11 +37,18 @@ import { ChallengeDifficultyComponent } from './challenges/challenge-list/challe
 		MaterialModule.forRoot(),
 		APP_ROUTING
 	],
+	entryComponents: [
+		ConfirmationDialogComponent,
+		ChallengeShareDialogComponent,
+	],
 	declarations: [
 		AppComponent,
 		HomeComponent,
 		AboutComponent,
 
+		ConfirmationDialogComponent,
+		ChallengeShareDialogComponent,
+		
 		ChallengeListComponent,
 		ChallengeListItemComponent,
 		ChallengeDifficultyComponent,

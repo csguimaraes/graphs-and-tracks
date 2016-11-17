@@ -26,6 +26,10 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 
 	@Output()
 	change = new EventEmitter<number>()
+	
+	@Output()
+	ballChange = new EventEmitter<number>()
+	
 
 	// TODO: get from THEME settings
 	trackWidth = 10
@@ -33,6 +37,7 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		radius: 15,
 		stroke: 3,
 		rotation: 0,
+		rotationRatio: 0,
 		perimeter: Math.PI * 2 * 15,
 		position: { x: 0, y: 0 }
 	}
@@ -345,7 +350,6 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		this.svg.attr('width', rect.width).attr('height', rect.height)
 		this.trackGroup.attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
 
-
 		let domainWidth = rect.width - this.margin.left - this.margin.right
 		let domainHeight = rect.height - this.margin.top - this.margin.bottom
 
@@ -364,7 +368,6 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		}
 
 		this.changeDetector.markForCheck()
-
 		this.updateDeadZones()
 	}
 
@@ -372,7 +375,7 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		posts = posts.slice()
 		posts.unshift(posts[0])
 		posts.push(posts[posts.length - 1])
-
+	
 		let lineClass = outline ? 'track-outline' : 'track-line'
 		let lineShape = d3.line()
 			.x((val, idx) => {
@@ -381,21 +384,21 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 				} else if (idx !== 0) {
 					idx--
 				}
-
+	
 				return this.scaleX(idx * this.rampSize)
 			})
 			.y((val, idx) => {
 				if (idx === 0 || idx === posts.length - 1) {
 					return this.scaleY(-1)
 				}
-
+	
 				return this.scaleY(val)
 			})
-
+	
 		if (!outline) {
 			this.trackGroup.select(`.track-outline`).attr('d', '')
 		}
-
+	
 		this.trackGroup.select(`.${lineClass}`)
 			.datum(posts)
 			.attr('d', lineShape)
@@ -408,15 +411,17 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		let leftToRight = currentPosition.x > previousPosition.x
 
 		let distance = getDistance(previousPosition, currentPosition)
-		let rotation = this.ball.rotation + (distance * (leftToRight ? -1 : 1))
+		let rotation = this.ball.rotation + (distance * (leftToRight ? 1 : -1))
 
 		let rotationRatio = rotation / this.ball.perimeter
-		if (rotationRatio > 1) { // TODO: negative values?
+		if (Math.abs(rotationRatio) > 1) { // TODO: negative values?
 			// Normalize new rotation if its more than 360 degres
-			rotation = (rotationRatio - Math.floor(rotationRatio)) * this.ball.perimeter
+			rotationRatio = rotationRatio - Math.floor(rotationRatio)
+			rotation = rotationRatio * this.ball.perimeter
 		}
 
-		this.ball.element.style.strokeDashoffset = `${rotation}px`
+		// this.ball.element.style.strokeDashoffset = `${rotation}px`
+		this.ball.rotationRatio = rotationRatio * 360
 		this.ball.rotation = rotation
 	}
 
@@ -547,5 +552,14 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 		}
 
 		fallFrame()
+	}
+	
+	onBallSlide(position: any) {
+		// FIXME
+		this.updateBallPostion(500 * position)
+	}
+	
+	onBallSlideChange(position: any) {
+		this.ballChange.emit(position)
 	}
 }

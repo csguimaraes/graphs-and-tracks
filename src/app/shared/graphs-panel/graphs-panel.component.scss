@@ -73,6 +73,7 @@ $ball-margin: 20px;
 
     .line.goal {
       stroke-dasharray: 10 20;
+      stroke-width: 1px;
 
       @if $effects-enabled {
         animation: dashing 1s linear infinite;

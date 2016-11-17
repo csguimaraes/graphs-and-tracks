@@ -21,6 +21,7 @@
 
 		<div id="track-content">
 			<gt-track
+							(ballChange)="onTrackBallChange($event)"
 							(change)="onTrackChange($event)"
 							[mode]="mode" [postsSetup]="setup.posts" [position]="setup.position"
 			></gt-track>

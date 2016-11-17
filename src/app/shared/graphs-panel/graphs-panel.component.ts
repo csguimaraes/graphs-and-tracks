@@ -5,8 +5,6 @@ import {
 	ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewChild, SimpleChanges, OnChanges
 } from '@angular/core'
 
-import { Tween } from 'tween.js'
-
 import { MotionData, ChallengeMode, DataType, UI_CONTROL, TrialError } from '../types'
 import { Motion } from '../motion.model'
 
@@ -31,7 +29,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 	@ViewChild('goalLine')
 	goalLine: ElementRef
 	
-	ignoreGoal = false
+	hideGoal = false
 	goalData: MotionData[]
 	goalLinePath: string
 	
@@ -104,7 +102,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		let goalLine = d3.select(this.goalLine.nativeElement)
 		goalLine
 			.transition()
-			.duration(600)
+			.duration(900)
 			.attr('d', newGoalLine)
 			.on('end', () => {
 				// Queue a change detection
@@ -318,7 +316,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 			.call(axisY)
 		
 		// Plot goal line
-		if (!this.ignoreGoal) {
+		if (!this.hideGoal) {
 			this.goalLinePath = this.generateLinePath(data, type)
 		}
 		
@@ -330,31 +328,6 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		}
 		
 		this.trialLinePaths = trialLinePaths
-
-		if (this.lineToClip === -1) {
-			// If clip animation is set to goal
-			let animating = true
-			
-			let tween = new Tween(0).to(1, 600)
-				.onUpdate(clipRatio => this.setTrialLineClip(clipRatio))
-				.onComplete(() => {
-					animating = false
-					this.lineToClip = undefined
-					this.changeDetector.markForCheck()
-					setTimeout(() => this.setTrialLineClip(0), 1)
-				})
-				.start()
-			
-			let animate = (time) => {
-				if (animating) {
-					requestAnimationFrame(animate)
-					tween.update(time)
-				}
-			}
-			
-			animate(0)
-		}
-		
 		this.changeDetector.markForCheck()
 	}
 	

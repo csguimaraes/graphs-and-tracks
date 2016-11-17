@@ -45,7 +45,6 @@
 				<g id="main-group" [attr.transform]="'translate(' + margin.left +','+ margin.top +')'">
 					<path #goalLine class="line goal"
 							[attr.d]="goalLinePath"
-							[attr.clip-path]="(lineToClip === -1) ? 'url(' + activeUrl + '#trial-line-clip)' : '#no-clip'"
 					></path>
 					<path class="line trial" *ngFor="let trialPathData of trialLinePaths; let idx = index"
 							[attr.d]="trialPathData"

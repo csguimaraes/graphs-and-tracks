@@ -7,8 +7,7 @@ export enum CHALLENGE_TYPE {
 	CUSTOM,
 	TUTORIAL,
 	PRACTICE,
-	COMMUNITY,
-	TEACHER
+	SHARED
 }
 
 export enum CHALLENGE_DIFFICULTY {
@@ -132,6 +131,7 @@ export interface Ball {
 	radius: number
 	stroke: number
 	rotation: number
+	rotationRatio?: number
 	perimeter: number
 	position: Point
 }

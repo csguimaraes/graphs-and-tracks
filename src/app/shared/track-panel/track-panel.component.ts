@@ -120,7 +120,12 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.tapHandler = null
 		}
 	}
-
+	
+	onTrackBallChange(position: number) {
+		let value = position * 500
+		this.positionSetter(Math.round(value / 50) * 50)
+	}
+	
 	onTrackChange(postIndex: number) {
 		if (postIndex === 0) {
 			this.change.emit(UI_CONTROL.TRACK_POST_FIRST)

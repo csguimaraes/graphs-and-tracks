@@ -94,16 +94,21 @@
 								{{ commitedAttemptsMessage }}
 							</small>
 						</div>
-						<br>
+
 						<div id="challenge-bottom-actions">
 							<div id="challenge-retry" (click)="onRetry()">
 								<md-icon>replay</md-icon>
-								Retry Challenge
+								Retry
 							</div>
 
 							<div *ngIf="isCustom()" id="challenge-remove" (click)="onRemove()">
 								<md-icon>delete_forever</md-icon>
-								Delete Challenge
+								Delete
+							</div>
+
+							<div *ngIf="isCustom()" id="challenge-share" (click)="onShare()">
+								<md-icon>share</md-icon>
+								Share
 							</div>
 						</div>
 					</div>

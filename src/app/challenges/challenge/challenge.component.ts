@@ -36,6 +36,9 @@ import { GraphsPanelComponent } from '../../shared/graphs-panel/graphs-panel.com
 import { TrackPanelComponent } from '../../shared/track-panel/track-panel.component'
 import { SWITCH_DURATION, SWITCH_ANIMATION } from '../../shared/animations'
 import { AuthService } from '../../shared/auth.service'
+import { MdDialog } from '@angular/material'
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component'
+import { ChallengeShareDialogComponent } from '../challenge-share-dialog'
 
 const SETUP_STORAGE_KEY = 'latest-track-setup'
 type SwitchDirection = 'toLeft' | 'toRight' | 'none'
@@ -94,7 +97,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	types = CHALLENGE_TYPE
 	
 	constructor(private challenges: ChallengesService, private router: Router, private changeDetector: ChangeDetectorRef,
-				public  auth: AuthService, route: ActivatedRoute) {
+				public  auth: AuthService, public dialog: MdDialog, route: ActivatedRoute) {
 		this.challengeId = route.snapshot.params['id']
 		route.params.subscribe(p => this.loadChallengeById(p['id']))
 	}
@@ -690,8 +693,30 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 	
 	onRemove() {
-		this.challenges.remove(this.challenge.id)
-		this.router.navigateByUrl('/challenges')
+		let dialogRef = this.dialog.open(ConfirmationDialogComponent)
+		dialogRef.componentInstance.question = `Delete challenge <b>${this.challenge.name}</b>?`
+		dialogRef.componentInstance.icon = 'delete_forever'
+		dialogRef.componentInstance.action = 'Delete'
+		
+		dialogRef.afterClosed().subscribe(result => {
+			dialogRef = null
+			
+			if (result) {
+				this.challenges.remove(this.challenge.id)
+				this.router.navigateByUrl('/challenges')
+			}
+		})
+	}
+	
+	onShare() {
+		let dialogRef = this.dialog.open(ChallengeShareDialogComponent)
+		dialogRef.afterClosed().subscribe(result => {
+			dialogRef = null
+			
+			if (result) {
+				
+			}
+		})
 	}
 	
 	isCustom() {

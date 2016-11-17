@@ -65,6 +65,8 @@ svg /deep/ {
     stroke-width: 3px;
     stroke-dashoffset: 0;
     stroke: #800;
+    cursor: move !important;
+    transform-origin: 50% 50% !important;
 
     // R = 10, N = 5, GAP = 2x
     // ((Math.PI * 2 * R) / N) - GAP

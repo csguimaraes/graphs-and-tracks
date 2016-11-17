@@ -23,9 +23,6 @@ md-card-actions {
   display: flex !important;
 
   [md-button] {
-    padding: 0 16px 0 8px;
-    min-width: unset;
-
     &[gray] {
       color: $gray-text !important;
     }
@@ -63,7 +60,7 @@ md-grid-list[card-fill] {
   }
 }
 
-md-card top-actions {
+md-card .top-actions {
   float: right;
   md-icon {
     padding: 0;
@@ -79,12 +76,21 @@ md-toolbar, md-toolbar-row {
   font-size: 18px !important;
 }
 
-.md-overlay-container {
-  background: rgba(255,0,0,.3) !important;
-  position: fixed !important;
-  z-index: 99999 !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
+md-dialog-container {
+  padding: 0 !important;
+  background: transparent !important;
+
+  md-card-actions {
+    & > * {
+      text-transform: uppercase !important;
+      flex: 1 1 auto !important;
+      &, & * {
+        cursor: pointer !important;
+      }
+    }
+
+    md-icon:not(.with-icon) {
+      vertical-align: text-bottom !important;
+    }
+  }
 }

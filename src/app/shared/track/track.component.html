@@ -1,4 +1,4 @@
-<svg>
+<svg #trackContainer>
 	<g id="track-group">
 		<path class="track-line"></path>
 		<path class="track-outline"></path>
@@ -74,9 +74,15 @@
 		></path>
 		
 		<circle id="ball"
+		        gtSlider
+		        [reference]="trackContainer"
+		        (change)="onBallSlideChange($event)"
+		        (slided)="onBallSlide($event)"
+
 		        [attr.r]="ball.radius - ball.stroke"
 		        [attr.cx]="ball.position.x"
 		        [attr.cy]="ball.position.y"
+		        [style.transform]="'rotate(' + ball.rotationRatio + 'deg)'"
 		></circle>
 	</g>
 </svg>
