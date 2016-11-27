@@ -767,6 +767,101 @@ html, body {
     opacity: 0 !important; }
   #portrait-message {
     display: block !important; } }
+
+body.mobile md-toolbar {
+  display: none !important; }
+
+body.mobile #main-container {
+  padding: 0 !important;
+  height: 100% !important; }
+
+body.mobile gt-track-panel gt-scale span {
+  padding: 0 !important; }
+
+body.mobile gt-track-panel gt-scale span.selected:before, body.mobile gt-track-panel gt-scale span.selected:after {
+  opacity: 0 !important; }
+
+body.mobile gt-track-panel .slider-info {
+  height: 28px !important;
+  line-height: 28px !important; }
+
+body.mobile gt-track-panel gt-track, body.mobile gt-track-panel #roll-ball-wrapper {
+  height: calc(100% - (28px * 2)) !important; }
+  body.mobile gt-track-panel gt-track #ball-roller, body.mobile gt-track-panel #roll-ball-wrapper #ball-roller {
+    background: transparent !important;
+    color: crimson !important;
+    animation: none !important; }
+
+body.mobile gt-track-panel .track-outline {
+  display: none !important; }
+
+body.mobile gt-graphs-panel md-card {
+  background: #F8FFED !important; }
+
+body.mobile gt-graphs-panel .card-content-with-header {
+  width: calc(100% - 8px) !important;
+  margin-top: 14px !important;
+  margin-left: -16px !important;
+  height: calc(100% - 2px) !important; }
+
+body.mobile gt-graphs-panel .card-header span:last-child, body.mobile gt-graphs-panel .card-header span:first-child {
+  opacity: 0 !important; }
+
+body.mobile .card-header {
+  margin: 0 !important;
+  height: 18px !important;
+  font-size: 14px !important;
+  top: 6px; }
+  body.mobile .card-header span, body.mobile .card-header span.active {
+    margin: 0 !important;
+    line-height: 20px !important; }
+  body.mobile .card-header span.graph-selector, body.mobile .card-header span.graph-selector.active {
+    margin: 0 8px !important; }
+  body.mobile .card-header span:last-child md-icon, body.mobile .card-header span:first-child md-icon {
+    line-height: 18px !important; }
+
+body.mobile .challenge-status-container, body.mobile .challenge-status-container * {
+  padding: 0 !important;
+  font-size: 16px !important;
+  line-height: 16px !important; }
+
+body.mobile .challenge-status-container md-icon {
+  font-size: 20px !important;
+  vertical-align: sub !important; }
+
+body.mobile .line.goal {
+  animation: none !important;
+  stroke-dasharray: 4 6 !important; }
+
+body.mobile md-card {
+  border-radius: 0 !important;
+  box-shadow: none !important; }
+
+body.mobile #info-card {
+  background: #F8FFED !important; }
+  body.mobile #info-card .content-wrapper {
+    background: white;
+    border-radius: 0 0 8px 0;
+    overflow: hidden; }
+  body.mobile #info-card #message-box {
+    border-radius: 0 0 8px 0;
+    overflow: hidden;
+    padding: 0; }
+    body.mobile #info-card #message-box #message-box-wrapper {
+      height: calc(100% - 48px);
+      padding: 8px;
+      overflow: auto; }
+    body.mobile #info-card #message-box #message-title {
+      line-height: 16px !important; }
+      body.mobile #info-card #message-box #message-title span {
+        font-size: 14px !important; }
+      body.mobile #info-card #message-box #message-title md-icon {
+        font-size: 16px !important;
+        width: 16px !important;
+        height: 16px !important; }
+    body.mobile #info-card #message-box p {
+      margin: 4px 0 !important;
+      font-size: 12px !important; }
 /*
 Component styles added at global level due to this issue
 https://github.com/angular/material2/issues/922
@@ -831,4 +926,4 @@ md-dialog-container {
   md-dialog-container md-card-actions md-icon:not(.with-icon) {
     vertical-align: text-bottom !important; }
 
-/*# sourceMappingURL=app.c380dced53efe6d5e264.css.map*/
+/*# sourceMappingURL=app.b221b6cca49d9cdda679.css.map*/
