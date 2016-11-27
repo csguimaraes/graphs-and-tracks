@@ -60,6 +60,16 @@ $ball-margin: 20px;
     }
   }
 
+  & /deep/ .axis-x .tick:last-child text:last-child {
+    opacity: .3;
+  }
+
+  .axis-title {
+    text-anchor: end;
+    font-size: 10px;
+    opacity: .3;
+  }
+
   &.s /deep/ .line { stroke: $color-s; }
   &.v /deep/ .line { stroke: $color-v; }
   &.a /deep/ .line { stroke: $color-a; }

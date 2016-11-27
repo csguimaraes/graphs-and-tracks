@@ -50,7 +50,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 	lineToClip: number
 	shadowClip: SVGRectElement
 	trialClip: SVGRectElement
-	currentClip: number
+	currentClip: number = 0
 	
 	@Output()
 	change = new EventEmitter<UI_CONTROL>()
@@ -87,7 +87,6 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 			this.doubleTapRecognizer = null
 		}
 	}
-	
 	
 	animateGoalUpdate(goalMotionData: MotionData[]) {
 		if (this.initialized !== true) {
@@ -260,13 +259,13 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 				scaleY.domain([pos.min, pos.max])
 				
 				ticks = 6
-				this.axisTitle = 'Position (cm)'
+				this.axisTitle = '(cm)'
 				break
 			
 			case 'v':
 				scaleY.domain([-150, 150])
 				ticks = this.height > 300 ? 15 : 5
-				this.axisTitle = 'Velocity (cm/s)'
+				this.axisTitle = '(cm/s)'
 				break
 			
 			case 'a':
@@ -276,7 +275,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 				scaleY.domain([maxAcceleration * -1, maxAcceleration])
 				
 				ticks = 5
-				this.axisTitle = 'Acceleration (cm/s²)'
+				this.axisTitle = '(cm/s²)'
 				break
 			
 			default:
@@ -286,7 +285,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		// Add the X Axis
 		let axisX = d3
 			.axisBottom(scaleX)
-			.tickValues([5, 10, 15, 20, 25]) // FIXME: should be based on duration
+			.tickValues([5, 10, 15, 20, 25]) // FIXME: should be based on simulation duration
 		
 		if (this.mainGroup) {
 			this.mainGroup.selectAll('.axis').remove()

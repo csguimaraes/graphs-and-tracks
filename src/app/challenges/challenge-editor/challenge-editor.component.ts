@@ -238,6 +238,7 @@ export class ChallengeEditorComponent implements OnInit {
 		}
 		
 		this.challenges.save(this.challenge)
+		window.ga('send', 'event', 'challenge', 'created')
 		this.router.navigateByUrl('/challenges')
 	}
 }

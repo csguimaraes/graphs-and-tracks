@@ -43,3 +43,144 @@
     display: block !important;
   }
 }
+
+
+body.mobile {
+  md-toolbar {
+    display: none !important;
+  }
+
+  #main-container {
+    padding: 0 !important;
+    height: 100% !important;
+  }
+
+  gt-track-panel {
+    gt-scale span {
+      padding: 0 !important;
+    }
+    gt-scale span.selected:before, gt-scale span.selected:after {
+      opacity: 0 !important;
+    }
+
+    .slider-info {
+      height: 28px !important;
+      line-height: 28px !important;
+    }
+
+    gt-track, #roll-ball-wrapper {
+      height: calc(100% - (28px * 2)) !important;
+      #ball-roller {
+        background: transparent !important;
+        color: crimson !important;
+        animation: none !important;
+      }
+    }
+
+    .track-outline {
+      display: none !important;
+    }
+  }
+
+  gt-graphs-panel {
+    md-card {
+      background: #F8FFED !important;
+    }
+
+    .card-content-with-header {
+      width: calc(100% - 8px) !important;
+      margin-top: 14px !important;
+      margin-left: -16px !important;
+      height: calc(100% - 2px) !important;
+    }
+
+    .card-header {
+      span:last-child, span:first-child {
+        opacity: 0 !important;
+      }
+    }
+  }
+
+  .card-header {
+    margin: 0 !important;
+    height: 18px !important;
+    font-size: 14px !important;
+    top: 6px;
+
+    span, span.active {
+      margin: 0 !important;
+      line-height: 20px !important;
+    }
+
+    span.graph-selector, span.graph-selector.active {
+      margin: 0 8px !important;
+    }
+
+    span:last-child md-icon, span:first-child md-icon {
+      line-height: 18px !important;
+    }
+  }
+
+  .challenge-status-container {
+    &, & * {
+      padding: 0 !important;
+      font-size: 16px !important;
+      line-height: 16px !important;
+    }
+
+    md-icon {
+      font-size: 20px !important;
+      vertical-align: sub !important;
+    }
+  }
+
+  .line.goal {
+    animation: none !important;
+    stroke-dasharray: 4 6 !important;
+  }
+
+  md-card {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  #info-card {
+    background: #F8FFED !important;
+    .content-wrapper {
+      background: white;
+      border-radius: 0 0 8px 0;
+      overflow: hidden;
+    }
+
+    #message-box {
+      border-radius: 0 0 8px 0;
+      overflow: hidden;
+      padding: 0;
+
+      #message-box-wrapper {
+        height: calc(100% - 48px);
+        padding: 8px;
+        overflow: auto;
+      }
+
+      #message-title {
+        line-height: 16px !important;
+
+        span {
+          font-size: 14px !important;
+        }
+
+        md-icon {
+          font-size: 16px !important;
+          width: 16px !important;
+          height: 16px !important;
+        }
+      }
+
+      p {
+        margin: 4px 0 !important;
+        font-size: 12px !important;
+      }
+    }
+  }
+}

@@ -115,7 +115,7 @@ module.exports = function makeWebpackConfig() {
 		// Reference: https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
 			template: root('/public/main.ejs'),
-			favicon: root('/public/img/favicon.png'),
+			favicon: root('/public/img/hdpi.png'),
 			chunksSortMode: 'dependency',
 			minify: false,
 			// inject: 'head',

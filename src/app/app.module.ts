@@ -24,7 +24,6 @@ import { TrackComponent } from './shared/track/track.component'
 import { SliderDirective } from './shared/slider.directive'
 import { AboutComponent } from './about/about.component'
 import { ChallengeListItemComponent } from './challenges/challenge-list/challenge-list-item/challenge-list-item.component'
-import { EditorComponent } from './editor/editor.component'
 import { SlimScrollComponent } from './shared/slim-scroll/slim-scroll.component'
 import { ChallengeDifficultyComponent } from './challenges/challenge-list/challenge-difficulty.component'
 import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component'
@@ -60,8 +59,6 @@ import { ChallengeShareDialogComponent } from './challenges/challenge-share-dial
 		ChallengePracticeComponent,
 		TrackPanelComponent,
 		GraphsPanelComponent,
-
-		EditorComponent,
 
 		SliderDirective,
 		SlimScrollComponent,

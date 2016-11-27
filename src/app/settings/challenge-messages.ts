@@ -6,6 +6,12 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		content: `
 			Your mission is to discover the motion of a rolling ball by using the
 			information provided in graphs of position, velocity and acceleration.
+			<br> <br>
+			This is a long text, This is a long text, This is a long text, This is a long text.
+			<br> <br>
+			This is a long text, This is a long text, This is a long text, This is a long text.
+			<br> <br>
+			This is a long text, This is a long text, This is a long text, This is a long text.
 		`
 	},
 	{
@@ -134,7 +140,13 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 		content: `
 			With hints enabled, we will provide guidance on how to improve your current setup.
 			<br> <br>
-			For instructions on how to use the program, select the <b>tutorial</b> icon above.
+			You can select the <b>tutorial</b> button for instructions on how to use the program.
+			<br> <br>
+			This is a long text, This is a long text, This is a long text, This is a long text.
+			<br> <br>
+			This is a long text, This is a long text, This is a long text, This is a long text.
+			<br> <br>
+			This is a long text, This is a long text, This is a long text, This is a long text.
 		`
 	},
 	position: {

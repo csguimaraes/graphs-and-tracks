@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-
 import { AuthService } from './shared/auth.service'
 
 @Component({
@@ -11,8 +10,9 @@ export class AppComponent {
 	fullscreen = false
 	
 	constructor(public auth: AuthService) {
+		window['fs'] = this.tryFullscreenForMobile
 	}
-	
+		
 	toggleFullscreen() {
 		this.fullscreen = !this.fullscreen
 		let el: any
@@ -34,6 +34,16 @@ export class AppComponent {
 		
 		if (rfs) {
 			rfs.call(el)
+		}
+	}
+	
+	tryFullscreenForMobile = () => {
+		let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+		if (isMobile && window.innerWidth < 1024) {
+			document.body.classList.add('mobile')
+			if (this.fullscreen === false) {
+				this.toggleFullscreen()
+			}
 		}
 	}
 }

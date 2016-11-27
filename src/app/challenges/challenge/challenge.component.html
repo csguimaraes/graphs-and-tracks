@@ -1,5 +1,6 @@
-<md-grid-list card-no-pad card-fill rowHeight="fit" cols="12" gutterSize="8px">
-	<md-grid-tile colspan="3" rowspan="7">
+<md-grid-list card-no-pad card-fill rowHeight="fit" cols="12"
+              [gutterSize]="isMobile() ? '0px' : '8px'">
+	<md-grid-tile colspan="5" [rowspan]="isMobile() ? 6 : 5">
 		<md-card id="info-card">
 			<div class="content-wrapper">
 				<div #cardHeader class="card-header">
@@ -31,6 +32,14 @@
 				</div>
 				
 				<div id="challenge-help" class="card-header-actions card-header-actions-full">
+					<span id="button-back" class="action"
+					      [routerLink]="['../']"
+					      title="Back to the challenges list"
+					>
+						<md-icon small>keyboard_return</md-icon>
+						<span class="hidden-small">BACK</span>
+					</span>
+
 					<span id="button-hints" class="action"
 					      [class.disabled]="isTutorial"
 					      [class.active]="hintsEnabled && !isTutorial"
@@ -88,11 +97,7 @@
 						     [class.complete]="challenge.complete"
 						>
 							<md-icon [class.one-bump]="challenge.attempts === commitedAttempts">{{ challenge.complete ?  'check' : 'not_interested' }}</md-icon>
-							<span>{{ challenge.complete ?  'Challenge Met' : 'Incomplete Challenge' }}</span>
-							<br>
-							<small [class.one-bumpy]="challenge.attempts === commitedAttempts">
-								{{ commitedAttemptsMessage }}
-							</small>
+							<span [class.one-bumpy]="challenge.attempts === commitedAttempts">{{ commitedAttemptsMessage }}</span>
 						</div>
 
 						<div id="challenge-bottom-actions">
@@ -114,12 +119,15 @@
 					</div>
 					
 					<div id="message-box" class="{{ message ? message.type : 'invisible' }}">
-						<b id="message-title">
-							<md-icon [innerHTML]="message?.icon"></md-icon>
-							<span [innerHTML]="message?.title"></span>
-						</b>
-						
-						<p [innerHTML]="message?.content"></p>
+						<div id="message-box-wrapper">
+							<b id="message-title">
+								<md-icon [innerHTML]="message?.icon"></md-icon>
+								<span [innerHTML]="message?.title"></span>
+							</b>
+
+							<p [innerHTML]="message?.content"></p>
+						</div>
+
 						<div id="message-actions">
 							<template [ngIf]="message?.type === 'tutorial'">
 								<span class="link" (click)="endTutorial()">End Tutorial</span>
@@ -150,11 +158,11 @@
 		</md-card>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="9" rowspan="7">
+	<md-grid-tile colspan="7" [rowspan]="isMobile() ? 6 : 5">
 		<gt-graphs-panel [mode]="challenge.mode" [goal]="goalMotion" (change)="onGraphPanelChange($event)"></gt-graphs-panel>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="12" rowspan="5">
+	<md-grid-tile colspan="12" [rowspan]="isMobile() ? 6 : 7">
 		<gt-track-panel [mode]="goalMotion.mode" (abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)" ></gt-track-panel>
 	</md-grid-tile>
 </md-grid-list>

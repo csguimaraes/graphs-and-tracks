@@ -13,15 +13,20 @@
 		<meta property="og:image:type" content="image/png" />
 		<meta property="og:image:width" content="144" />
 		<meta property="og:image:height" content="144" />
-		<meta property="og:description" content="A simulation for math and physics students to help develop
+		<meta property="og:description" content="This is simulation for math and physics students to help develop
 an intuitive understanding of graphs of position, velocity and acceleration."/>
 		<meta name="twitter:card" content="summary" />
-		<meta name="twitter:site" content="@snolflake" />
 		<meta name="twitter:title" content="I created a challenge on Graphs and Tracks" />
 		<meta name="twitter:description" content="A simulation for math and physics students to help develop
 an intuitive understanding of graphs of position, velocity and acceleration." />
 		<meta name="twitter:image" content="http://graphsandtracks.com/img/social-logo.png" />
 	</head>
 	<body>
+		<script>
+				localStorage['import'] = document.location.search.slice(1)
+				setTimeout(function () {
+						document.location.href = document.location.origin + '/#/challenges/'
+				}, 1000)
+		</script>
 	</body>
 </html>

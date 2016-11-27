@@ -435,6 +435,8 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 				this.setCurrentMessage(message, 'hint', true)
 			}
 		} else {
+			window.ga('send', 'event', 'challenge', 'resolved')
+			
 			this.hintsEnabled = false
 			let titles = KUDOS.titles
 			let message = lodash.sample(KUDOS.intros)
@@ -515,6 +517,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 	
 	startTutorial() {
+		window.ga('send', 'event', 'tutorial', 'started')
 		this.hintsEnabled = true
 		this.hintDismissed = false
 		this.tutorialStepIndex = -1
@@ -549,6 +552,11 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		
 		if (currentStep === undefined) {
 			return this.endTutorial()
+		}
+		
+		if (this.tutorialStepIndex === TUTORIAL_STEPS.length - 1) {
+			// User reached the last tutorial screen
+			window.ga('send', 'event', 'tutorial', 'complete')
 		}
 		
 		this.tutorialStep = currentStep
@@ -710,16 +718,15 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	
 	onShare() {
 		let dialogRef = this.dialog.open(ChallengeShareDialogComponent)
-		dialogRef.afterClosed().subscribe(result => {
-			dialogRef = null
-			
-			if (result) {
-				
-			}
-		})
+		dialogRef.componentInstance.createShareableLink(this.challenge)
 	}
 	
 	isCustom() {
 		return this.challenge.type === CHALLENGE_TYPE.CUSTOM
 	}
+	
+	isMobile() {
+		return document.body.classList.contains('mobile')
+	}
+	
 }
