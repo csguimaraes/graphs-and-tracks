@@ -6,6 +6,7 @@ import { MODE_NORMAL } from '../settings/challenge-setups'
 
 @Injectable()
 export class ChallengesService {
+	importedChallenge: string
 	constructor(private storage: StorageService) {
 		this.checkForImport()
 	}
@@ -92,6 +93,7 @@ export class ChallengesService {
 			}
 		}
 		
+		this.importedChallenge = challenge.id
 		this.storage.challenges.push(challenge)
 	}
 }

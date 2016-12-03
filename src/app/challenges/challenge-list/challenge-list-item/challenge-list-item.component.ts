@@ -38,7 +38,7 @@ export class ChallengeListItemComponent implements OnInit {
 	}
 	
 	onChallengeSelect() {
-		if(window['fs']) {
+		if (window['fs']) {
 			window['fs']()
 		}
 	}

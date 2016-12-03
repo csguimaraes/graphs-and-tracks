@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+
 import { ChallengesService } from '../../shared/challenges.service'
 import { Challenge, CHALLENGE_TYPE } from '../../shared/types'
 
@@ -10,7 +12,7 @@ import { Challenge, CHALLENGE_TYPE } from '../../shared/types'
 export class ChallengeListComponent implements OnInit {
 	localChallenges: Challenge[]
 
-	constructor(private challenges: ChallengesService) {}
+	constructor(private challenges: ChallengesService, public router: Router) {}
 
 	ngOnInit() {
 		let examples = this.challenges.getByType(CHALLENGE_TYPE.EXAMPLE)
@@ -19,5 +21,11 @@ export class ChallengeListComponent implements OnInit {
 			...examples,
 			...custom,
 		]
+		
+		if (this.challenges.importedChallenge) {
+			this.router
+				.navigate(['challenges', this.challenges.importedChallenge])
+				.then(() => this.challenges.importedChallenge = undefined)
+		}
 	}
 }
