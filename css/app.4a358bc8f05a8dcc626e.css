@@ -848,7 +848,7 @@ body.mobile #info-card {
     overflow: hidden;
     padding: 0; }
     body.mobile #info-card #message-box #message-box-wrapper {
-      height: calc(100% - 48px);
+      height: calc(100% - 32px);
       padding: 8px;
       overflow: auto; }
     body.mobile #info-card #message-box #message-title {
@@ -926,4 +926,10 @@ md-dialog-container {
   md-dialog-container md-card-actions md-icon:not(.with-icon) {
     vertical-align: text-bottom !important; }
 
-/*# sourceMappingURL=app.b221b6cca49d9cdda679.css.map*/
+.md-radio-container {
+  display: none !important; }
+
+md-radio-button:not(.md-radio-checked) * {
+  color: silver !important; }
+
+/*# sourceMappingURL=app.4a358bc8f05a8dcc626e.css.map*/
