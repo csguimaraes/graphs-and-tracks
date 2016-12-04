@@ -36,11 +36,5 @@ export class ChallengeListItemComponent implements OnInit {
 	isCustom() {
 		return this.challenge.type === CHALLENGE_TYPE.CUSTOM
 	}
-	
-	onChallengeSelect() {
-		if (window['fs']) {
-			window['fs']()
-		}
-	}
 }
 

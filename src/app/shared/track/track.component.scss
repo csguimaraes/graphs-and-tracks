@@ -66,11 +66,13 @@ svg /deep/ {
     stroke-dashoffset: 0;
     stroke: #800;
     cursor: move !important;
-    transform-origin: 50% 50% !important;
-
     // R = 10, N = 5, GAP = 2x
     // ((Math.PI * 2 * R) / N) - GAP
     stroke-dasharray: 13.079644737231007px 2px;
+    shape-rendering: geometricPrecision !important;
+    :host.rolling & {
+      shape-rendering: optimizeSpeed !important;
+    }
   }
 
   path#ramp-error {

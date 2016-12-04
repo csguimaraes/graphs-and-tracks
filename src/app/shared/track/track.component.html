@@ -73,16 +73,20 @@
 				[attr.d]="highlight"
 		></path>
 		
-		<circle id="ball"
+		<g
 		        gtSlider
 		        [reference]="trackContainer"
 		        (change)="onBallSlideChange($event)"
 		        (slided)="onBallSlide($event)"
-
-		        [attr.r]="ball.radius - ball.stroke"
-		        [attr.cx]="ball.position.x"
-		        [attr.cy]="ball.position.y"
-		        [style.transform]="'rotate(' + ball.rotationRatio + 'deg)'"
-		></circle>
+						[attr.transform]="'translate('+ ball.position.x +', '+ ball.position.y +')'"
+		>
+			<circle id="ball"
+					[attr.r]="ball.radius - ball.stroke"
+					[class.rolling]="rolling"
+					cx="0"
+					cy="0"
+					[style.transform]="'rotate(' + ball.rotationRatio + 'deg)'"
+			></circle>
+		</g>
 	</g>
 </svg>

@@ -11,6 +11,7 @@ export class AppComponent {
 	
 	constructor(public auth: AuthService) {
 		window['fs'] = this.tryFullscreenForMobile
+		window['fs-out'] = this.exitFullscreen
 	}
 		
 	toggleFullscreen() {
@@ -39,11 +40,18 @@ export class AppComponent {
 	
 	tryFullscreenForMobile = () => {
 		let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-		if (isMobile && window.innerWidth < 1024) {
+		if (isMobile || window.innerWidth < 1024) {
 			document.body.classList.add('mobile')
 			if (this.fullscreen === false) {
 				this.toggleFullscreen()
 			}
+		}
+	}
+	
+	exitFullscreen = () => {
+		document.body.classList.remove('mobile')
+		if (this.fullscreen === true) {
+			this.toggleFullscreen()
 		}
 	}
 }

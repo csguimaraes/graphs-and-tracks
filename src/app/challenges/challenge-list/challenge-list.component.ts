@@ -27,5 +27,9 @@ export class ChallengeListComponent implements OnInit {
 				.navigate(['challenges', this.challenges.importedChallenge])
 				.then(() => this.challenges.importedChallenge = undefined)
 		}
+		
+		if (window['fs-out']) {
+			window['fs-out']()
+		}
 	}
 }

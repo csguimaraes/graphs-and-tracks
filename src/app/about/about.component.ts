@@ -10,5 +10,8 @@ export class AboutComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		if (window['fs-out']) {
+			window['fs-out']()
+		}
 	}
 }

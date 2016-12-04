@@ -17,7 +17,10 @@ const SETUP_STORAGE_KEY = 'latest-track-setup'
 @Component({
 	selector: 'gt-challenge',
 	templateUrl: './challenge-editor.component.html',
-	styleUrls: ['./challenge-editor.component.scss']
+	styleUrls: [
+		'../challenge/challenge.component.scss',
+		'./challenge-editor.component.scss'
+	]
 })
 export class ChallengeEditorComponent implements OnInit {
 	@ViewChild(TrackPanelComponent)
@@ -238,7 +241,7 @@ export class ChallengeEditorComponent implements OnInit {
 		}
 		
 		this.challenges.save(this.challenge)
-		window.ga('send', 'event', 'challenge', 'created')
+		window.ga('send', 'event', 'challenge', 'challenge-created')
 		this.router.navigateByUrl('/challenges')
 	}
 }

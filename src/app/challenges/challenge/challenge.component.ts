@@ -100,6 +100,10 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 				public  auth: AuthService, public dialog: MdDialog, route: ActivatedRoute) {
 		this.challengeId = route.snapshot.params['id']
 		route.params.subscribe(p => this.loadChallengeById(p['id']))
+		
+		if (window['fs']) {
+			window['fs']()
+		}
 	}
 	
 	ngOnInit() {
@@ -121,7 +125,6 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		swipeHandler.on('swiperight', () => {
 			this.navigateTo('toRight')
 		})
-		
 	}
 	
 	onRollBall(setup: MotionSetup) {
@@ -435,7 +438,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 				this.setCurrentMessage(message, 'hint', true)
 			}
 		} else {
-			window.ga('send', 'event', 'challenge', 'resolved')
+			window.ga('send', 'event', 'challenge', 'challenge-resolved')
 			
 			this.hintsEnabled = false
 			let titles = KUDOS.titles
@@ -517,7 +520,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	}
 	
 	startTutorial() {
-		window.ga('send', 'event', 'tutorial', 'started')
+		window.ga('send', 'event', 'tutorial', 'tutorial-started')
 		this.hintsEnabled = true
 		this.hintDismissed = false
 		this.tutorialStepIndex = -1
@@ -556,7 +559,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		
 		if (this.tutorialStepIndex === TUTORIAL_STEPS.length - 1) {
 			// User reached the last tutorial screen
-			window.ga('send', 'event', 'tutorial', 'complete')
+			window.ga('send', 'event', 'tutorial', 'tutorial-complete')
 		}
 		
 		this.tutorialStep = currentStep
@@ -721,6 +724,12 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		dialogRef.componentInstance.createShareableLink(this.challenge)
 	}
 	
+	onReturn() {
+		if (window['fs-out']) {
+			window['fs-out']()
+		}
+	}
+	
 	isCustom() {
 		return this.challenge.type === CHALLENGE_TYPE.CUSTOM
 	}
@@ -728,5 +737,4 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	isMobile() {
 		return document.body.classList.contains('mobile')
 	}
-	
 }

@@ -34,37 +34,6 @@
 	</a>
 
 	<div class="filler"></div>
-
-	<a (click)="toggleFullscreen()">
-		<template [ngIf]="!fullscreen">
-			<md-icon>fullscreen</md-icon>
-			<span class="hidden-mobile">
-				Maximize
-			</span>
-		</template>
-		<template [ngIf]="fullscreen">
-			<md-icon>fullscreen_exit</md-icon>
-			<span class="hidden-mobile">
-				Restore
-			</span>
-		</template>
-	</a>
-
-
-	<!--
-	<a id="menu-user-status"> <!--md-icon-button [md-menu-trigger-for]="menu"
-		<img [src]="auth.user.avatarUrl">
-		<span class="hidden-small">
-			{{ auth.user.username }}
-		</span>
-		<md-icon>arrow_drop_down</md-icon>
-	</a>
-	md-menu id="user-menu" #menu="mdMenu" x-position="after">
-		<button md-menu-item> Refresh </button>
-		<button md-menu-item> Settings </button>
-		<button md-menu-item> Help </button>
-		<button md-menu-item disabled> Sign Out </button>
-	</md-menu-->
 </md-toolbar>
 
 <div id="main-container">

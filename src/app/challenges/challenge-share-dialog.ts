@@ -66,7 +66,7 @@ export class ChallengeShareDialogComponent implements OnInit, AfterViewInit {
 	}
 	
 	socialShare(target: any) {
-		window.ga('send', 'event', 'challenge', 'shared')
+		window.ga('send', 'event', 'challenge', 'challenge-shared')
 		const sharer = new Sharer(target._elementRef.nativeElement)
 		sharer.share()
 	}
@@ -77,7 +77,7 @@ export class ChallengeShareDialogComponent implements OnInit, AfterViewInit {
 	}
 
 	copyLink() {
-		window.ga('send', 'event', 'challenge', 'shared')
+		window.ga('send', 'event', 'challenge', 'challenge-shared')
 		let copyTextarea = document.querySelector('#link') as HTMLTextAreaElement
 		copyTextarea.select()
 		

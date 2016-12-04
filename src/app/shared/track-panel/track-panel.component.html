@@ -24,6 +24,7 @@
 							(ballChange)="onTrackBallChange($event)"
 							(change)="onTrackChange($event)"
 							[mode]="mode" [postsSetup]="setup.posts" [position]="setup.position"
+			        [class.rolling]="rolling"
 			></gt-track>
 			<gt-scale id="position-scale"
 			          [class.pulsing-scale]="requestingSelectionOf === 's'"

@@ -137,7 +137,6 @@ md-card-content {
   width: 100%;
   top: 0;
   bottom: 0;
-  padding: 16px;
   box-sizing: border-box;
 
   transform: scale(.6);
@@ -148,6 +147,13 @@ md-card-content {
     transform: scale(1);
     visibility: visible;
     transition: transform 150ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+  }
+
+  #message-box-wrapper {
+    padding: 16px;
+    overflow: auto;
+    height: calc(100% - 32px);
+    box-sizing: border-box;
   }
 
   #message-close {
