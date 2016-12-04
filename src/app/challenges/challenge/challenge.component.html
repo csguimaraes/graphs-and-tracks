@@ -34,7 +34,6 @@
 				<div id="challenge-help" class="card-header-actions card-header-actions-full">
 					<span id="button-back" class="action"
 					      [routerLink]="['../']"
-					      (click)="onReturn()"
 					      title="Back to the challenges list"
 					>
 						<md-icon small>keyboard_return</md-icon>
@@ -132,6 +131,12 @@
 						<div id="message-actions">
 							<template [ngIf]="message?.type === 'tutorial'">
 								<span class="link" (click)="endTutorial()">End Tutorial</span>
+								<span class="button button-back"
+								      *ngIf="tutorialHasPrevious() && tutorialHasNext()"
+								      (click)="tutorialPreviousStep()">
+									<md-icon>chevron_left</md-icon>
+									Back
+								</span>
 								<span class="button"
 								      *ngIf="tutorialHasNext()"
 								      [class.disabled]="tutorialRequires.length"

@@ -87,6 +87,12 @@ $track-height: calc(100% - (#{$scale-height} * 2) - 8px);
   background: #F8FFED;
 }
 
+gt-scale {
+  &.pulsing-scale /deep/ #slider {
+    animation: pulse 600ms linear infinite;
+  }
+}
+
 //#track-controls {
 //  height: $track-controls-height;
 //  overflow: hidden;

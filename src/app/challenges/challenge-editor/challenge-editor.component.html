@@ -1,5 +1,6 @@
-<md-grid-list card-no-pad card-fill rowHeight="fit" cols="12" gutterSize="8px">
-	<md-grid-tile colspan="3" rowspan="7">
+<md-grid-list card-no-pad card-fill rowHeight="fit" cols="12"
+              [gutterSize]="isMobile() ? '0px' : '8px'">
+	<md-grid-tile colspan="5" [rowspan]="isMobile() ? 6 : 5">
 		<md-card id="info-card">
 			<div class="content-wrapper">
 				<div class="card-header">
@@ -13,48 +14,61 @@
 				</div>
 				
 				<md-card-content class="card-content-with-header">
-					<md-input id="challenge-name" maxlength="16" placeholder="Challenge Name" [(ngModel)]="name"></md-input>
-					<br><br>
+					<div class="form-wrapper">
+						<md-input id="challenge-name" maxlength="16" placeholder="Challenge Name" [(ngModel)]="name"></md-input>
+						<br>
+						<md-radio-group id="challenge-difficulty" [(ngModel)]="difficulty" [selected]="defaultOption">
+							<md-radio-button [value]="0">
+								<gt-challenge-difficulty
+												[level]="0"
+												[full]="true"
+								></gt-challenge-difficulty>
+							</md-radio-button>
+							<md-radio-button [value]="1" #defaultOption>
+								<gt-challenge-difficulty
+												[level]="1"
+												[full]="true"
+								></gt-challenge-difficulty>
+							</md-radio-button>
+							<md-radio-button [value]="2">
+								<gt-challenge-difficulty
+												[level]="2"
+												[full]="true"
+								></gt-challenge-difficulty>
+							</md-radio-button>
+						</md-radio-group>
+					</div>
 
-					<md-radio-group id="challenge-difficulty" [(ngModel)]="difficulty" [selected]="defaultOption">
-						<md-radio-button [value]="0">
-							<gt-challenge-difficulty
-											[level]="0"
-											[full]="true"
-							></gt-challenge-difficulty>
-						</md-radio-button>
-						<md-radio-button [value]="1" #defaultOption>
-							<gt-challenge-difficulty
-											[level]="1"
-											[full]="true"
-							></gt-challenge-difficulty>
-						</md-radio-button>
-						<md-radio-button [value]="2">
-							<gt-challenge-difficulty
-											[level]="2"
-											[full]="true"
-							></gt-challenge-difficulty>
-						</md-radio-button>
-					</md-radio-group>
+					<div id="challenge-help" class="card-header-actions card-header-actions-full">
+						<span id="button-back" class="action"
+						      [routerLink]="['../']"
+						      title="Back to the challenges list"
+						>
+							<md-icon small>keyboard_return</md-icon>
+							<span class="hidden-small">BACK</span>
+						</span>
 
-					<br><br>
+						<span id="button-tutorial" class="action" title="Learn how to solve a challenge"
+						      [class.disabled]="!canSave()" (click)="save()"
+							>
+								<md-icon small>save</md-icon>
 
-					<button id="button-save" md-button md-raised-button color="primary" [disabled]="!canSave()" (click)="save()">
-						SAVE
-					</button>
+								<span class="hidden-small">SAVE</span>
+						</span>
+					</div>
 				</md-card-content>
 			</div>
 		</md-card>
 	</md-grid-tile>
 	
-	<md-grid-tile colspan="9" rowspan="7">
+	<md-grid-tile colspan="7" [rowspan]="isMobile() ? 6 : 5">
 		<gt-graphs-panel
 				[mode]="challenge.mode" [goal]="goalMotion"
 				(change)="onGraphPanelChange($event)"
 		></gt-graphs-panel>
 	</md-grid-tile>
 
-	<md-grid-tile colspan="12" rowspan="5">
+	<md-grid-tile colspan="12" [rowspan]="isMobile() ? 6 : 7">
 		<gt-track-panel
 				[mode]="goalMotion.mode"
 				(abort)="onAbort()" (roll)="onRollBall($event)" (change)="onTrackPanelChange($event)"

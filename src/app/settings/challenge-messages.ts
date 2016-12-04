@@ -6,12 +6,6 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		content: `
 			Your mission is to discover the motion of a rolling ball by using the
 			information provided in graphs of position, velocity and acceleration.
-			<br> <br>
-			This is a long text, This is a long text, This is a long text, This is a long text.
-			<br> <br>
-			This is a long text, This is a long text, This is a long text, This is a long text.
-			<br> <br>
-			This is a long text, This is a long text, This is a long text, This is a long text.
 		`
 	},
 	{
@@ -24,7 +18,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			Click on the <b class="b">ROLL BALL</b> button.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON],
-		triggers: [UI_CONTROL.POSITION_GRAPH, UI_CONTROL.TUTORIAL_NEXT_ON_ANIMATION_END]
+		triggers: [UI_CONTROL.POSITION_GRAPH]
 	},
 	{
 		title: 'Motion graphs',
@@ -37,12 +31,28 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Position graph',
 		content: `
-			On the <b class="s">POSITION</b> graph, note that in general, the actual motion (<span class="solid">solid line</span>)
-			does NOT match the given graph (<span class="dashed">dashed line</span>).
-			<br>
-			Your task is to match the graphs.<br>
-			<br>
-			Now select the <b class="v">VELOCITY</b> graph.
+			The vertical axis of the <b class="s">POSITION</b> vs. time graph corresponds to the horizontal position of the ball.
+		`,
+		requires: [],
+		triggers: []
+	},
+	{
+		title: 'Finding the right place',
+		content: `
+			Note the scale of <b class="s">Initial Position</b> directly below the tracks.
+			<br> <br>
+			You can set the starting position of the ball by clicking on new position values, dragging the ball,
+			or by dragging the scale pointers. Try it!
+		`,
+		requires: [UI_CONTROL.POSITION_SCALE],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT]
+	},
+	{
+		title: 'Finding the right place',
+		content: `
+			The position vs. time graph shows what direction the ball travels. An upward line means going to the right.
+			<br> <br>
+			When ready, click on <b class="v">VELOCITY</b> to see a graph of velocity vs. time.
 		`,
 		requires: [UI_CONTROL.VELOCITY_GRAPH],
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
@@ -52,34 +62,12 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		content: `
 			Here is the <b class="v">VELOCITY</b> graph for this first example of motion. <br> 
 			Can you see places where the speed changes? Or stays the same for a period of time?
-			
-			<br> <br>
-			When ready to continue, click on <b class="a">ACCELERATION</b>.
 		`,
-		requires: [UI_CONTROL.ACCELERATION_GRAPH],
-		triggers: [UI_CONTROL.TUTORIAL_NEXT]
+		requires: [],
+		triggers: []
 	},
 	{
-		title: 'Acceleration graph',
-		content: `
-			Try experimenting with graphs of acceleration vs. time by adjusting the inclinations of the ramps and rolling the ball.
-		`,
-		requires: [UI_CONTROL.POSITION_GRAPH],
-		triggers: [UI_CONTROL.TUTORIAL_NEXT]
-	},
-	{
-		title: 'Finding the right place',
-		content: `
-			Note the scale of <b class="s">Initial Position</b> directly below the tracks.
-			<br> <br>
-			You can set the starting position of the ball by clicking on new position values
-			or by dragging the scale pointers. Drag the pointers rather than the ball itself.
-		`,
-		requires: [UI_CONTROL.POSITION_SCALE],
-		triggers: [UI_CONTROL.TUTORIAL_NEXT]
-	},
-	{
-		title: 'Setting initial speed and direction',
+		title: 'Initial speed and direction',
 		content: `
 			In some challenge motions, the ball may already be moving at time t=0.
 			<br> <br>
@@ -91,12 +79,28 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
 	},
 	{
+		title: 'Initial speed and direction',
+		content: `
+			Try different initial  velocities (positive and negative) and see what happens.
+			<br> <br>
+			When ready, click on <b class="a">ACCELERATION</b>.
+		`,
+		requires: [UI_CONTROL.ACCELERATION_GRAPH],
+		triggers: [UI_CONTROL.TUTORIAL_NEXT]
+	},
+	{
+		title: 'Acceleration graph',
+		content: `
+			The acceleration vs. time graph shows when the acceleration of the ball is positive (to the right), negative (to the left) or zero (constant velocity).
+		`,
+		requires: [],
+		triggers: []
+	},
+	{
 		title: 'Change the track setup',
 		content: `
 			Drag the top of a <b>POST</b> to raise or lower it, or simply tap above or below to increase or decrease its <b>height</b>.
 			The height of each post is displayed at its base.
-			<br>
-			Try rolling the ball along different track arrangements.
 		`,
 		requires: [UI_CONTROL.TRACK_POST_ANY],
 		triggers: []
@@ -111,7 +115,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			Acceleration graphs will help you for find out how steep to make your ramps.
 		`,
 		requires: [UI_CONTROL.ROLL_BUTTON],
-		triggers: [UI_CONTROL.ACCELERATION_GRAPH, UI_CONTROL.TUTORIAL_NEXT_ON_ANIMATION_END]
+		triggers: [UI_CONTROL.ACCELERATION_GRAPH]
 	},
 	{
 		title: 'One step at a time',
@@ -141,12 +145,6 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 			With hints enabled, we will provide guidance on how to improve your current setup.
 			<br> <br>
 			You can select the <b>tutorial</b> button for instructions on how to use the program.
-			<br> <br>
-			This is a long text, This is a long text, This is a long text, This is a long text.
-			<br> <br>
-			This is a long text, This is a long text, This is a long text, This is a long text.
-			<br> <br>
-			This is a long text, This is a long text, This is a long text, This is a long text.
 		`
 	},
 	position: {

@@ -94,3 +94,12 @@ md-dialog-container {
     }
   }
 }
+
+.md-radio-container {
+  display: none !important;
+}
+
+md-radio-button:not(.md-radio-checked) * {
+  color: silver !important;
+}
+

@@ -25,7 +25,7 @@ const SETUP_STORAGE_KEY = 'latest-track-setup'
 export class ChallengeEditorComponent implements OnInit {
 	@ViewChild(TrackPanelComponent)
 	trackPanel: TrackPanelComponent
-
+	
 	@ViewChild(GraphsPanelComponent)
 	graphsPanel: GraphsPanelComponent
 
@@ -57,6 +57,10 @@ export class ChallengeEditorComponent implements OnInit {
 		this.graphsPanel.hideGoal = true
 		this.loadChallengeById(this.challengeId)
 		this.loadTrackSetup()
+		
+		if (window['fs']) {
+			window['fs']()
+		}
 	}
 
 	onRollBall(setup: MotionSetup) {
@@ -243,5 +247,9 @@ export class ChallengeEditorComponent implements OnInit {
 		this.challenges.save(this.challenge)
 		window.ga('send', 'event', 'challenge', 'challenge-created')
 		this.router.navigateByUrl('/challenges')
+	}
+	
+	isMobile() {
+		return document.body.classList.contains('mobile')
 	}
 }

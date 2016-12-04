@@ -16,7 +16,10 @@ const SETUP_STORAGE_KEY = 'latest-track-setup'
 @Component({
 	selector: 'gt-challenge',
 	templateUrl: 'challenge-practice.component.html',
-	styleUrls: ['challenge-practice.component.scss']
+	styleUrls: [
+		'../challenge/challenge.component.scss',
+		'challenge-practice.component.scss'
+	]
 })
 export class ChallengePracticeComponent implements OnInit {
 	@ViewChild(TrackPanelComponent)
@@ -49,6 +52,10 @@ export class ChallengePracticeComponent implements OnInit {
 		this.graphsPanel.hideGoal = true
 		this.loadChallengeById(this.challengeId)
 		this.loadTrackSetup()
+		
+		if (window['fs']) {
+			window['fs']()
+		}
 	}
 
 	onRollBall(setup: MotionSetup) {
@@ -208,5 +215,9 @@ export class ChallengePracticeComponent implements OnInit {
 
 	loadTrackSetup() {
 		this.trackPanel.setup = lodash.cloneDeep(INITIAL_SETUP)
+	}
+	
+	isMobile() {
+		return document.body.classList.contains('mobile')
 	}
 }

@@ -288,6 +288,10 @@ md-card-content {
 .tutorial {
   background: #CEF;
   & .button { color: #CEF; background: dodgerblue; }
+  .button-back {
+    margin-right: 8px;
+    animation: none !important;
+  }
   #message-title, & .link { color: dodgerblue; }
   #message-actions, #message-close { background: lighten(dodgerblue, 40); }
 }

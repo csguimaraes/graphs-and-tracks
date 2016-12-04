@@ -544,6 +544,15 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 		return this.tutorialStepIndex < (TUTORIAL_STEPS.length - 1)
 	}
 	
+	tutorialHasPrevious() {
+		return this.tutorialStepIndex > 0
+	}
+	
+	tutorialPreviousStep() {
+		this.tutorialStepIndex -= 2
+		this.tutorialNextStep()
+	}
+	
 	tutorialNextStep() {
 		if (this.tutorialWaitingAnimationEnd) {
 			// If the user manually clicks next before the animation ends
@@ -722,12 +731,6 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	onShare() {
 		let dialogRef = this.dialog.open(ChallengeShareDialogComponent)
 		dialogRef.componentInstance.createShareableLink(this.challenge)
-	}
-	
-	onReturn() {
-		if (window['fs-out']) {
-			window['fs-out']()
-		}
 	}
 	
 	isCustom() {

@@ -22,4 +22,9 @@ export class HomeComponent implements OnInit {
 			this.router.navigateByUrl(`/challenges/tutorial`)
 		}
 	}
+	
+	debug = () => {
+		let msg = `Screen width: ${window.innerWidth}\nUser agent: ${navigator.userAgent}`
+		alert(msg)
+	}
 }
