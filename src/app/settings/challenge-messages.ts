@@ -42,7 +42,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 			Note the scale of <b class="s">Initial Position</b> directly below the tracks.
 			<br> <br>
 			You can set the starting position of the ball by clicking on new position values, dragging the ball,
-			or by dragging the scale pointers. Try it!
+			or dragging the scale pointers. Try it!
 		`,
 		requires: [UI_CONTROL.POSITION_SCALE],
 		triggers: [UI_CONTROL.TUTORIAL_NEXT]
