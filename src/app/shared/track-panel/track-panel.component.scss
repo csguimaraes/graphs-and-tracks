@@ -23,6 +23,12 @@ $track-height: calc(100% - (#{$scale-height} * 2) - 8px);
   left: 0;
   right: 0;
   display: flex;
+}
+
+#panel-wrapper {
+  & > * {
+    height: 100%;
+  }
 
   #track-labels {
     flex: 0 1 auto;

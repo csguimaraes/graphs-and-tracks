@@ -23,7 +23,7 @@ module.exports = function makeWebpackConfig() {
 	 */
 	let config = {}
 
-	config.devtool = 'source-map'
+	config.devtool = isProd ? undefined : 'source-map'
 
 	// add debug messages
 	config.debug = !isProd

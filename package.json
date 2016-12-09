@@ -54,6 +54,7 @@
     "raw-loader": "*",
     "rimraf": "*",
     "sass-loader": "*",
+    "string-replace-loader": "^1.0.5",
     "style-loader": "*",
     "ts-helpers": "*",
     "ts-loader": "*",
