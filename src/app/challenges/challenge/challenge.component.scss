@@ -2,6 +2,20 @@ $color-s: lighten(orangered, 10);
 $color-v: lighten(forestgreen, 10);
 $color-a: lighten(steelblue, 10);
 
+.mobile {
+  :host {
+    height: calc(100% - 0px);
+    overflow: hidden;
+  }
+}
+
+:host {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 8px);
+  display: block;
+}
+
 md-card-content {
   position: relative;
 }

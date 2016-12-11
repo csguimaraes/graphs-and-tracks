@@ -40,8 +40,9 @@ export class AppComponent {
 	
 	tryFullscreenForMobile = () => {
 		let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-		if (isMobile || window.innerWidth < 1024) {
+		if (isMobile && window.innerWidth < 1024) {
 			document.body.classList.add('mobile')
+			document.body.classList.add('no-toolbar')
 			if (this.fullscreen === false) {
 				this.toggleFullscreen()
 			}
@@ -49,9 +50,16 @@ export class AppComponent {
 	}
 	
 	exitFullscreen = () => {
+		if (this.fullscreen === true) {
+			document.body.classList.remove('no-toolbar')
+		}
+		
+		/*
+		NOTE: Disabled for now
 		document.body.classList.remove('mobile')
 		if (this.fullscreen === true) {
 			this.toggleFullscreen()
 		}
+	    */
 	}
 }

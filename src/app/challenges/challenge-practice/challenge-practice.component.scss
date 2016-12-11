@@ -6,13 +6,21 @@ md-card-content {
   position: relative;
 }
 
-#info-card {
+#info-card.challenge-practice {
   .card-header md-icon {
     vertical-align: top !important;
   }
 
   md-card-content {
-    padding: 16px !important;
+    padding: 16px;
+
+    /deep/ .mobile & {
+      padding: 8px !important;
+      overflow: scroll;
+      font-size: 14px !important;
+      height: calc(100% - 46px);
+    }
+
 
     h3 {
       color: #009688 !important;

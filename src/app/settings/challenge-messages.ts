@@ -99,8 +99,10 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Change the track setup',
 		content: `
-			Drag the top of a <b>POST</b> to raise or lower it, or simply tap above or below to increase or decrease its <b>height</b>.
-			The height of each post is displayed at its base.
+			Tap just above or below the top of a <b>post</b> to raise or lower it. <br> <br>
+			Or drag the top up or down to increase or decrease its <b>height</b>. <br> <br>
+			The <b>height</b> of each <b>post</b> is displayed at its base. <br> <br>
+			
 		`,
 		requires: [UI_CONTROL.TRACK_POST_ANY],
 		triggers: []

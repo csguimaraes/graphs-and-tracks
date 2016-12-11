@@ -14,16 +14,26 @@
   }
 }
 
-#portrait-message {
-  display: none;
-  position: absolute;
-  top: 50%;
-  width: 80%;
-  margin: 0 auto;
-  transform: translateY(-50%) translateX(-50%);
-  left: 50%;
+#portrait-message-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
   text-align: center;
+  padding-top: 10%;
+  box-sizing: border-box;
+}
+
+#portrait-message {
+  width: 100vh;
+  max-width: 100vw;
   opacity: .3;
+  outline: 3px solid;
+  height: 100%;
+  max-height: 80%;
+  display: none;
 
   svg {
     width: 80%;
@@ -40,12 +50,12 @@
   }
 
   #portrait-message {
-    display: block !important;
+    display: inline-block !important;
   }
 }
 
 
-body.mobile {
+body.no-toolbar {
   md-toolbar {
     display: none !important;
   }
@@ -54,7 +64,9 @@ body.mobile {
     padding: 0 !important;
     height: 100% !important;
   }
+}
 
+body.mobile {
   gt-track-panel {
     gt-scale span {
       padding: 0 !important;
@@ -121,6 +133,10 @@ body.mobile {
     }
   }
 
+  .card-header-actions.card-header-actions-full {
+    border-radius: 0 8px 0 0 !important;
+  }
+
   .challenge-status-container {
     &, & * {
       padding: 0 !important;
@@ -147,7 +163,7 @@ body.mobile {
   #info-card {
     background: #F8FFED !important;
     .content-wrapper {
-      background: white;
+      background: #F8FFED !important;
       border-radius: 0 0 8px 0;
       overflow: hidden;
     }
