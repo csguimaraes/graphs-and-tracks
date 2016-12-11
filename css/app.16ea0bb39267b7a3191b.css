@@ -734,7 +734,7 @@ html, body {
 
 #main-container {
   padding: 8px;
-  height: calc(100% - 40px);
+  height: calc(100% - 32px);
   box-sizing: border-box; }
 @media screen and (max-width: 960px) {
   .hidden-small {
@@ -746,16 +746,25 @@ html, body {
   .hidden-mobile {
     display: none !important; } }
 
-#portrait-message {
-  display: none;
-  position: absolute;
-  top: 50%;
-  width: 80%;
-  margin: 0 auto;
-  transform: translateY(-50%) translateX(-50%);
-  left: 50%;
+#portrait-message-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
   text-align: center;
-  opacity: .3; }
+  padding-top: 10%;
+  box-sizing: border-box; }
+
+#portrait-message {
+  width: 100vh;
+  max-width: 100vw;
+  opacity: .3;
+  outline: 3px solid;
+  height: 100%;
+  max-height: 80%;
+  display: none; }
   #portrait-message svg {
     width: 80%;
     filter: blur(1px); }
@@ -766,12 +775,12 @@ html, body {
     pointer-events: none !important;
     opacity: 0 !important; }
   #portrait-message {
-    display: block !important; } }
+    display: inline-block !important; } }
 
-body.mobile md-toolbar {
+body.no-toolbar md-toolbar {
   display: none !important; }
 
-body.mobile #main-container {
+body.no-toolbar #main-container {
   padding: 0 !important;
   height: 100% !important; }
 
@@ -820,6 +829,9 @@ body.mobile .card-header {
   body.mobile .card-header span:last-child md-icon, body.mobile .card-header span:first-child md-icon {
     line-height: 18px !important; }
 
+body.mobile .card-header-actions.card-header-actions-full {
+  border-radius: 0 8px 0 0 !important; }
+
 body.mobile .challenge-status-container, body.mobile .challenge-status-container * {
   padding: 0 !important;
   font-size: 16px !important;
@@ -840,7 +852,7 @@ body.mobile md-card {
 body.mobile #info-card {
   background: #F8FFED !important; }
   body.mobile #info-card .content-wrapper {
-    background: white;
+    background: #F8FFED !important;
     border-radius: 0 0 8px 0;
     overflow: hidden; }
   body.mobile #info-card #message-box {
@@ -931,3 +943,10 @@ md-dialog-container {
 
 md-radio-button:not(.md-radio-checked) * {
   color: silver !important; }
+
+gt-app {
+  height: 100%;
+  display: block; }
+
+html, body, gt-app, #main-container {
+  overflow: hidden !important; }
