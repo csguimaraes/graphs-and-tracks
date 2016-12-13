@@ -8,6 +8,10 @@ $ball-margin: 20px;
 
 #graph-header {
   & > span {
+    &:not(.graph-selector) {
+      opacity: 0;
+    }
+
     &.graph-selector {
       &:hover {
         background: #E0E0E0;

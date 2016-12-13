@@ -740,4 +740,8 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	isMobile() {
 		return document.body.classList.contains('mobile')
 	}
+	
+	stopPropagation(e: TouchEvent) {
+		e.stopPropagation()
+	}
 }

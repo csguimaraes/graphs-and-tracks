@@ -119,7 +119,7 @@
 					</div>
 					
 					<div id="message-box" class="{{ message ? message.type : 'invisible' }}">
-						<div id="message-box-wrapper">
+						<div (touchmove)="stopPropagation($event)" id="message-box-wrapper">
 							<b id="message-title">
 								<md-icon [innerHTML]="message?.icon"></md-icon>
 								<span [innerHTML]="message?.title"></span>

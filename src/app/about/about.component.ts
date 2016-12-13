@@ -14,4 +14,8 @@ export class AboutComponent implements OnInit {
 			window['fs-out']()
 		}
 	}
+	
+	stopPropagation(e: TouchEvent) {
+		e.stopPropagation()
+	}
 }

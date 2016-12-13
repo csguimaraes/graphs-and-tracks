@@ -269,4 +269,8 @@ export class TrackPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 	toggleZoom() {
 		this.zoom.emit('track')
 	}
+	
+	isMobile() {
+		return document.body.classList.contains('mobile')
+	}
 }

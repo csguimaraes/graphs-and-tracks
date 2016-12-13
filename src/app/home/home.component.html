@@ -1,46 +1,44 @@
-<div>
-	<md-card>
-		<md-card-title [routerLink]="'/about'" class="flex-vcenter">
-			<md-icon>multiline_chart</md-icon>
-			<span>Graphs and Tracks</span>
-		</md-card-title>
-		<md-card-content>
-			<p class="primary" (click)="debug()">
-				A simulation designed for math and physics students to help develop <br class="hide-sw">
-				an intuitive understanding of graphs of position, velocity and acceleration
-			</p>
-			<p>
-				Test your understanding of one-dimensional motion by <br class="hide-sw">
-				interpreting graphs and producing motions.
-			</p>
-			
-			<br>
-			
-			<md-list>
-				<md-list-item [routerLink]="'/challenges/tutorial'">
-					<md-icon md-list-avatar>school</md-icon>
-					<h3 md-line>Tutorial</h3>
-					<p md-line>
-						Learn how the program works
-					</p>
-				</md-list-item>
-				
-				<md-list-item [routerLink]="'/challenges/practice'">
-					<md-icon md-list-avatar>gps_fixed</md-icon>
-					<h3 md-line>Practice</h3>
-					<p md-line>
-						Get comfortable with using the program
-					</p>
-				</md-list-item>
-				
-				<md-list-item [routerLink]="'/challenges'">
-					<md-icon md-list-avatar>star</md-icon>
-					<h3 md-line>Challenges</h3>
-					<p md-line>
-						Browse all the available challenges
-					</p>
-				</md-list-item>
-			</md-list>
-		</md-card-content>
-	</md-card>
-</div>
+<md-card class="with-scroller">
+	<md-card-title [routerLink]="'/about'" class="flex-vcenter">
+		<md-icon>multiline_chart</md-icon>
+		<span>Graphs and Tracks</span>
+	</md-card-title>
+	<md-card-content>
+		<p class="primary">
+			A simulation designed for math and physics students to help develop <br class="hide-sw">
+			an intuitive understanding of graphs of position, velocity and acceleration
+		</p>
+		<p>
+			Test your understanding of one-dimensional motion by <br class="hide-sw">
+			interpreting graphs and producing motions.
+		</p>
+
+		<br>
+
+		<md-list>
+			<md-list-item [routerLink]="'/challenges/tutorial'">
+				<md-icon md-list-avatar>school</md-icon>
+				<h3 md-line>Tutorial</h3>
+				<p md-line>
+					Learn how the program works
+				</p>
+			</md-list-item>
+
+			<md-list-item [routerLink]="'/challenges/practice'">
+				<md-icon md-list-avatar>gps_fixed</md-icon>
+				<h3 md-line>Practice</h3>
+				<p md-line>
+					Get comfortable with using the program
+				</p>
+			</md-list-item>
+
+			<md-list-item [routerLink]="'/challenges'">
+				<md-icon md-list-avatar>star</md-icon>
+				<h3 md-line>Challenges</h3>
+				<p md-line>
+					Browse all the available challenges
+				</p>
+			</md-list-item>
+		</md-list>
+	</md-card-content>
+</md-card>

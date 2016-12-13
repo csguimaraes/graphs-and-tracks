@@ -82,15 +82,6 @@ body.mobile {
 
     gt-track, #roll-ball-wrapper {
       height: calc(100% - (28px * 2)) !important;
-      #ball-roller {
-        background: transparent !important;
-        color: crimson !important;
-        animation: none !important;
-      }
-    }
-
-    .track-outline {
-      display: none !important;
     }
   }
 

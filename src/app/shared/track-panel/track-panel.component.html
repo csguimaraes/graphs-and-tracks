@@ -6,7 +6,7 @@
 				<span id="ball-roller" class="slider-info"
 				      [class.pulsing-alt]="requestingSelectionOf === 'b'"
 				      (click)="rollBall()">
-				ROLL BALL
+				ROLL <br *ngIf="isMobile()">BALL
 			</span>
 			</div>
 			<div id="scale-labels">

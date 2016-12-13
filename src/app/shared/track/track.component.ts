@@ -106,6 +106,7 @@ export class TrackComponent implements OnInit, OnChanges, AfterViewInit {
 	}
 
 	onPostDrag(position: number, postIndex: number, commit = false) {
+		console.log(position)
 		position = 1 - position
 		let domain = this.mode.domain.posts
 		let range = domain.max - domain.min

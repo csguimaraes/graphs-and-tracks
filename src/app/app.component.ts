@@ -12,6 +12,12 @@ export class AppComponent {
 	constructor(public auth: AuthService) {
 		window['fs'] = this.tryFullscreenForMobile
 		window['fs-out'] = this.exitFullscreen
+		
+		// document.body.addEventListener('touchmove', function(event) {
+		// 	if (event.preventDefault) {
+		// 		event.preventDefault()
+		// 	}
+		// })
 	}
 		
 	toggleFullscreen() {
