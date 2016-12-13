@@ -4,8 +4,23 @@ div {
 }
 
 md-card {
-  width: auto;
-  display: inline-block;
+  width: 440px;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/deep/ body.mobile gt-home md-card {
+  width: unset !important;
+  padding: 8px !important;
+
+  md-card-content > br {
+    display: none;
+  }
+
+  .md-list-item {
+    height: 48px !important;
+  }
 }
 
 md-card-title {

@@ -35,11 +35,19 @@
 
 	<div class="filler"></div>
 
-	<a [routerLink]="['about']">
-		<md-icon>info_outline</md-icon>
-		<span class="hidden-mobile">
-			About
-		</span>
+	<a (click)="toggleFullscreen()">
+		<template [ngIf]="!fullscreen">
+			<md-icon>fullscreen</md-icon>
+			<span class="hidden-mobile">
+				Maximize
+			</span>
+		</template>
+		<template [ngIf]="fullscreen">
+			<md-icon>fullscreen_exit</md-icon>
+			<span class="hidden-mobile">
+				Restore
+			</span>
+		</template>
 	</a>
 </md-toolbar>
 

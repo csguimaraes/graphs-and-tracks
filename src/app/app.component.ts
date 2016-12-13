@@ -13,11 +13,13 @@ export class AppComponent {
 		window['fs'] = this.tryFullscreenForMobile
 		window['fs-out'] = this.exitFullscreen
 		
-		// document.body.addEventListener('touchmove', function(event) {
-		// 	if (event.preventDefault) {
-		// 		event.preventDefault()
-		// 	}
-		// })
+		document.body.addEventListener('touchmove', function(event) {
+			if (event.preventDefault) {
+				event.preventDefault()
+			}
+		})
+		
+		this.checkForMobile()
 	}
 		
 	toggleFullscreen() {
@@ -41,6 +43,13 @@ export class AppComponent {
 		
 		if (rfs) {
 			rfs.call(el)
+		}
+	}
+	
+	checkForMobile = () => {
+		let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+		if (isMobile && window.innerWidth < 1024) {
+			document.body.classList.add('mobile')
 		}
 	}
 	
