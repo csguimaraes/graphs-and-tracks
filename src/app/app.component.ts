@@ -37,7 +37,7 @@ export class AppComponent {
 			el = document
 			rfs = el['exitFullscreen']
 				|| el['webkitExitFullscreen']
-				|| el['mozExitFullScreen']
+				|| el['mozCancelFullScreen']
 				|| el['msExitFullscreen']
 		}
 		

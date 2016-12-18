@@ -1,6 +1,6 @@
 <md-grid-list card-fill id="challenge-list-grid" cols="5" gutterSize="8px" rowHeight="fit">
 	<md-grid-tile colspan="5">
-		<md-card class="with-scroller">
+		<md-card class="with-scroller" (touchmove)="stopPropagation($event)">
 			<gt-scroller>
 				<md-card-content>
 					<div class="list-actions">

@@ -6,6 +6,14 @@
   md-toolbar {
     font-size: 14px !important;
   }
+
+  #track-labels {
+    width: 75px !important;
+  }
+
+  #track-content {
+    width: calc(100% - 75px) !important;
+  }
 }
 
 @media screen and (max-width: 720px) {

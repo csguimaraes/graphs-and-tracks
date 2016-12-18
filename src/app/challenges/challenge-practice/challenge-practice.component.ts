@@ -220,4 +220,8 @@ export class ChallengePracticeComponent implements OnInit {
 	isMobile() {
 		return document.body.classList.contains('mobile')
 	}
+	
+	stopPropagation(e: TouchEvent) {
+		e.stopPropagation()
+	}
 }

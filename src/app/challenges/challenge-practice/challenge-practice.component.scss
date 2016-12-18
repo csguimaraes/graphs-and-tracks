@@ -14,13 +14,14 @@ md-card-content {
   md-card-content {
     padding: 16px;
 
+    overflow: auto;
+    height: calc(100% - 30px);
+    box-sizing: border-box;
+
     /deep/ .mobile & {
       padding: 8px !important;
-      overflow: scroll;
       font-size: 14px !important;
-      height: calc(100% - 46px);
     }
-
 
     h3 {
       color: #009688 !important;

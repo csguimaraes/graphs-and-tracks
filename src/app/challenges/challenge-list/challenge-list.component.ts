@@ -32,4 +32,8 @@ export class ChallengeListComponent implements OnInit {
 			window['fs-out']()
 		}
 	}
+	
+	stopPropagation(e: TouchEvent) {
+		e.stopPropagation()
+	}
 }

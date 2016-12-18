@@ -20,7 +20,7 @@
 					</span>
 				</div>
 				
-				<md-card-content>
+				<md-card-content (touchmove)="stopPropagation($event)">
 					<h3>Practice Mode</h3>
 					Try making adjustments to the tracks.
 					You can adjust the post heights either by clicking above or below the top of a <b>post</b>, or by dragging up or down.

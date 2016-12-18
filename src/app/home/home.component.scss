@@ -19,7 +19,12 @@ md-card {
   }
 
   .md-list-item {
-    height: 48px !important;
+    height: 44px !important;
+  }
+
+  p {
+    margin: 0 !important;
+    font-size: 12px !important;
   }
 }
 
