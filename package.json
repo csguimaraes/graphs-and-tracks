@@ -1,8 +1,8 @@
 {
-  "name": "gt",
-  "version": "0.0.1",
+  "name": "graphs-and-tracks",
+  "version": "1.0.1",
   "description": "Graphs and Tracks",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "clean": "rimraf node_modules dist && npm cache clean",
