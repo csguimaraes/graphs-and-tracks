@@ -7,8 +7,9 @@ This version of **Graphs and Tracks** has been implemented by [Carlos G.](https:
 It corresponds to _Part I: From Graphs to Motion_ of the [legacy program](https://github.com/davidtro/gt).
 
 <a target="_blank" href="https://www.browserstack.com/" title="Cross Browser Testing Tool. 1000+ Browsers, Mobile, Real IE.">
-    <img src="img/browserstack.svg" width="30%">
+    <img src="public/img/browserstack.svg" width="30%">
 </a>
+
 Thanks to <a target="_blank" href="https://www.browserstack.com/" title="Cross Browser Testing Tool. 1000+ Browsers, Mobile, Real IE.">BrowserStack</a> this app is tested and officially supported on Windows PCs and Macintoshes, as well as on tablets and smartphones running Android, iOS and WP.
 
 ### NOTE TO TEACHERS
