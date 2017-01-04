@@ -2,9 +2,15 @@
 
 **Graphs and Tracks** by [David Trowbridge](https://github.com/davidtro) is based upon research and curriculum development by the Physics Education Group at the University of Washington, and educational software design at the Educational Technology Center at the University of California, Irvine. A software package **Graphs and Tracks** was developed at the Center for Design of Educational Computing at Carnegie Mellon University and at the University of Washington. In 1988, **Graphs and Tracks** was selected as Best Physics and Best Integrated Software by EDUCOM/NCRIPTAL and subsequently published by Physics Academic Software for 22 years.  
 
-This version of **Graphs and Tracks** has been implemented by [Carlos G.](https://github.com/snolflake) as a web application using [Angular 2](https://angular.io/) and [D3.js](https://d3js.org/). The software is free to use and open source, subject to the [MIT license](LICENSE.txt).
+This version of **Graphs and Tracks** has been implemented by [Carlos G.](https://github.com/snolflake) as a web application using [D3.js](https://d3js.org/) and [Angular 2](https://angular.io/). The software is free to use and open source, subject to the [MIT license](LICENSE.txt).
 
-It runs on Windows PCs and Macintoshes, as well as on tablets and smartphones running Android, iOS and WP. It corresponds to _Part I: From Graphs to Motion_ of the [legacy program](https://github.com/davidtro/gt).
+It corresponds to _Part I: From Graphs to Motion_ of the [legacy program](https://github.com/davidtro/gt).
+
+<a target="_blank" href="https://www.browserstack.com/" title="Cross Browser Testing Tool. 1000+ Browsers, Mobile, Real IE.">
+    <img src="img/browserstack.svg" width="30%">
+</a>
+Thanks to <a target="_blank" href="https://www.browserstack.com/" title="Cross Browser Testing Tool. 1000+ Browsers, Mobile, Real IE.">BrowserStack</a> this app is tested and officially supported on Windows PCs and Macintoshes, as well as on tablets and smartphones running Android, iOS and WP.
+
 ### NOTE TO TEACHERS
 
 Students are introduced to the topic of graphs and motion early in their study of physics, but educational research shows that most cannot apply the concepts of position, velocity and acceleration to real motion. **Graphs and Tracks** is a goal-oriented program that underscores the connection between animated motion and graphs. It makes learning about graphs of motion a playful activity.  
