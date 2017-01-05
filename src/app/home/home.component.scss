@@ -13,13 +13,40 @@ md-card {
 /deep/ body.mobile gt-home md-card {
   width: unset !important;
   padding: 8px !important;
+  height: calc(100% - 16px);
 
   md-card-content > br {
     display: none;
   }
 
-  .md-list-item {
-    height: 44px !important;
+  md-list {
+    padding: 0;
+    min-width: unset;
+    margin-top: 16px;
+
+    md-list-item {
+      width: auto;
+      min-width: unset;
+      float: left;
+      padding: 0;
+
+      .md-list-item {
+        height: 44px !important;
+        border: 1px solid #009688;
+        width: auto;
+        float: left;
+        padding: 0 4px;
+        margin: 4px;
+        border-radius: 3px !important;
+      }
+
+      .md-list-text {
+        padding: 0 4px;
+        p[md-line] {
+          display: none !important;
+        }
+      }
+    }
   }
 
   p {

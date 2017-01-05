@@ -69,6 +69,10 @@ md-card .top-actions {
   }
 }
 
+md-toolbar {
+  min-height: unset !important;
+}
+
 md-toolbar, md-toolbar-row {
   min-height: unset !important;
   height: 32px !important;
