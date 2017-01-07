@@ -23,7 +23,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Motion graphs',
 		content: `
-			Your graphs, with <span class="solid">solid lines</span>, should match the challenge graphs, the <span class="dashed">dashed lines</span>.
+			Your graphs, with <span class="solid">solid lines</span>, should match the challenge graphs, 
+			the <span class="dashed">dashed lines</span>.
 		`,
 		requires: [],
 		triggers: [UI_CONTROL.POSITION_GRAPH]
@@ -31,7 +32,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Position graph',
 		content: `
-			The vertical axis of the <b class="s">POSITION</b> vs. time graph corresponds to the horizontal position of the ball.
+			The vertical axis of the <b class="s">POSITION</b> vs. time graph corresponds to the horizontal 
+			position of the ball.
 		`,
 		requires: [],
 		triggers: []
@@ -50,7 +52,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Finding the right place',
 		content: `
-			The position vs. time graph shows what direction the ball travels. An upward line means going to the right.
+			The position vs. time graph shows what direction the ball travels. An upward line indicates motion to the right;
+			a dopwnward line shows motion to the left.
 			<br> <br>
 			When ready, click on <b class="v">VELOCITY</b> to see a graph of velocity vs. time.
 		`,
@@ -60,7 +63,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Velocity graph',
 		content: `
-			Here is the <b class="v">VELOCITY</b> graph for this first example of motion. <br> 
+			Here is the <b class="v">VELOCITY</b> graph for this first example of motion. <br><br> 
 			Can you see places where the speed changes? Or stays the same for a period of time?
 		`,
 		requires: [],
@@ -71,7 +74,9 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 		content: `
 			In some challenge motions, the ball may already be moving at time t=0.
 			<br> <br>
-			Its initial velocity may be positive <span>(to the right)</span> or negative <span>(to the left)</span>, or zero <span>(at rest)</span>.
+			Its initial velocity may be positive <span>(moving to the right)</span> 
+			or negative <span>(moving to the left)</span>, 
+			or zero <span>(at rest)</span>.
 			<br> <br>
 			Use the <b class="v">Initial Velocity</b> scale to set the ball’s starting velocity.
 		`,
@@ -91,7 +96,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 	{
 		title: 'Acceleration graph',
 		content: `
-			The acceleration vs. time graph shows when the acceleration of the ball is positive (to the right), negative (to the left) or zero (constant velocity).
+			The acceleration vs. time graph shows when the acceleration of the ball is positive (to the right), 
+			negative (to the left) or zero (constant velocity).
 		`,
 		requires: [],
 		triggers: []
@@ -154,7 +160,8 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 		content: `
 			Your ball starts at the wrong place.
 			<br> <br>
-			Examine the <b class="s">position graph</b> and read off the <b class="s">initial position</b> <span>(at time t=0)</span>.
+			Examine the <b class="s">position graph</b> and read off the <b class="s">initial position</b> 
+			<span>(at Time t=0)</span>.
 		`
 	},
 	velocity: {
@@ -162,7 +169,8 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 		content: `
 			Use the <b class="v">VELOCITY</b> graph to read off the initial velocity.
 			<br>
-			If the initial velocity is positive, this means the ball is initially rolling to the right; if it’s negative the ball rolls to the left.
+			If the initial velocity is positive, this means the ball is initially rolling to the right; 
+			if it’s negative the ball rolls to the left.
 		`
 	},
 	posts: {
@@ -171,8 +179,8 @@ export const HINT_MESSAGES: { [name: string]: Message } = {
 			The highlighted ramp has the wrong inclination.
 			<br><br>
 			Take a careful look at the <b class="a">acceleration graph</b> to see whether the acceleration
-			on this ramp should be <b>positive</b> <span>(sloping downward to the right)</span>,
-			<b>negative</b> <span>(sloping upward to the right)</span> or <b>zero</b> (level).
+			on this ramp should be <b>positive</b> <span>(ramp slopes downward to the right)</span>,
+			<b>negative</b> <span>(slopes upward to the right)</span> or <b>zero</b> (ramp is level).
 			<br> <br>
 			Holding down the <b class="b">ROLL BALL</b> button will show the motion one segment at a time.
 		`
