@@ -35,7 +35,7 @@
 
 	<div class="filler"></div>
 
-	<a (click)="toggleFullscreen()">
+	<a (click)="toggleFullscreen()" *ngIf="!isIos()">
 		<template [ngIf]="!fullscreen">
 			<md-icon>fullscreen</md-icon>
 			<span class="hidden-mobile">

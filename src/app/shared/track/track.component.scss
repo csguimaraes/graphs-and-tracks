@@ -18,6 +18,11 @@ svg {
 }
 
 svg /deep/ {
+
+  * {
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+  }
+
   .track-line, .track-outline {
     fill: none;
     stroke: $track-color;

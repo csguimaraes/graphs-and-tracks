@@ -1,5 +1,8 @@
 import 'ie-shim'
 
+const CLASS_LIST = require('classlist.js')
+console.log(CLASS_LIST)
+
 import 'core-js/es6/symbol'
 import 'core-js/es6/object'
 import 'core-js/es6/function'

@@ -53,6 +53,18 @@ export class AppComponent {
 		}
 	}
 	
+	isIos() {
+		return /iP/.test(navigator.userAgent)
+	}
+	
+	isIphone() {
+		return /iPhone/.test(navigator.userAgent)
+	}
+	
+	isSafari() {
+		return /safari/i.test(navigator.userAgent)
+	}
+	
 	tryFullscreenForMobile = () => {
 		let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 		if (isMobile && window.innerWidth < 1024) {
