@@ -730,6 +730,7 @@ html, body {
   font-family: 'Roboto', 'Helvetica Neue', sans-serif; }
 
 * {
+  -webkit-text-size-adjust: 100% !important;
   cursor: default; }
 
 #main-container {
@@ -919,8 +920,11 @@ md-card .top-actions {
     cursor: pointer;
     font-size: 18px !important; }
 
+md-toolbar {
+  min-height: unset !important; }
+
 md-toolbar, md-toolbar-row {
-  min-height: unset !important;
+  min-height: 32px !important;
   height: 32px !important;
   line-height: 32px !important;
   font-size: 18px !important; }
