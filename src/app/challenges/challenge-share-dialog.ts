@@ -14,7 +14,7 @@ const Sharer: any = require('sharer.npm.js')
 			<md-card-content>
 				Share this challenge and see if someone else can solve it!
 				Here is the link for your challenge: <br>
-				<textarea name="link" id="link" cols="70" rows="1">{{ link }}</textarea>
+				<textarea name="link" id="link" cols="70" rows="2">{{ link }}</textarea>
 			</md-card-content>
 			<md-card-actions>
 				<button #twitterButton md-button md-raised-button type="button" (click)="socialShare(twitterButton)"
