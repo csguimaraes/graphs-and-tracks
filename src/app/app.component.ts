@@ -37,7 +37,7 @@ export class AppComponent {
 			el = document
 			rfs = el['exitFullscreen']
 				|| el['webkitExitFullscreen']
-				|| el['mozCancelFullScreen']
+				|| el['mozFullScreen']
 				|| el['msExitFullscreen']
 		}
 		
@@ -47,7 +47,7 @@ export class AppComponent {
 	}
 	
 	checkForMobile = () => {
-		let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+		let isMobile = /iPhone|Android/i.test(navigator.userAgent)
 		if (isMobile && window.innerWidth < 1024) {
 			document.body.classList.add('mobile')
 		}

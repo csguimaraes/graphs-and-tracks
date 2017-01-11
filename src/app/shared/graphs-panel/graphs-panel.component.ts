@@ -285,7 +285,7 @@ export class GraphsPanelComponent implements OnInit, OnChanges, AfterViewInit, O
 		// Add the X Axis
 		let axisX = d3
 			.axisBottom(scaleX)
-			.tickValues([5, 10, 15, 20, 25]) // FIXME: should be based on simulation duration
+			.tickValues([0, 5, 10, 15, 20, 25])
 		
 		if (this.mainGroup) {
 			this.mainGroup.selectAll('.axis').remove()
