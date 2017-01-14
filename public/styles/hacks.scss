@@ -115,3 +115,9 @@ gt-app {
 html, body, gt-app, #main-container:not(.scrollabe) {
   overflow: hidden !important;
 }
+
+.share-icon {
+  width: 16px;
+  opacity: .8;
+  vertical-align: sub !important;
+}

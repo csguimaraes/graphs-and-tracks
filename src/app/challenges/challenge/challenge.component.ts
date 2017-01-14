@@ -714,7 +714,7 @@ export class ChallengeComponent implements OnInit, AfterViewInit {
 	
 	onRemove() {
 		let dialogRef = this.dialog.open(ConfirmationDialogComponent)
-		dialogRef.componentInstance.question = `Delete challenge <b>${this.challenge.name}</b>?`
+		dialogRef.componentInstance.message = `Delete challenge <b>${this.challenge.name}</b>?`
 		dialogRef.componentInstance.icon = 'delete_forever'
 		dialogRef.componentInstance.action = 'Delete'
 		

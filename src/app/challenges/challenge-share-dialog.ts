@@ -8,9 +8,7 @@ const Sharer: any = require('sharer.npm.js')
 
 @Component({
 	selector: 'gt-challenge-share',
-	template: `
-	
-	`,
+	templateUrl: 'challenge-share-dialog.html',
 	styleUrls: ['challenge-share-dialog.scss']
 })
 export class ChallengeShareDialogComponent implements OnInit, AfterViewInit {

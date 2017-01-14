@@ -1,5 +1,7 @@
 import { Component } from '@angular/core'
 import { AuthService } from './shared/auth.service'
+import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component'
+import { MdDialog } from '@angular/material'
 
 @Component({
 	selector: 'gt-app',
@@ -9,7 +11,7 @@ import { AuthService } from './shared/auth.service'
 export class AppComponent {
 	fullscreen = false
 	
-	constructor(public auth: AuthService) {
+	constructor(public auth: AuthService, public dialog: MdDialog) {
 		window['fs'] = this.tryFullscreenForMobile
 		window['fs-out'] = this.exitFullscreen
 		
@@ -19,9 +21,10 @@ export class AppComponent {
 			}
 		})
 		
+		alert(this.isAppMode())
 		this.checkForMobile()
 	}
-		
+	
 	toggleFullscreen() {
 		this.fullscreen = !this.fullscreen
 		let el: any
@@ -37,7 +40,7 @@ export class AppComponent {
 			el = document
 			rfs = el['exitFullscreen']
 				|| el['webkitExitFullscreen']
-				|| el['mozFullScreen']
+				|| el['mozCancelFullScreen']
 				|| el['msExitFullscreen']
 		}
 		
@@ -65,6 +68,21 @@ export class AppComponent {
 		return /safari/i.test(navigator.userAgent)
 	}
 	
+	isAppMode() {
+		let standalone = navigator['standalone'] === true
+		if (!standalone) {
+			try {
+				standalone = window.matchMedia('(display-mode: standalone)').matches
+			} catch (err) {}
+		}
+		
+		return standalone
+	}
+	
+	canInstall() {
+		return this.isIphone() && !this.isAppMode()
+	}
+	
 	tryFullscreenForMobile = () => {
 		let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 		if (isMobile && window.innerWidth < 1024) {
@@ -88,5 +106,15 @@ export class AppComponent {
 			this.toggleFullscreen()
 		}
 	    */
+	}
+	
+	showInstallInfo() {
+		let dialogRef = this.dialog.open(ConfirmationDialogComponent)
+		dialogRef.componentInstance.message = `
+			To have a better user experience, add this page to your Home Screen to use it as a mobile app.
+			<br> <br>
+			Tap the share button <img src="img/share-icon.png" class="share-icon"> and select "Add to Home Screen".
+		`
+		dialogRef.componentInstance.icon = 'delete_forever'
 	}
 }

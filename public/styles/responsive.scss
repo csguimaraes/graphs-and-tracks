@@ -20,6 +20,17 @@
   .hidden-mobile {
     display: none !important;
   }
+
+  md-toolbar a span {
+    font-size: 14px !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media screen and (max-width: 666px) {
+  .hidden-mobile-small {
+    display: none !important;
+  }
 }
 
 #portrait-message-wrapper {

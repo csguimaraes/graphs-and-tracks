@@ -7,21 +7,21 @@ declare let d3
 	selector: 'gt-confirmation-dialog',
 	template: `
 		<md-card>
-			<md-card-content [innerHTML]="question"></md-card-content>
+			<md-card-content [innerHTML]="message"></md-card-content>
 			<md-card-actions>
-				<button md-button md-raised-button type="button" (click)="dialogRef.close(true)" [color]="color">
+				<button *ngIf="action" md-button md-raised-button type="button" (click)="dialogRef.close(true)" [color]="color">
 					<md-icon *ngIf="icon">{{ icon }}</md-icon>
 					{{ action }}
 				</button>
 				<button md-button type="button" (click)="dialogRef.close(false)">
-					Cancel	
+					{{ action ? 'Cancel' : 'Ok' }}
 				</button>
 			</md-card-actions>
 		</md-card>
 	`
 })
 export class ConfirmationDialogComponent implements OnInit, AfterViewInit {
-	question: string
+	message: string
 	icon: string
 	action: string
 	color: string = 'accent'

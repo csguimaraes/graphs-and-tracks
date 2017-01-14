@@ -11,7 +11,7 @@ import { Challenge, CHALLENGE_TYPE } from '../../shared/types'
 })
 export class ChallengeListComponent implements OnInit {
 	localChallenges: Challenge[]
-
+	
 	constructor(private challenges: ChallengesService, public router: Router) {}
 
 	ngOnInit() {

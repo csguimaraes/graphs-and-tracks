@@ -6,45 +6,37 @@
 
 	<a [routerLink]="['challenges']">
 		<md-icon>star</md-icon>
-		<span class="hidden-mobile">
+		<span class="hidden-mobile-small">
 			Challenges
 		</span>
 	</a>
-	<!--
-	<a [routerLink]="['playground']" class="todo">
-		<md-icon>public</md-icon>
-		<span class="hidden-mobile">
-			Community
-		</span>
-	</a>
-
-	<a [routerLink]="['settings']" class="todo">
-		<md-icon>settings</md-icon>
-		<span class="hidden-mobile">
-			Settings
-		</span>
-	</a>
-	-->
 
 	<a [routerLink]="['about']">
 		<md-icon>info_outline</md-icon>
-		<span class="hidden-mobile">
+		<span class="hidden-mobile-small">
 			About
 		</span>
 	</a>
 
 	<div class="filler"></div>
 
+	<a (click)="showInstallInfo()" *ngIf="canInstall()">
+		<md-icon>add_box</md-icon>
+		<span class="hidden-mobile-small">
+			Install as App
+		</span>
+	</a>
+
 	<a (click)="toggleFullscreen()" *ngIf="!isIos()">
 		<template [ngIf]="!fullscreen">
 			<md-icon>fullscreen</md-icon>
-			<span class="hidden-mobile">
+			<span class="hidden-mobile-small">
 				Maximize
 			</span>
 		</template>
 		<template [ngIf]="fullscreen">
 			<md-icon>fullscreen_exit</md-icon>
-			<span class="hidden-mobile">
+			<span class="hidden-mobile-small">
 				Restore
 			</span>
 		</template>
