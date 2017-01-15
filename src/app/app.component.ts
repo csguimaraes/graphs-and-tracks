@@ -21,7 +21,6 @@ export class AppComponent {
 			}
 		})
 		
-		alert(this.isAppMode())
 		this.checkForMobile()
 	}
 	

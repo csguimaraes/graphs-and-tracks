@@ -1,0 +1,19 @@
+{
+  "app": {
+    "urls": [
+      "http://graphsandtracks.com/"
+    ],
+    "launch": {
+      "web_url": "http://graphsandtracks.com/"
+    }
+  },
+  "manifest_version": 2,
+  "name": "Graphs and Tracks",
+  "version": "1.0.1",
+  "description": "A simulation for developing an intuitive understanding of graphs of positon, velocity and acceleration.",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png" },
+  "minimum_chrome_version": "43"
+}
