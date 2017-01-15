@@ -749,6 +749,13 @@ html, body {
 
 @media screen and (max-width: 720px) {
   .hidden-mobile {
+    display: none !important; }
+  md-toolbar a span {
+    font-size: 14px !important;
+    white-space: nowrap !important; } }
+
+@media screen and (max-width: 666px) {
+  .hidden-mobile-small {
     display: none !important; } }
 
 #portrait-message-wrapper {
@@ -952,3 +959,8 @@ gt-app {
 
 html, body, gt-app, #main-container:not(.scrollabe) {
   overflow: hidden !important; }
+
+.share-icon {
+  width: 16px;
+  opacity: .8;
+  vertical-align: sub !important; }
