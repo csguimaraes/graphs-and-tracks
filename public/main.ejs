@@ -4,6 +4,7 @@
     <base href="<%= htmlWebpackPlugin.options.baseUrl %>"/>
     <meta charset="utf-8">
     <title>Graphs and Tracks</title>
+    <meta name="description" content="A simulation designed for math and physics students to help develop an intuitive understanding of graphs of position, velocity and acceleration" />
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#009688" />
@@ -24,7 +25,38 @@
     <script src="libs/d3.v4.min.js"></script>
 </head>
 <body>
-    <gt-app></gt-app>
+    <style>
+        #pre-load-desc {
+            max-width: 300px;
+            margin: 60px auto;
+            text-align: center;
+        }
+
+        #pre-load-desc, #pre-load-desc * {
+            color: #F0F0F0 !important;
+        }
+    </style>
+    <gt-app>
+        <div id="pre-load-desc">
+        <p class="primary">
+            A simulation designed for math and physics students to help develop <br class="hide-sw">
+            an intuitive understanding of graphs of position, velocity and acceleration
+        </p>
+        <p>
+            Test your understanding of one-dimensional motion by <br class="hide-sw">
+            interpreting graphs and producing motions.
+        </p>
+
+        <b>Graphs and Tracks</b> by <a target="_blank" href="https://plus.google.com/+DavidDaikuTrowbridge">
+        David Trowbridge</a> is based upon research and curriculum development by the
+        Physics Education Group at the University of Washington, and educational software design at the
+        Educational Technology Center at the University of California, Irvine. A software package <b>Graphs and Tracks</b>
+        was developed at the Center for Design of Educational Computing at Carnegie Mellon University
+        and at the University of Washington. In 1988, <b>Graphs and Tracks</b> was selected as Best Physics and Best
+        Integrated Software by EDUCOM/NCRIPTAL and subsequently published by Physics Academic Software
+        for more than 20 years.
+        </div>
+    </gt-app>
 
     <script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
