@@ -10,7 +10,7 @@ It corresponds to _Part I: From Graphs to Motion_ of the [legacy program](https:
     <img src="public/img/browserstack.png">
 </a>
 
-Thanks to <a target="_blank" href="https://www.browserstack.com/" title="Cross Browser Testing Tool. 1000+ Browsers, Mobile, Real IE.">BrowserStack</a> this app is tested and officially supported on Windows PCs and Macintoshes, as well as on tablets and smartphones running Android, iOS and WP.
+Thanks to <a target="_blank" href="https://www.browserstack.com/" title="Cross Browser Testing Tool. 1000+ Browsers, Mobile, Real IE.">BrowserStack</a> this app is tested and officially supported on Windows PCs and Macintoshes, as well as on tablets and smartphones running the latest versions of Android, iOS and Windows.
 
 ### NOTE TO TEACHERS
 
